@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/widgets/app_header.dart';
+import 'package:union_shop/widgets/app_footer.dart';
+
 void main() {
   runApp(const UnionShopApp());
 }
@@ -29,22 +31,18 @@ class UnionShopApp extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  
-
   void navigateToProduct(BuildContext context) {
     Navigator.pushNamed(context, '/product');
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppHeader(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Header
-            
 
             // Hero Section
             SizedBox(
@@ -99,7 +97,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 32),
                         ElevatedButton(
-                          onPressed: placeholderCallbackForButtons,
+                          onPressed: () {
+                            navigateToProduct(context);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4d2963),
                             foregroundColor: Colors.white,
@@ -118,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-
+            const AppFooter(),
             // Products Section
             Container(
               color: Colors.white,
@@ -173,8 +173,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            
           ],
         ),
       ),
