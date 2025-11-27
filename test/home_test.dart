@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:union_shop/main.dart';
+import 'package:union_shop/repositories/in_memory_collection_repository.dart';
 import 'package:union_shop/repositories/in_memory_product_repository.dart';
 
 void main() {
   group('Home Page Tests', () {
     testWidgets('should display home page with basic elements', (tester) async {
-      // Create app with zero-latency repository for deterministic tests
-      final repo = InMemoryProductRepository(latency: Duration.zero);
-      await tester.pumpWidget(createApp(productRepo: repo));
+      // Create app with zero-latency repositories for deterministic tests
+      final productRepo = InMemoryProductRepository(latency: Duration.zero);
+      final collectionRepo =
+          InMemoryCollectionRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(
+        productRepo: productRepo,
+        collectionRepo: collectionRepo,
+      ));
 
       // Wait for async operations to complete
       await tester.pumpAndSettle();
@@ -16,13 +22,17 @@ void main() {
       // Check that basic UI elements are present
       expect(find.text('PLACEHOLDER HEADER TEXT'), findsOneWidget);
       expect(find.byKey(const Key('hero_carousel')), findsOneWidget);
-      expect(find.text('PRODUCTS SECTION'), findsOneWidget);
     });
 
     testWidgets('should display carousel with navigation dots', (tester) async {
-      // Create app with zero-latency repository for deterministic tests
-      final repo = InMemoryProductRepository(latency: Duration.zero);
-      await tester.pumpWidget(createApp(productRepo: repo));
+      // Create app with zero-latency repositories for deterministic tests
+      final productRepo = InMemoryProductRepository(latency: Duration.zero);
+      final collectionRepo =
+          InMemoryCollectionRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(
+        productRepo: productRepo,
+        collectionRepo: collectionRepo,
+      ));
 
       // Wait for async operations to complete
       await tester.pumpAndSettle();
@@ -35,31 +45,34 @@ void main() {
       expect(find.text('BROWSE COLLECTION'), findsOneWidget);
     });
 
-    testWidgets('should display product cards', (tester) async {
-      // Create app with zero-latency repository for deterministic tests
-      final repo = InMemoryProductRepository(latency: Duration.zero);
-      await tester.pumpWidget(createApp(productRepo: repo));
+    testWidgets('should display collection sections', (tester) async {
+      // Create app with zero-latency repositories for deterministic tests
+      final productRepo = InMemoryProductRepository(latency: Duration.zero);
+      final collectionRepo =
+          InMemoryCollectionRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(
+        productRepo: productRepo,
+        collectionRepo: collectionRepo,
+      ));
 
       // Wait for async operations to complete
       await tester.pumpAndSettle();
 
-      // Check that product cards are displayed
-      expect(find.text('Placeholder Product 1'), findsOneWidget);
-      expect(find.text('Placeholder Product 2'), findsOneWidget);
-      expect(find.text('Placeholder Product 3'), findsOneWidget);
-      expect(find.text('Placeholder Product 4'), findsOneWidget);
-
-      // Check prices are displayed
-      expect(find.text('£10.00'), findsOneWidget);
-      expect(find.text('£15.00'), findsOneWidget);
-      expect(find.text('£20.00'), findsOneWidget);
-      expect(find.text('£25.00'), findsOneWidget);
+      // Check that collection headings are displayed
+      expect(find.text('Signature & Essential Range'), findsOneWidget);
+      expect(find.text('Portsmouth City Collection'), findsOneWidget);
+      expect(find.text('Pride Collection 🏳️‍🌈'), findsOneWidget);
     });
 
     testWidgets('should display header icons', (tester) async {
-      // Create app with zero-latency repository for deterministic tests
-      final repo = InMemoryProductRepository(latency: Duration.zero);
-      await tester.pumpWidget(createApp(productRepo: repo));
+      // Create app with zero-latency repositories for deterministic tests
+      final productRepo = InMemoryProductRepository(latency: Duration.zero);
+      final collectionRepo =
+          InMemoryCollectionRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(
+        productRepo: productRepo,
+        collectionRepo: collectionRepo,
+      ));
 
       // Wait for async operations to complete
       await tester.pumpAndSettle();
@@ -71,9 +84,14 @@ void main() {
     });
 
     testWidgets('should display footer', (tester) async {
-      // Create app with zero-latency repository for deterministic tests
-      final repo = InMemoryProductRepository(latency: Duration.zero);
-      await tester.pumpWidget(createApp(productRepo: repo));
+      // Create app with zero-latency repositories for deterministic tests
+      final productRepo = InMemoryProductRepository(latency: Duration.zero);
+      final collectionRepo =
+          InMemoryCollectionRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(
+        productRepo: productRepo,
+        collectionRepo: collectionRepo,
+      ));
 
       // Wait for async operations to complete
       await tester.pumpAndSettle();
