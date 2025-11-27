@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:union_shop/data/navigation_data.dart';
 import 'package:union_shop/models/navigation_item.dart';
 import 'package:union_shop/widgets/shared/dropdown_menu_widget.dart';
@@ -10,7 +11,7 @@ class NavigationMenu extends StatelessWidget {
 
   void _handleNavigation(BuildContext context, String? route) {
     if (route != null) {
-      Navigator.pushNamed(context, route);
+      context.go(route);
     }
   }
 

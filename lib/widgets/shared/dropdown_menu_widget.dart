@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:union_shop/models/navigation_item.dart';
 
 /// Dropdown menu widget that displays child navigation items
@@ -100,7 +101,7 @@ class _DropdownMenuWidgetState extends State<DropdownMenuWidget> {
       child: InkWell(
         onTap: () {
           if (child.route != null) {
-            Navigator.pushNamed(context, child.route!);
+            context.go(child.route!);
             setState(() => _isOpen = false);
             _removeOverlay();
           }
