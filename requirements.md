@@ -118,12 +118,12 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Dynamic routes via onGenerateRoute handle '/shop/{collectionId}' pattern
   - Reason: S-21 functionality was already implemented in S-20. CollectionsPage (lib/views/collections_view.dart) accepts collectionId parameter and displays filtered products for that collection. CollectionViewModel's getCollectionById() and getProductsForCollection() methods filter products by collection. Breadcrumb navigation added showing "Home > [Collection Name]" with clickable Home link. Dynamic routes handled via onGenerateRoute for '/shop/{collectionId}' pattern. Page includes Key('collections_page') for testing. Collection pages display name, description, product count, and responsive product grid matching shop.upsu.net pattern.
 
-- [ ] S-21.1 — **Fix Collection URLs to Match Website**
+- [x] S-21.1 — **Fix Collection URLs to Match Website**
   - Update routing from '/shop/{collectionId}' to '/collections/{collectionId}'
   - Update all navigation links in NavigationData to use '/collections/' prefix
   - Update onGenerateRoute in main.dart to handle '/collections/{collectionId}' pattern
   - Test that collection links work with new URL format
-  - Reason: Shop.upsu.net uses /collections/{collectionId} format, not /shop/. This needs to be updated for consistency with the actual website.
+  - Reason: Updated NavigationData (lib/data/navigation_data.dart) to change all SHOP dropdown routes from '/shop/' to '/collections/' prefix, including SALE! route. Updated onGenerateRoute in main.dart to handle '/collections/{collectionId}' pattern instead of '/shop/' with validation to avoid matching the overview page itself. Updated CollectionsOverviewPage collection cards to navigate to '/collections/{collectionId}'. URLs now match shop.upsu.net structure exactly where collections are accessed via /collections/clothing, /collections/pride, etc.
 
 - [ ] S-21.2 — **Implement Nested Product URLs with Collection Context**
   - Products can belong to multiple collections (e.g., classic-rainbow-hoodies in both "Pride Collection" and "Clothing")
