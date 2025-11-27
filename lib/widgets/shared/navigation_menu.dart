@@ -20,10 +20,11 @@ class NavigationMenu extends StatelessWidget {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 8,
           children: NavigationData.mainNavigation.map((item) {
             return _buildNavItem(context, item);
           }).toList(),
@@ -60,7 +61,7 @@ class NavigationMenu extends StatelessWidget {
 
     if (item.hasDropdown) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: DropdownMenuWidget(
           item: item,
           trigger: TextButton(
@@ -73,7 +74,7 @@ class NavigationMenu extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: TextButton(
         key: key,
         onPressed: () => _handleNavigation(context, item.route),
