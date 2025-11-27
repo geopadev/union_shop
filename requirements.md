@@ -146,7 +146,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Ensure URLs are properly formatted and match shop.upsu.net pattern
   - Reason: Added go_router ^14.0.0 package to pubspec.yaml. Created app_router.dart (lib/router/app_router.dart) defining all routes using GoRouter with declarative routing structure matching shop.upsu.net URL pattern. Migrated from MaterialApp to MaterialApp.router in main.dart using routerConfig parameter. Replaced all Navigator.pushNamed() calls with context.go() throughout the app (home_view.dart, about_view.dart, collections_overview_view.dart, collections_view.dart, product_view.dart, navigation_menu.dart, dropdown_menu_widget.dart). Browser address bar now updates on navigation, browser back/forward buttons work automatically, URLs can be bookmarked and shared. Deep linking fully functional matching shop.upsu.net behavior with proper URL paths like /collections/clothing and /collections/pride/products/classic-hoodie.
 
-- [ ] S-21.4 — **Support Products in Multiple Collections**
+- [x] S-21.4 — **Support Products in Multiple Collections**
   - Products can belong to multiple collections simultaneously
   - Update Product model to have optional collectionIds list (not required for display)
   - InMemoryProductRepository should allow same product to appear in multiple collection filters
@@ -154,7 +154,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Product cards in collection pages must navigate with collection context: '/collections/{currentCollectionId}/products/{productId}'
   - ProductPage receives collectionId from URL for breadcrumb, not from product data
   - This allows products to be discovered through multiple navigation paths while maintaining URL context
-  - Reason: Products like "classic-rainbow-hoodies" appear in multiple collections (Pride, Clothing) with different URLs. The URL path shows navigation context, not product ownership. Products are associated with collections via Collection.productIds list.
+  - Reason: Updated InMemoryCollectionRepository (lib/repositories/in_memory_collection_repository.dart) to have overlapping product IDs in Collection.productIds lists. Product '1' now appears in 6 collections (Clothing, Halloween, Signature, Portsmouth, Pride, Sale). Product '2' appears in 6 collections. Product '3' appears in 5 collections. Product '4' appears in 5 collections. CollectionViewModel's getProductsForCollection() method already filters products correctly using collection.productIds.contains(product.id), so no ViewModel changes needed. Product cards navigate with collection context (/collections/{collectionId}/products/{productId}). ProductPage receives collectionId from URL for breadcrumb display, not from product data. Same product accessible via different URLs based on navigation path, matching shop.upsu.net behavior.
 
 - [ ] S-22 — **Hero Carousel Widget**
   - Create CarouselSlide model (lib/models/carousel_slide.dart): title, subtitle, imageUrl, buttonText, buttonRoute
