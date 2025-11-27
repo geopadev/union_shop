@@ -15,9 +15,24 @@ void main() {
 
       // Check that basic UI elements are present
       expect(find.text('PLACEHOLDER HEADER TEXT'), findsOneWidget);
-      expect(find.text('Placeholder Hero Title'), findsOneWidget);
+      expect(find.byKey(const Key('hero_carousel')), findsOneWidget);
       expect(find.text('PRODUCTS SECTION'), findsOneWidget);
-      expect(find.text('BROWSE PRODUCTS'), findsOneWidget);
+    });
+
+    testWidgets('should display carousel with navigation dots', (tester) async {
+      // Create app with zero-latency repository for deterministic tests
+      final repo = InMemoryProductRepository(latency: Duration.zero);
+      await tester.pumpWidget(createApp(productRepo: repo));
+
+      // Wait for async operations to complete
+      await tester.pumpAndSettle();
+
+      // Check that carousel is displayed
+      expect(find.byKey(const Key('hero_carousel')), findsOneWidget);
+
+      // Check that first slide content is visible
+      expect(find.text('Explore Portsmouth City Collection'), findsOneWidget);
+      expect(find.text('BROWSE COLLECTION'), findsOneWidget);
     });
 
     testWidgets('should display product cards', (tester) async {
