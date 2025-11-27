@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -6,7 +7,7 @@ class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.go('/');
   }
 
   void placeholderCallbackForButtons() {
