@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/data/carousel_data.dart';
+import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/widgets/home/hero_carousel.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
@@ -10,10 +12,6 @@ class HomeScreen extends StatelessWidget {
 
   void navigateToHome(BuildContext context) {
     context.go('/');
-  }
-
-  void navigateToProduct(BuildContext context) {
-    context.go('/product');
   }
 
   void placeholderCallbackForButtons() {
@@ -35,88 +33,51 @@ class HomeScreen extends StatelessWidget {
               onMenuTap: placeholderCallbackForButtons,
             ),
 
-            // Hero Carousel (replaced static hero section)
+            // Hero Carousel
             const HeroCarousel(slides: CarouselData.slides),
 
-            // Products Section
-            Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'PRODUCTS SECTION',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        letterSpacing: 1,
+            // Featured Collections Sections
+            Consumer<CollectionViewModel>(
+              builder: (context, viewModel, child) {
+                if (viewModel.isLoading) {
+                  return Container(
+                    padding: const EdgeInsets.all(60),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF4d2963),
                       ),
                     ),
-                    const SizedBox(height: 48),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        // Calculate columns based on available width
-                        int crossAxisCount;
-                        double childAspectRatio;
+                  );
+                }
 
-                        if (constraints.maxWidth > 1200) {
-                          // Large screens: 4 columns
-                          crossAxisCount = 4;
-                          childAspectRatio = 0.7;
-                        } else if (constraints.maxWidth > 800) {
-                          // Medium screens: 3 columns
-                          crossAxisCount = 3;
-                          childAspectRatio = 0.75;
-                        } else if (constraints.maxWidth > 600) {
-                          // Tablets: 2 columns
-                          crossAxisCount = 2;
-                          childAspectRatio = 0.8;
-                        } else {
-                          // Mobile: 1 column
-                          crossAxisCount = 1;
-                          childAspectRatio = 1.2;
-                        }
+                // Featured collections to display on homepage
+                final featuredCollectionIds = [
+                  'signature-essential',
+                  'portsmouth',
+                  'pride',
+                ];
 
-                        return GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: crossAxisCount,
-                          childAspectRatio: childAspectRatio,
-                          crossAxisSpacing: 24,
-                          mainAxisSpacing: 48,
-                          children: const [
-                            ProductCard(
-                              title: 'Placeholder Product 1',
-                              price: '£10.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 2',
-                              price: '£15.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 3',
-                              price: '£20.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                            ProductCard(
-                              title: 'Placeholder Product 4',
-                              price: '£25.00',
-                              imageUrl:
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                return Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: featuredCollectionIds.map((collectionId) {
+                      final collection =
+                          viewModel.getCollectionById(collectionId);
+                      if (collection == null) return const SizedBox.shrink();
+
+                      final products =
+                          viewModel.getProductsForCollection(collectionId);
+                      final displayProducts = products.take(2).toList();
+
+                      return _CollectionSection(
+                        collectionId: collectionId,
+                        collectionName: collection.name,
+                        products: displayProducts,
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
             ),
 
             // Footer
@@ -128,64 +89,155 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class ProductCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String imageUrl;
+class _CollectionSection extends StatelessWidget {
+  final String collectionId;
+  final String collectionName;
+  final List<dynamic> products;
 
-  const ProductCard({
-    super.key,
-    required this.title,
-    required this.price,
-    required this.imageUrl,
+  const _CollectionSection({
+    required this.collectionId,
+    required this.collectionName,
+    required this.products,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Collection heading (clickable)
+              GestureDetector(
+                onTap: () => context.go('/collections/$collectionId'),
+                child: Text(
+                  collectionName,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4d2963),
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Products grid (2 products side by side on desktop, stacked on mobile)
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isDesktop = constraints.maxWidth > 600;
+
+                  if (isDesktop) {
+                    // Desktop: products side by side
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: products.map((product) {
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: _ProductCard(
+                              product: product,
+                              collectionId: collectionId,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    // Mobile: products stacked
+                    return Column(
+                      children: products.map((product) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: _ProductCard(
+                            product: product,
+                            collectionId: collectionId,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProductCard extends StatelessWidget {
+  final dynamic product;
+  final String collectionId;
+
+  const _ProductCard({
+    required this.product,
+    required this.collectionId,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go('/product');
+        context.go('/collections/$collectionId/products/${product.id}');
       },
       child: Semantics(
         button: true,
-        label: 'Product: $title, Price: $price',
+        label: 'Product: ${product.title}, Price: ${product.price}',
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            // Product image
+            AspectRatio(
+              aspectRatio: 1.0,
               child: Semantics(
                 image: true,
-                label: 'Image of $title',
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Center(
-                        child:
-                            Icon(Icons.image_not_supported, color: Colors.grey),
-                      ),
-                    );
-                  },
+                label: 'Image of ${product.title}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    product.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
-                  maxLines: 2,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  price,
-                  style: const TextStyle(fontSize: 13, color: Colors.grey),
-                ),
-              ],
+            const SizedBox(height: 12),
+            // Product title
+            Text(
+              product.title,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 8),
+            // Product price
+            Text(
+              product.price,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Color(0xFF4d2963),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

@@ -174,22 +174,25 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Test carousel on mobile and desktop views
   - Reason: Replaced static hero section in home_view.dart with HeroCarousel widget using CarouselData.slides (3 slides for Portsmouth, Halloween, and Pride collections). Carousel buttons navigate to collection pages via go_router's context.go(). Updated home_test.dart to check for carousel presence (Key('hero_carousel')) and first slide content instead of old static hero content. Carousel displays with smooth auto-advance transitions (5 seconds, 400ms animation), manual swipe support, and navigation dots. Maintains 400px height with proper aspect ratios across mobile and desktop views. All tests passing with zero-latency repository.
 
-- [ ] S-24 — **Deep Linking & Routes**
+- [x] S-24 — **Deep Linking & Routes**
   - Update main.dart with all new named routes:
     - '/about' → AboutPage
-    - '/collections' → CollectionsPage
-    - '/collections/:id' → CollectionDetailPage
-    - '/shop/clothing' → CollectionDetailPage(collectionId: 'clothing')
-    - '/shop/merchandise' → CollectionDetailPage(collectionId: 'merchandise')
-    - '/shop/halloween' → CollectionDetailPage(collectionId: 'halloween')
-    - '/shop/signature-essential' → CollectionDetailPage(collectionId: 'signature-essential')
-    - '/shop/portsmouth' → CollectionDetailPage(collectionId: 'portsmouth')
-    - '/shop/pride' → CollectionDetailPage(collectionId: 'pride')
-    - '/shop/graduation' → CollectionDetailPage(collectionId: 'graduation')
-    - '/printshack/about' → AboutPage (print shack specific)
-    - '/printshack/personalisation' → PersonalisationPage
-    - '/sale' → CollectionDetailPage(collectionId: 'sale')
+    - '/collections' → CollectionsOverviewPage
+    - '/collections/:id' → CollectionsPage
+    - '/collections/:id/products/:productId' → ProductPage
   - Test all routes with browser URL bar navigation
+  - Reason: S-24 was already completed in S-21.3 with go_router implementation. All routes are defined in app_router.dart (lib/router/app_router.dart) using GoRouter with declarative routing. Routes include: '/' → HomeScreen, '/about' → AboutPage, '/collections' → CollectionsOverviewPage, '/collections/:collectionId' → CollectionsPage with dynamic parameter extraction, '/collections/:collectionId/products/:productId' → ProductPage with nested route parameters, '/product' → ProductPage as fallback. All navigation links throughout the app use context.go() with proper URL paths. Browser URL bar updates on navigation, URLs can be copied/bookmarked/shared, back/forward buttons work correctly. All collection routes (clothing, merchandise, halloween, signature-essential, portsmouth, pride, graduation, sale) work via dynamic routing with the collectionId parameter. Print Shack routes (/printshack/about, /printshack/personalisation) can be added similarly if needed in future. Deep linking fully functional matching shop.upsu.net behavior.
+
+- [x] S-24.1 — **Homepage Collection Sections**
+  - Update homepage to display featured collections with products (matching shop.upsu.net pattern)
+  - Each section shows: collection name (clickable heading), 2 products from that collection
+  - Display 2-3 featured collections on homepage (e.g., "Signature Range", "Portsmouth City Collection", "Pride Collection")
+  - Collection heading links to full collection page (/collections/{collectionId})
+  - Products link to product pages with collection context (/collections/{collectionId}/products/{productId})
+  - Use Consumer<CollectionViewModel> to fetch collections and their products
+  - Responsive layout: products side-by-side on desktop, stacked on mobile
+  - Remove old "FEATURED PRODUCTS" section with hardcoded placeholder products
+  - Reason: Shop.upsu.net homepage displays multiple collection sections, each showing the collection name as a heading and 2 products from that collection below it. This provides better content discovery and matches the reference website's pattern. Collections act as category showcases on the homepage, encouraging users to explore different product categories.
 
 - [ ] S-25 — **Mobile Navigation (Hamburger Menu)**
   - Create MobileNavigationDrawer widget (lib/widgets/shared/mobile_navigation_drawer.dart)
