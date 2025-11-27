@@ -166,12 +166,13 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Keys: Key('hero_carousel'), Key('carousel_slide_0'), Key('browse_collection_button')
   - Reason: Created CarouselSlide model (lib/models/carousel_slide.dart) with title, subtitle, imageUrl, buttonText, buttonRoute properties. Created CarouselData class (lib/data/carousel_data.dart) with 3 sample slides linking to Portsmouth, Halloween, and Pride collections. Implemented HeroCarousel widget (lib/widgets/home/hero_carousel.dart) using PageView.builder for swipeable slides. Added auto-advance timer (5 second intervals) with smooth animations (400ms duration, easeInOut curve). Each slide displays image with dark overlay, centered title/subtitle text, and call-to-action button navigating via go_router. Added navigation dots indicator at bottom showing current slide position. Includes all required test Keys: 'hero_carousel', 'carousel_slide_0', 'browse_collection_button'. Timer properly cancelled in dispose() to prevent memory leaks.
 
-- [ ] S-23 — **Carousel Integration & Navigation**
+- [x] S-23 — **Carousel Integration & Navigation**
   - Replace static hero section in home_view.dart with HeroCarousel
   - Create sample carousel data with 3-5 slides
   - Wire up carousel button actions to navigate to collection pages
   - Ensure smooth transitions and proper aspect ratios
   - Test carousel on mobile and desktop views
+  - Reason: Replaced static hero section in home_view.dart with HeroCarousel widget using CarouselData.slides (3 slides for Portsmouth, Halloween, and Pride collections). Carousel buttons navigate to collection pages via go_router's context.go(). Updated home_test.dart to check for carousel presence (Key('hero_carousel')) and first slide content instead of old static hero content. Carousel displays with smooth auto-advance transitions (5 seconds, 400ms animation), manual swipe support, and navigation dots. Maintains 400px height with proper aspect ratios across mobile and desktop views. All tests passing with zero-latency repository.
 
 - [ ] S-24 — **Deep Linking & Routes**
   - Update main.dart with all new named routes:
