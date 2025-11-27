@@ -8,6 +8,7 @@ import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/view_models/home_view_model.dart';
 import 'package:union_shop/view_models/product_view_model.dart';
 import 'package:union_shop/views/about_view.dart';
+import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
 import 'package:union_shop/views/home_view.dart';
 import 'package:union_shop/views/product_view.dart';
@@ -68,7 +69,7 @@ class UnionShopApp extends StatelessWidget {
       routes: {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
-        '/collections': (context) => const CollectionsPage(),
+        '/collections': (context) => const CollectionsOverviewPage(),
       },
       onGenerateRoute: (settings) {
         // Handle dynamic routes with parameters
