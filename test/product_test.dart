@@ -15,26 +15,10 @@ void main() {
       await tester.pump();
 
       // Check that basic UI elements are present
-      expect(
-        find.text('PLACEHOLDER HEADER TEXT - STUDENTS TO UPDATE!'),
-        findsOneWidget,
-      );
+      expect(find.text('PLACEHOLDER HEADER TEXT'), findsOneWidget);
       expect(find.text('Placeholder Product Name'), findsOneWidget);
       expect(find.text('£15.00'), findsOneWidget);
       expect(find.text('Description'), findsOneWidget);
-    });
-
-    testWidgets('should display student instruction text', (tester) async {
-      await tester.pumpWidget(createTestWidget());
-      await tester.pump();
-
-      // Check that student instruction is present
-      expect(
-        find.text(
-          'Students should add size options, colour options, quantity selector, add to cart button, and buy now button here.',
-        ),
-        findsOneWidget,
-      );
     });
 
     testWidgets('should display header icons', (tester) async {
@@ -53,10 +37,6 @@ void main() {
 
       // Check that footer is present
       expect(find.text('Placeholder Footer'), findsOneWidget);
-      expect(
-        find.text('Students should customise this footer section'),
-        findsOneWidget,
-      );
     });
   });
 }

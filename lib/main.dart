@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/views/home_view.dart';
 import 'package:union_shop/views/product_view.dart';
 
 void main() {
