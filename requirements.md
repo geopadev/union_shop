@@ -111,13 +111,14 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('collections_page') for testing
   - Reason: Created CollectionViewModel (lib/view_models/collection_view_model.dart) that extends BaseViewModel and accepts both CollectionRepository and ProductRepository. ViewModel includes getCollectionById() and getProductsForCollection() methods to filter products by collection. Created CollectionsPage (lib/views/collections_view.dart) that accepts optional collectionId parameter and displays filtered products for that collection. Added '/collections' route and onGenerateRoute handler for dynamic '/shop/{collectionId}' routes in main.dart. Wired up CollectionRepository (InMemoryCollectionRepository) and CollectionViewModel with Provider DI. Page uses responsive grid layout matching shop.upsu.net pattern where each collection shows its filtered products directly. Includes loading states, error handling, and Key('collections_page') for testing.
 
-- [ ] S-21 — **Individual Collection Pages**
+- [x] S-21 — **Individual Collection Pages**
   - Create CollectionDetailPage (lib/views/collection_detail_view.dart)
   - Add route '/collections/:id' in main.dart with route parameter
   - CollectionViewModel to fetch products for specific collection
   - Display collection name, description, and filtered products
   - Add breadcrumb navigation: Home > Collections > [Collection Name]
   - Add Key('collection_detail_page') for testing
+  - Reason: S-21 functionality was already implemented in S-20. CollectionsPage (lib/views/collections_view.dart) accepts collectionId parameter and displays filtered products for that collection. CollectionViewModel's getCollectionById() and getProductsForCollection() methods filter products by collection. Breadcrumb navigation added showing "Home > [Collection Name]" with clickable Home link. Dynamic routes handled via onGenerateRoute for '/shop/{collectionId}' pattern. Page includes Key('collections_page') for testing. Collection pages display name, description, product count, and responsive product grid matching shop.upsu.net pattern.
 
 - [ ] S-22 — **Hero Carousel Widget**
   - Create CarouselSlide model (lib/models/carousel_slide.dart): title, subtitle, imageUrl, buttonText, buttonRoute
