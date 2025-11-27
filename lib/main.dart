@@ -72,17 +72,39 @@ class UnionShopApp extends StatelessWidget {
         '/collections': (context) => const CollectionsOverviewPage(),
       },
       onGenerateRoute: (settings) {
-        // Handle dynamic routes with parameters
+        // Handle nested product URLs: /collections/{collectionId}/products/{productId}
+        if (settings.name != null && settings.name!.contains('/products/')) {
+          final uri = Uri.parse(settings.name!);
+          final segments = uri.pathSegments;
+
+          // Expected format: ['collections', collectionId, 'products', productId]
+          if (segments.length == 4 &&
+              segments[0] == 'collections' &&
+              segments[2] == 'products') {
+            final collectionId = segments[1];
+            final productId = segments[3];
+
+            return MaterialPageRoute(
+              builder: (context) => ProductPage(
+                collectionId: collectionId,
+                productId: productId,
+              ),
+            );
+          }
+        }
+
+        // Handle collection URLs: /collections/{collectionId}
         if (settings.name != null &&
             settings.name!.startsWith('/collections/')) {
           final collectionId = settings.name!.replaceFirst('/collections/', '');
-          // Avoid matching the overview page
+          // Avoid matching the overview page and nested product URLs
           if (collectionId.isNotEmpty && !collectionId.contains('/')) {
             return MaterialPageRoute(
               builder: (context) => CollectionsPage(collectionId: collectionId),
             );
           }
         }
+
         return null;
       },
     );
