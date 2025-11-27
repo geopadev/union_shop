@@ -84,21 +84,25 @@ class _DropdownMenuWidgetState extends State<DropdownMenuWidget> {
   }
 
   Widget _buildMenuItem(NavigationItem child) {
-    return InkWell(
-      onTap: () {
-        if (child.route != null) {
-          Navigator.pushNamed(context, child.route!);
-          setState(() => _isHovering = false);
-          _removeOverlay();
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Text(
-          child.title,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
+    return Semantics(
+      button: true,
+      label: 'Navigate to ${child.title}',
+      child: InkWell(
+        onTap: () {
+          if (child.route != null) {
+            Navigator.pushNamed(context, child.route!);
+            setState(() => _isHovering = false);
+            _removeOverlay();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(
+            child.title,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
           ),
         ),
       ),
@@ -107,28 +111,33 @@ class _DropdownMenuWidgetState extends State<DropdownMenuWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: MouseRegion(
-        onEnter: (_) {
-          setState(() => _isHovering = true);
-          _showOverlay();
-        },
-        onExit: (_) {
-          setState(() => _isHovering = false);
-          _removeOverlay();
-        },
-        child: GestureDetector(
-          onTap: () {
-            if (_isHovering) {
-              setState(() => _isHovering = false);
-              _removeOverlay();
-            } else {
-              setState(() => _isHovering = true);
-              _showOverlay();
-            }
+    return Semantics(
+      button: true,
+      label: '${widget.item.title} menu',
+      hint: 'Activate to open dropdown menu',
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: MouseRegion(
+          onEnter: (_) {
+            setState(() => _isHovering = true);
+            _showOverlay();
           },
-          child: widget.trigger,
+          onExit: (_) {
+            setState(() => _isHovering = false);
+            _removeOverlay();
+          },
+          child: GestureDetector(
+            onTap: () {
+              if (_isHovering) {
+                setState(() => _isHovering = false);
+                _removeOverlay();
+              } else {
+                setState(() => _isHovering = true);
+                _showOverlay();
+              }
+            },
+            child: widget.trigger,
+          ),
         ),
       ),
     );
