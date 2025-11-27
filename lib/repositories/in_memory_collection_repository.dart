@@ -20,7 +20,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Explore our range of comfortable and stylish clothing',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2'],
+      productIds: ['1', '2', '3'], // Products 1, 2, 3 in Clothing
     ),
     Collection(
       id: 'merchandise',
@@ -28,7 +28,10 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'University branded merchandise and accessories',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['3', '4'],
+      productIds: [
+        '2',
+        '4'
+      ], // Products 2, 4 in Merchandise (2 is shared with Clothing)
     ),
     Collection(
       id: 'halloween',
@@ -36,7 +39,11 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Spooky season essentials and Halloween specials',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '3'],
+      productIds: [
+        '1',
+        '3',
+        '4'
+      ], // Products 1, 3, 4 (shared with Clothing and Merchandise)
     ),
     Collection(
       id: 'signature-essential',
@@ -44,7 +51,12 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Our core collection of everyday essentials',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['2', '4'],
+      productIds: [
+        '1',
+        '2',
+        '3',
+        '4'
+      ], // All products (shared across all collections)
     ),
     Collection(
       id: 'portsmouth',
@@ -52,7 +64,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Celebrate Portsmouth with our exclusive city collection',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2', '3', '4'],
+      productIds: ['1', '2', '4'], // Products 1, 2, 4 (shared)
     ),
     Collection(
       id: 'pride',
@@ -60,7 +72,10 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Show your pride with our inclusive collection',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '4'],
+      productIds: [
+        '1',
+        '3'
+      ], // Products 1, 3 (shared with Clothing, Halloween, etc.)
     ),
     Collection(
       id: 'graduation',
@@ -68,7 +83,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Celebrate your graduation with our special collection',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['2', '3'],
+      productIds: ['2', '3', '4'], // Products 2, 3, 4 (shared)
     ),
     Collection(
       id: 'sale',
@@ -76,7 +91,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
       description: 'Amazing deals on selected items',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2', '3'],
+      productIds: ['1', '2'], // Products 1, 2 on sale
     ),
   ];
 
