@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -6,11 +7,11 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.go('/');
   }
 
   void navigateToProduct(BuildContext context) {
-    Navigator.pushNamed(context, '/product');
+    context.go('/product');
   }
 
   void placeholderCallbackForButtons() {
@@ -211,7 +212,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        context.go('/product');
       },
       child: Semantics(
         button: true,
