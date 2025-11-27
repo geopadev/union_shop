@@ -53,8 +53,9 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Repositories and view models injected via Provider in `main.dart`.
   - Reason: Product model created (lib/models/product.dart) with id, title, price, imageUrl, and description. ProductRepository interface created (lib/repositories/product_repository.dart) with fetchAll(), fetchById(), and search() methods. InMemoryProductRepository implemented with configurable latency (default 500ms, can be set to Duration.zero for tests). HomeViewModel and ProductViewModel updated to use Product model and repository injection. Provider DI wired up in main.dart with createApp() factory function that accepts optional ProductRepository and navigatorKey for testing.
 
-- [ ] S-07 — Routing & navigation  
+- [x] S-07 — Routing & navigation  
   - Routes and `navigatorKey` exposed in `main.dart` (home + /product route present).
+  - Reason: MaterialApp already configured with initialRoute '/', home route pointing to HomeScreen, and '/product' route pointing to ProductPage. navigatorKey parameter accepted in createApp() factory function and passed through to MaterialApp for integration testing support.
 
 - [ ] S-08 — Testability fixes
   - Tests should build the app via `createApp(productRepo: InMemoryProductRepository(latency: Duration.zero))` (see lib/main.dart).  
