@@ -125,7 +125,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Test that collection links work with new URL format
   - Reason: Updated NavigationData (lib/data/navigation_data.dart) to change all SHOP dropdown routes from '/shop/' to '/collections/' prefix, including SALE! route. Updated onGenerateRoute in main.dart to handle '/collections/{collectionId}' pattern instead of '/shop/' with validation to avoid matching the overview page itself. Updated CollectionsOverviewPage collection cards to navigate to '/collections/{collectionId}'. URLs now match shop.upsu.net structure exactly where collections are accessed via /collections/clothing, /collections/pride, etc.
 
-- [ ] S-21.2 — **Implement Nested Product URLs with Collection Context**
+- [x] S-21.2 — **Implement Nested Product URLs with Collection Context**
   - Products can belong to multiple collections (e.g., classic-rainbow-hoodies in both "Pride Collection" and "Clothing")
   - Product URLs must include collection context: '/collections/{collectionId}/products/{productId}'
   - Same product accessed from different collections shows different URLs reflecting the navigation path
@@ -134,9 +134,19 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update all product card taps to include current collection context in navigation URL
   - Add dynamic breadcrumb to ProductPage: Home > [Collection Name from URL] > [Product Name]
   - Breadcrumb should reflect the collection user came from, not all collections product belongs to
-  - Reason: Shop.upsu.net shows same product at different URLs depending on navigation path (e.g., /collections/pride-collection/products/classic-rainbow-hoodies vs /collections/clothing-2/products/classic-rainbow-hoodies). This provides proper navigation context and breadcrumb trails based on where user came from.
+  - Reason: Updated ProductPage (lib/views/product_view.dart) to accept optional collectionId and productId parameters. Added breadcrumb navigation showing Home > Collection Name > Product with clickable links. Updated main.dart onGenerateRoute to parse nested URLs like '/collections/{collectionId}/products/{productId}' by extracting path segments and validating structure. Updated CollectionsPage product cards (lib/views/collections_view.dart) to navigate with collection context via '/collections/{collectionId}/products/{productId}'. Product URLs now reflect navigation path matching shop.upsu.net pattern where same product has different URLs based on where it's accessed from.
 
-- [ ] S-21.3 — **Support Products in Multiple Collections**
+- [ ] S-21.3 — **Implement Deep Linking with Browser URL Updates**
+  - Configure Flutter web app to update browser URL bar when navigating
+  - Replace Navigator.pushNamed with proper routing that updates the browser address bar
+  - Implement go_router or similar declarative routing package for URL management
+  - Ensure URLs in browser match the route structure: /collections/clothing, /collections/pride/products/id
+  - Test that browser back/forward buttons work correctly with navigation
+  - Test that copying URL from address bar and pasting in new tab navigates to correct page
+  - Ensure URLs are properly formatted and match shop.upsu.net pattern
+  - Reason: Flutter web apps need proper deep linking configuration to show URLs in browser address bar. By default, Navigator.pushNamed uses hash routing (#/route) or doesn't update the URL at all. Need to implement go_router package which provides declarative routing with proper URL path updates, browser history support, and deep linking. This allows users to bookmark pages, share links, and use browser back/forward buttons naturally, matching shop.upsu.net behavior.
+
+- [ ] S-21.4 — **Support Products in Multiple Collections**
   - Products can belong to multiple collections simultaneously
   - Update Product model to have optional collectionIds list (not required for display)
   - InMemoryProductRepository should allow same product to appear in multiple collection filters
