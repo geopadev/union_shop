@@ -3,7 +3,14 @@ import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+  final String? collectionId;
+  final String? productId;
+
+  const ProductPage({
+    super.key,
+    this.collectionId,
+    this.productId,
+  });
 
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -35,6 +42,55 @@ class ProductPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Breadcrumb Navigation
+                  if (collectionId != null) ...[
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/'),
+                          child: const Text(
+                            'Home',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF4d2963),
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          ' > ',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            '/collections/$collectionId',
+                          ),
+                          child: Text(
+                            collectionId!.replaceAll('-', ' ').toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF4d2963),
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          ' > ',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        const Text(
+                          'Product',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
                   // Product image
                   Semantics(
                     image: true,
