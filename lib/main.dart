@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:union_shop/views/product_page.dart';
+import 'package:union_shop/views/product_view.dart';
 
 void main() {
   runApp(const UnionShopApp());
