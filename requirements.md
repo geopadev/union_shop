@@ -192,7 +192,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Use Consumer<CollectionViewModel> to fetch collections and their products
   - Responsive layout: products side-by-side on desktop, stacked on mobile
   - Remove old "FEATURED PRODUCTS" section with hardcoded placeholder products
-  - Reason: Shop.upsu.net homepage displays multiple collection sections, each showing the collection name as a heading and 2 products from that collection below it. This provides better content discovery and matches the reference website's pattern. Collections act as category showcases on the homepage, encouraging users to explore different product categories.
+  - Reason: Updated home_view.dart to display 3 featured collections (Signature & Essential Range, Portsmouth City Collection, Pride Collection) using Consumer<CollectionViewModel>. Each section shows clickable collection name heading linking to /collections/{collectionId} and 2 products from that collection. Products link with collection context to /collections/{collectionId}/products/{productId}. Implemented responsive layout with LayoutBuilder - products displayed side-by-side on desktop (>600px width) and stacked vertically on mobile. Replaced old hardcoded "FEATURED PRODUCTS" section with real data from repositories. Updated home_test.dart to check for collection section headings instead of hardcoded product names. All tests updated to inject both ProductRepository and CollectionRepository with zero latency for deterministic testing. Homepage now matches shop.upsu.net pattern where collections act as category showcases.
 
 - [ ] S-25 — **Mobile Navigation (Hamburger Menu)**
   - Create MobileNavigationDrawer widget (lib/widgets/shared/mobile_navigation_drawer.dart)
