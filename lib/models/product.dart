@@ -4,14 +4,14 @@ class Product {
   final String title;
   final String price;
   final String imageUrl;
-  final String? description;
+  final String description;
 
   const Product({
     required this.id,
     required this.title,
     required this.price,
     required this.imageUrl,
-    this.description,
+    required this.description,
   });
 
   /// Create a Product from a Map
@@ -21,7 +21,7 @@ class Product {
       title: map['title'] as String,
       price: map['price'] as String,
       imageUrl: map['imageUrl'] as String,
-      description: map['description'] as String?,
+      description: map['description'] as String,
     );
   }
 
