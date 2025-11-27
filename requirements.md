@@ -48,9 +48,10 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - BaseViewModel centralises loading state and helpers.
   - Reason: BaseViewModel created with loading state management and helper methods (setLoading, runWithLoading). HomeViewModel and ProductViewModel created extending BaseViewModel. Both ViewModels currently use hardcoded data and will be connected to repositories in S-06. Provider package added to dependencies for state management.
 
-- [ ] S-06 — Repositories & DI  
+- [x] S-06 — Repositories & DI  
   - `ProductRepository` interface and `InMemoryProductRepository` implemented with configurable latency.  
   - Repositories and view models injected via Provider in `main.dart`.
+  - Reason: Product model created (lib/models/product.dart) with id, title, price, imageUrl, and description. ProductRepository interface created (lib/repositories/product_repository.dart) with fetchAll(), fetchById(), and search() methods. InMemoryProductRepository implemented with configurable latency (default 500ms, can be set to Duration.zero for tests). HomeViewModel and ProductViewModel updated to use Product model and repository injection. Provider DI wired up in main.dart with createApp() factory function that accepts optional ProductRepository and navigatorKey for testing.
 
 - [ ] S-07 — Routing & navigation  
   - Routes and `navigatorKey` exposed in `main.dart` (home + /product route present).
