@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
@@ -8,7 +9,7 @@ class CollectionsOverviewPage extends StatelessWidget {
   const CollectionsOverviewPage({super.key});
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.go('/');
   }
 
   void placeholderCallbackForButtons() {
@@ -156,7 +157,7 @@ class _CollectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/collections/$collectionId');
+        context.go('/collections/$collectionId');
       },
       child: Semantics(
         button: true,

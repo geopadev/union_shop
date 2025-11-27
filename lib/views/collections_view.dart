@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
@@ -12,7 +13,7 @@ class CollectionsPage extends StatelessWidget {
   const CollectionsPage({super.key, this.collectionId});
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.go('/');
   }
 
   void placeholderCallbackForButtons() {
@@ -83,7 +84,7 @@ class CollectionsPage extends StatelessWidget {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap: () => Navigator.pushNamed(context, '/'),
+                                onTap: () => context.go('/'),
                                 child: const Text(
                                   'Home',
                                   style: TextStyle(
@@ -221,13 +222,10 @@ class _ProductCard extends StatelessWidget {
       onTap: () {
         // Navigate with collection context if available
         if (collectionId != null) {
-          Navigator.pushNamed(
-            context,
-            '/collections/$collectionId/products/${product.id}',
-          );
+          context.go('/collections/$collectionId/products/${product.id}');
         } else {
           // Fallback to old route if no collection context
-          Navigator.pushNamed(context, '/product');
+          context.go('/product');
         }
       },
       child: Semantics(

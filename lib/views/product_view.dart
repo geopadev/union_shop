@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -13,7 +14,7 @@ class ProductPage extends StatelessWidget {
   });
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.go('/');
   }
 
   void placeholderCallbackForButtons() {
@@ -47,7 +48,7 @@ class ProductPage extends StatelessWidget {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/'),
+                          onTap: () => context.go('/'),
                           child: const Text(
                             'Home',
                             style: TextStyle(
@@ -62,10 +63,7 @@ class ProductPage extends StatelessWidget {
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            '/collections/$collectionId',
-                          ),
+                          onTap: () => context.go('/collections/$collectionId'),
                           child: Text(
                             collectionId!.replaceAll('-', ' ').toUpperCase(),
                             style: const TextStyle(
