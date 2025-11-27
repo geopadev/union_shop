@@ -13,31 +13,31 @@ class NavigationData {
       children: [
         NavigationItem(
           title: 'Clothing',
-          route: '/shop/clothing',
+          route: '/collections/clothing',
         ),
         NavigationItem(
           title: 'Merchandise',
-          route: '/shop/merchandise',
+          route: '/collections/merchandise',
         ),
         NavigationItem(
           title: 'Halloween 🎃',
-          route: '/shop/halloween',
+          route: '/collections/halloween',
         ),
         NavigationItem(
           title: 'Signature & Essential Range',
-          route: '/shop/signature-essential',
+          route: '/collections/signature-essential',
         ),
         NavigationItem(
           title: 'Portsmouth City Collection',
-          route: '/shop/portsmouth',
+          route: '/collections/portsmouth',
         ),
         NavigationItem(
           title: 'Pride Collection 🏳️‍🌈',
-          route: '/shop/pride',
+          route: '/collections/pride',
         ),
         NavigationItem(
           title: 'Graduation 🎓',
-          route: '/shop/graduation',
+          route: '/collections/graduation',
         ),
       ],
     ),
@@ -56,7 +56,7 @@ class NavigationData {
     ),
     NavigationItem(
       title: 'SALE!',
-      route: '/sale',
+      route: '/collections/sale',
     ),
     NavigationItem(
       title: 'About',
