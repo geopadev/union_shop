@@ -21,6 +21,7 @@ class _HeroCarouselState extends State<HeroCarousel> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
+  bool _isPaused = false;
 
   @override
   void initState() {
@@ -36,16 +37,53 @@ class _HeroCarouselState extends State<HeroCarousel> {
   }
 
   void _startAutoAdvance() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_pageController.hasClients) {
-        final nextPage = (_currentPage + 1) % widget.slides.length;
-        _pageController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
+    _timer?.cancel();
+    if (!_isPaused) {
+      _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+        if (_pageController.hasClients) {
+          final nextPage = (_currentPage + 1) % widget.slides.length;
+          _pageController.animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  void _togglePause() {
+    setState(() {
+      _isPaused = !_isPaused;
+      if (_isPaused) {
+        _timer?.cancel();
+      } else {
+        _startAutoAdvance();
       }
     });
+  }
+
+  void _goToPrevious() {
+    if (_pageController.hasClients) {
+      final prevPage =
+          (_currentPage - 1 + widget.slides.length) % widget.slides.length;
+      _pageController.animateToPage(
+        prevPage,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _goToNext() {
+    if (_pageController.hasClients) {
+      final nextPage = (_currentPage + 1) % widget.slides.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -68,6 +106,51 @@ class _HeroCarouselState extends State<HeroCarousel> {
             itemBuilder: (context, index) {
               return _buildSlide(widget.slides[index], index);
             },
+          ),
+
+          // Previous button
+          Positioned(
+            left: 16,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios,
+                    color: Colors.white, size: 32),
+                onPressed: _goToPrevious,
+                tooltip: 'Previous slide',
+              ),
+            ),
+          ),
+
+          // Next button
+          Positioned(
+            right: 16,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.white, size: 32),
+                onPressed: _goToNext,
+                tooltip: 'Next slide',
+              ),
+            ),
+          ),
+
+          // Pause/Play button
+          Positioned(
+            top: 16,
+            right: 16,
+            child: IconButton(
+              icon: Icon(
+                _isPaused ? Icons.play_arrow : Icons.pause,
+                color: Colors.white,
+                size: 32,
+              ),
+              onPressed: _togglePause,
+              tooltip: _isPaused ? 'Resume auto-advance' : 'Pause auto-advance',
+            ),
           ),
 
           // Navigation dots indicator
