@@ -1,4 +1,3 @@
-
 # Feature Requirements: MVVM refactor, minimal main.dart, reusable header & footer
 
 ## 1. Feature description
@@ -34,52 +33,38 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
 - [x] S-02 — Main entry refactor (keep main.dart)  
   - Replace current `main.dart` with a minimal bootstrap that initializes services and calls `runApp(UnionShopApp())`.  
   - Keep `UnionShopApp` in `lib/main.dart`; configure ThemeData, routes, navigatorKey and top-level providers inside `main.dart`.  
-  - Reason: `main.dart` now wires providers, navigatorKey, routes and ThemeData.
+  - Reason: `main.dart` is now minimal, containing only `main()` function and `UnionShopApp` with theme, routes configuration.
 
-- [x] S-03 — Shared header widget  
-  - `lib/widgets/shared/shared_header.dart` implemented. Exposes header actions and Keys (note: Key names used in code differ slightly from original recommendations; consider standardizing).
+- [ ] S-03 — Shared header widget  
+  - `lib/widgets/shared/shared_header.dart` implemented. Exposes header actions and Keys.
 
-- [x] S-04 — Shared footer widget  
+- [ ] S-04 — Shared footer widget  
   - `lib/widgets/shared/shared_footer.dart` implemented with Key('footer_main').
 
-- [x] S-05 — MVVM scaffolding — COMPLETE
+- [ ] S-05 — MVVM scaffolding
   - HomeViewModel and ProductViewModel now extend a new BaseViewModel (lib/view_models/base_view_model.dart)
   - BaseViewModel centralises loading state and helpers.
 
---- 
-
-complete: S-05
-
-- [x] S-06 — Repositories & DI  
+- [ ] S-06 — Repositories & DI  
   - `ProductRepository` interface and `InMemoryProductRepository` implemented with configurable latency.  
   - Repositories and view models injected via Provider in `main.dart`.
 
-- [x] S-07 — Routing & navigation  
+- [ ] S-07 — Routing & navigation  
   - Routes and `navigatorKey` exposed in `main.dart` (home + /product route present).
 
-- [x] S-08 — Testability fixes — COMPLETE  
+- [ ] S-08 — Testability fixes
   - Tests should build the app via `createApp(productRepo: InMemoryProductRepository(latency: Duration.zero))` (see lib/main.dart).  
   - This ensures deterministic widget tests by removing artificial repo latency while keeping the production default unchanged.
 
---- 
-
-complete: S-08
-
-- [x] S-09 — Accessibility, theming, responsiveness — COMPLETE  
+- [ ] S-09 — Accessibility, theming, responsiveness
   - Added semantic labels to product images and wrapped header/footer with Semantics to improve screen reader support (lib/views/* and lib/widgets/shared/*).  
   - Header strip now keeps its original icon-only actions so the look remains unchanged while tooltips keep it accessible (lib/widgets/shared/shared_header.dart).  
   - Products grid layout now adapts columns & aspect ratio to available width to improve responsiveness (lib/views/home_view.dart).
 
---- 
-
-complete: S-09
-
-- [x] S-10 — Documentation — COMPLETE  
+- [ ] S-10 — Documentation
   - Added developer usage examples, test instructions and guidance for adding new views, view models and repositories below.
 
 --- 
-
-complete: S-10
 
 ## Developer quickstart (how to run the app)
 - Install Flutter and ensure `flutter doctor` is green.
