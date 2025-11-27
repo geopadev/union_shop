@@ -118,6 +118,34 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Dynamic routes via onGenerateRoute handle '/shop/{collectionId}' pattern
   - Reason: S-21 functionality was already implemented in S-20. CollectionsPage (lib/views/collections_view.dart) accepts collectionId parameter and displays filtered products for that collection. CollectionViewModel's getCollectionById() and getProductsForCollection() methods filter products by collection. Breadcrumb navigation added showing "Home > [Collection Name]" with clickable Home link. Dynamic routes handled via onGenerateRoute for '/shop/{collectionId}' pattern. Page includes Key('collections_page') for testing. Collection pages display name, description, product count, and responsive product grid matching shop.upsu.net pattern.
 
+- [ ] S-21.1 — **Fix Collection URLs to Match Website**
+  - Update routing from '/shop/{collectionId}' to '/collections/{collectionId}'
+  - Update all navigation links in NavigationData to use '/collections/' prefix
+  - Update onGenerateRoute in main.dart to handle '/collections/{collectionId}' pattern
+  - Test that collection links work with new URL format
+  - Reason: Shop.upsu.net uses /collections/{collectionId} format, not /shop/. This needs to be updated for consistency with the actual website.
+
+- [ ] S-21.2 — **Implement Nested Product URLs with Collection Context**
+  - Products can belong to multiple collections (e.g., classic-rainbow-hoodies in both "Pride Collection" and "Clothing")
+  - Product URLs must include collection context: '/collections/{collectionId}/products/{productId}'
+  - Same product accessed from different collections shows different URLs reflecting the navigation path
+  - Update ProductPage to accept both collectionId and productId parameters from URL
+  - Update onGenerateRoute to parse nested URLs like '/collections/pride-collection/products/classic-rainbow-hoodies'
+  - Update all product card taps to include current collection context in navigation URL
+  - Add dynamic breadcrumb to ProductPage: Home > [Collection Name from URL] > [Product Name]
+  - Breadcrumb should reflect the collection user came from, not all collections product belongs to
+  - Reason: Shop.upsu.net shows same product at different URLs depending on navigation path (e.g., /collections/pride-collection/products/classic-rainbow-hoodies vs /collections/clothing-2/products/classic-rainbow-hoodies). This provides proper navigation context and breadcrumb trails based on where user came from.
+
+- [ ] S-21.3 — **Support Products in Multiple Collections**
+  - Products can belong to multiple collections simultaneously
+  - Update Product model to have optional collectionIds list (not required for display)
+  - InMemoryProductRepository should allow same product to appear in multiple collection filters
+  - CollectionViewModel's getProductsForCollection returns products where collection.productIds contains the product ID
+  - Product cards in collection pages must navigate with collection context: '/collections/{currentCollectionId}/products/{productId}'
+  - ProductPage receives collectionId from URL for breadcrumb, not from product data
+  - This allows products to be discovered through multiple navigation paths while maintaining URL context
+  - Reason: Products like "classic-rainbow-hoodies" appear in multiple collections (Pride, Clothing) with different URLs. The URL path shows navigation context, not product ownership. Products are associated with collections via Collection.productIds list.
+
 - [ ] S-22 — **Hero Carousel Widget**
   - Create CarouselSlide model (lib/models/carousel_slide.dart): title, subtitle, imageUrl, buttonText, buttonRoute
   - Create HeroCarousel widget (lib/widgets/home/hero_carousel.dart)
