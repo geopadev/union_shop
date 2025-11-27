@@ -136,7 +136,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Breadcrumb should reflect the collection user came from, not all collections product belongs to
   - Reason: Updated ProductPage (lib/views/product_view.dart) to accept optional collectionId and productId parameters. Added breadcrumb navigation showing Home > Collection Name > Product with clickable links. Updated main.dart onGenerateRoute to parse nested URLs like '/collections/{collectionId}/products/{productId}' by extracting path segments and validating structure. Updated CollectionsPage product cards (lib/views/collections_view.dart) to navigate with collection context via '/collections/{collectionId}/products/{productId}'. Product URLs now reflect navigation path matching shop.upsu.net pattern where same product has different URLs based on where it's accessed from.
 
-- [ ] S-21.3 — **Implement Deep Linking with Browser URL Updates**
+- [x] S-21.3 — **Implement Deep Linking with Browser URL Updates**
   - Configure Flutter web app to update browser URL bar when navigating
   - Replace Navigator.pushNamed with proper routing that updates the browser address bar
   - Implement go_router or similar declarative routing package for URL management
@@ -144,7 +144,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Test that browser back/forward buttons work correctly with navigation
   - Test that copying URL from address bar and pasting in new tab navigates to correct page
   - Ensure URLs are properly formatted and match shop.upsu.net pattern
-  - Reason: Flutter web apps need proper deep linking configuration to show URLs in browser address bar. By default, Navigator.pushNamed uses hash routing (#/route) or doesn't update the URL at all. Need to implement go_router package which provides declarative routing with proper URL path updates, browser history support, and deep linking. This allows users to bookmark pages, share links, and use browser back/forward buttons naturally, matching shop.upsu.net behavior.
+  - Reason: Added go_router ^14.0.0 package to pubspec.yaml. Created app_router.dart (lib/router/app_router.dart) defining all routes using GoRouter with declarative routing structure matching shop.upsu.net URL pattern. Migrated from MaterialApp to MaterialApp.router in main.dart using routerConfig parameter. Replaced all Navigator.pushNamed() calls with context.go() throughout the app (home_view.dart, about_view.dart, collections_overview_view.dart, collections_view.dart, product_view.dart, navigation_menu.dart, dropdown_menu_widget.dart). Browser address bar now updates on navigation, browser back/forward buttons work automatically, URLs can be bookmarked and shared. Deep linking fully functional matching shop.upsu.net behavior with proper URL paths like /collections/clothing and /collections/pride/products/classic-hoodie.
 
 - [ ] S-21.4 — **Support Products in Multiple Collections**
   - Products can belong to multiple collections simultaneously
