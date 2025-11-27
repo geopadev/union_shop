@@ -44,22 +44,26 @@ class SharedHeader extends StatelessWidget {
                   GestureDetector(
                     key: const Key('logoTap'),
                     onTap: onLogoTap,
-                    child: Image.network(
-                      'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                      key: const Key('app_logo'),
-                      height: 18,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[300],
-                          width: 18,
-                          height: 18,
-                          child: const Center(
-                            child: Icon(Icons.image_not_supported,
-                                color: Colors.grey),
-                          ),
-                        );
-                      },
+                    child: Semantics(
+                      label: 'University of Portsmouth Students Union logo',
+                      button: true,
+                      child: Image.network(
+                        'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                        key: const Key('app_logo'),
+                        height: 18,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            width: 18,
+                            height: 18,
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported,
+                                  color: Colors.grey),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -75,6 +79,7 @@ class SharedHeader extends StatelessWidget {
                             size: 18,
                             color: Colors.grey,
                           ),
+                          tooltip: 'Search',
                           padding: const EdgeInsets.all(8),
                           constraints: const BoxConstraints(
                             minWidth: 32,
@@ -89,6 +94,7 @@ class SharedHeader extends StatelessWidget {
                             size: 18,
                             color: Colors.grey,
                           ),
+                          tooltip: 'Account',
                           padding: const EdgeInsets.all(8),
                           constraints: const BoxConstraints(
                             minWidth: 32,
@@ -103,6 +109,7 @@ class SharedHeader extends StatelessWidget {
                             size: 18,
                             color: Colors.grey,
                           ),
+                          tooltip: 'Shopping cart',
                           padding: const EdgeInsets.all(8),
                           constraints: const BoxConstraints(
                             minWidth: 32,
@@ -117,6 +124,7 @@ class SharedHeader extends StatelessWidget {
                             size: 18,
                             color: Colors.grey,
                           ),
+                          tooltip: 'Menu',
                           padding: const EdgeInsets.all(8),
                           constraints: const BoxConstraints(
                             minWidth: 32,
