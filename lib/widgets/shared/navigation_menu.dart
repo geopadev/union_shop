@@ -20,11 +20,14 @@ class NavigationMenu extends StatelessWidget {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: NavigationData.mainNavigation.map((item) {
-          return _buildNavItem(context, item);
-        }).toList(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: NavigationData.mainNavigation.map((item) {
+            return _buildNavItem(context, item);
+          }).toList(),
+        ),
       ),
     );
   }
