@@ -29,35 +29,6 @@ class AboutPage extends StatelessWidget {
               onMenuTap: placeholderCallbackForButtons,
             ),
 
-            // Hero Banner
-            Container(
-              width: double.infinity,
-              height: 250,
-              decoration: BoxDecoration(
-                color: const Color(0xFF4d2963),
-                image: DecorationImage(
-                  image: const NetworkImage(
-                    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-                  ),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.5),
-                    BlendMode.darken,
-                  ),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'About Us',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-
             // About Content
             Container(
               color: Colors.white,
@@ -66,29 +37,39 @@ class AboutPage extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 900),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Page Title
+                      const Text(
+                        'About Us',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+
                       // Introduction
                       const Text(
                         'Welcome to the University of Portsmouth Students\' Union Shop',
-                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           height: 1.3,
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
                       const Text(
                         'We are your one-stop destination for all things University of Portsmouth! From exclusive merchandise and clothing to everyday essentials, we provide students with high-quality products that celebrate university life and Portsmouth pride.',
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black87,
                           height: 1.8,
                         ),
                       ),
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 48),
 
                       // Two Column Section
                       LayoutBuilder(
@@ -114,7 +95,7 @@ class AboutPage extends StatelessWidget {
                         },
                       ),
 
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 48),
 
                       // Why Choose Us Section
                       Container(
@@ -161,7 +142,7 @@ class AboutPage extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 48),
 
                       // Contact Section
                       Container(

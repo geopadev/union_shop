@@ -94,12 +94,13 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add hover behavior for desktop, tap behavior for mobile
   - Reason: Created DropdownMenuWidget (lib/widgets/shared/dropdown_menu_widget.dart) using Overlay system for dropdown rendering. Implemented hover behavior with MouseRegion for desktop and tap behavior with GestureDetector for mobile. Added 200ms delay timer to prevent flickering between trigger and dropdown. Dropdown tracks hover state separately for trigger and overlay to allow smooth mouse movement. Added semantic labels to dropdown trigger and menu items for screen reader support. Integrated DropdownMenuWidget into NavigationMenu for items with children (SHOP and The Print Shack). Dropdown closes when clicking outside or selecting an item.
 
-- [ ] S-19 — **About Page**
+- [x] S-19 — **About Page**
   - Create AboutPage (lib/views/about_view.dart)
   - Add route '/about' in main.dart
   - Display company information, mission, values
   - Use SharedHeader and SharedFooter for consistency
   - Add Key('about_page') for testing
+  - Reason: Created AboutPage (lib/views/about_view.dart) with comprehensive content including introduction, mission/values cards, "Why Choose Us?" section with icon-based features, and contact information section. Added '/about' route to main.dart. Page uses SharedHeader and SharedFooter for consistency. Content is constrained to 900px width for readability with responsive two-column layout for mission/values cards. Page includes Key('about_page') for testing. Styled sections with appropriate spacing, colors (university purple #4d2963), and visual hierarchy.
 
 - [ ] S-20 — **Collections Overview Page**
   - Create CollectionsPage (lib/views/collections_view.dart)
