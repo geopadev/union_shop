@@ -122,39 +122,65 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 48),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                      crossAxisSpacing: 24,
-                      mainAxisSpacing: 48,
-                      children: const [
-                        ProductCard(
-                          title: 'Placeholder Product 1',
-                          price: '£10.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 2',
-                          price: '£15.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 3',
-                          price: '£20.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 4',
-                          price: '£25.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                      ],
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Calculate columns based on available width
+                        int crossAxisCount;
+                        double childAspectRatio;
+
+                        if (constraints.maxWidth > 1200) {
+                          // Large screens: 4 columns
+                          crossAxisCount = 4;
+                          childAspectRatio = 0.7;
+                        } else if (constraints.maxWidth > 800) {
+                          // Medium screens: 3 columns
+                          crossAxisCount = 3;
+                          childAspectRatio = 0.75;
+                        } else if (constraints.maxWidth > 600) {
+                          // Tablets: 2 columns
+                          crossAxisCount = 2;
+                          childAspectRatio = 0.8;
+                        } else {
+                          // Mobile: 1 column
+                          crossAxisCount = 1;
+                          childAspectRatio = 1.2;
+                        }
+
+                        return GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: childAspectRatio,
+                          crossAxisSpacing: 24,
+                          mainAxisSpacing: 48,
+                          children: const [
+                            ProductCard(
+                              title: 'Placeholder Product 1',
+                              price: '£10.00',
+                              imageUrl:
+                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                            ),
+                            ProductCard(
+                              title: 'Placeholder Product 2',
+                              price: '£15.00',
+                              imageUrl:
+                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                            ),
+                            ProductCard(
+                              title: 'Placeholder Product 3',
+                              price: '£20.00',
+                              imageUrl:
+                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                            ),
+                            ProductCard(
+                              title: 'Placeholder Product 4',
+                              price: '£25.00',
+                              imageUrl:
+                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),
