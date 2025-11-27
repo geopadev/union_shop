@@ -37,6 +37,9 @@ class CollectionViewModel extends BaseViewModel {
   }
 
   /// Get products for a specific collection
+  /// Products can appear in multiple collections - this method filters based on
+  /// the collection's productIds list. Same product accessed from different
+  /// collections will have different URLs reflecting the navigation path.
   List<Product> getProductsForCollection(String collectionId) {
     final collection = getCollectionById(collectionId);
     if (collection == null) return [];
