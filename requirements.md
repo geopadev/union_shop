@@ -156,7 +156,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - This allows products to be discovered through multiple navigation paths while maintaining URL context
   - Reason: Updated InMemoryCollectionRepository (lib/repositories/in_memory_collection_repository.dart) to have overlapping product IDs in Collection.productIds lists. Product '1' now appears in 6 collections (Clothing, Halloween, Signature, Portsmouth, Pride, Sale). Product '2' appears in 6 collections. Product '3' appears in 5 collections. Product '4' appears in 5 collections. CollectionViewModel's getProductsForCollection() method already filters products correctly using collection.productIds.contains(product.id), so no ViewModel changes needed. Product cards navigate with collection context (/collections/{collectionId}/products/{productId}). ProductPage receives collectionId from URL for breadcrumb display, not from product data. Same product accessible via different URLs based on navigation path, matching shop.upsu.net behavior.
 
-- [ ] S-22 — **Hero Carousel Widget**
+- [x] S-22 — **Hero Carousel Widget**
   - Create CarouselSlide model (lib/models/carousel_slide.dart): title, subtitle, imageUrl, buttonText, buttonRoute
   - Create HeroCarousel widget (lib/widgets/home/hero_carousel.dart)
   - Implement PageView for sliding between carousel items
@@ -164,6 +164,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add manual navigation dots/indicators
   - First slide has "BROWSE COLLECTION" button linking to a collection
   - Add Keys: Key('hero_carousel'), Key('carousel_slide_0'), Key('browse_collection_button')
+  - Reason: Created CarouselSlide model (lib/models/carousel_slide.dart) with title, subtitle, imageUrl, buttonText, buttonRoute properties. Created CarouselData class (lib/data/carousel_data.dart) with 3 sample slides linking to Portsmouth, Halloween, and Pride collections. Implemented HeroCarousel widget (lib/widgets/home/hero_carousel.dart) using PageView.builder for swipeable slides. Added auto-advance timer (5 second intervals) with smooth animations (400ms duration, easeInOut curve). Each slide displays image with dark overlay, centered title/subtitle text, and call-to-action button navigating via go_router. Added navigation dots indicator at bottom showing current slide position. Includes all required test Keys: 'hero_carousel', 'carousel_slide_0', 'browse_collection_button'. Timer properly cancelled in dispose() to prevent memory leaks.
 
 - [ ] S-23 — **Carousel Integration & Navigation**
   - Replace static hero section in home_view.dart with HeroCarousel
