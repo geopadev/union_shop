@@ -29,102 +29,184 @@ class AboutPage extends StatelessWidget {
               onMenuTap: placeholderCallbackForButtons,
             ),
 
+            // Hero Banner
+            Container(
+              width: double.infinity,
+              height: 250,
+              decoration: BoxDecoration(
+                color: const Color(0xFF4d2963),
+                image: DecorationImage(
+                  image: const NetworkImage(
+                    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+                  ),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5),
+                    BlendMode.darken,
+                  ),
+                ),
+              ),
+              child: const Center(
+                child: Text(
+                  'About Us',
+                  style: TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+
             // About Content
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(40.0),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Page Title
-                    const Text(
-                      'About Us',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 900),
+                  child: Column(
+                    children: [
+                      // Introduction
+                      const Text(
+                        'Welcome to the University of Portsmouth Students\' Union Shop',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          height: 1.3,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 32),
+                      const SizedBox(height: 32),
+                      const Text(
+                        'We are your one-stop destination for all things University of Portsmouth! From exclusive merchandise and clothing to everyday essentials, we provide students with high-quality products that celebrate university life and Portsmouth pride.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                          height: 1.8,
+                        ),
+                      ),
+                      const SizedBox(height: 60),
 
-                    // Mission Section
-                    const Text(
-                      'Our Mission',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF4d2963),
+                      // Two Column Section
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          if (constraints.maxWidth > 700) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(child: _buildMissionCard()),
+                                const SizedBox(width: 40),
+                                Expanded(child: _buildValuesCard()),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                _buildMissionCard(),
+                                const SizedBox(height: 40),
+                                _buildValuesCard(),
+                              ],
+                            );
+                          }
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'At the University of Portsmouth Students\' Union Shop, we are dedicated to providing students with high-quality products that celebrate university life and Portsmouth pride. From everyday essentials to exclusive collections, we strive to offer items that enhance the student experience.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        height: 1.6,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
 
-                    // Values Section
-                    const Text(
-                      'Our Values',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF4d2963),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildValueItem(
-                      'Quality',
-                      'We source and create products that meet the highest standards of quality and durability.',
-                    ),
-                    _buildValueItem(
-                      'Community',
-                      'We foster a sense of belonging by offering products that unite students and celebrate our diverse community.',
-                    ),
-                    _buildValueItem(
-                      'Sustainability',
-                      'We are committed to environmentally responsible practices and offering sustainable product options.',
-                    ),
-                    _buildValueItem(
-                      'Affordability',
-                      'We believe quality products should be accessible to all students at fair prices.',
-                    ),
-                    const SizedBox(height: 32),
+                      const SizedBox(height: 60),
 
-                    // Contact Section
-                    const Text(
-                      'Get in Touch',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF4d2963),
+                      // Why Choose Us Section
+                      Container(
+                        padding: const EdgeInsets.all(40),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Why Choose Us?',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4d2963),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            _buildFeatureRow(
+                              Icons.verified,
+                              'Quality Products',
+                              'We source and create products that meet the highest standards.',
+                            ),
+                            const SizedBox(height: 24),
+                            _buildFeatureRow(
+                              Icons.people,
+                              'Student Community',
+                              'Supporting student life through exclusive collections and events.',
+                            ),
+                            const SizedBox(height: 24),
+                            _buildFeatureRow(
+                              Icons.eco,
+                              'Sustainability',
+                              'Committed to environmentally responsible practices.',
+                            ),
+                            const SizedBox(height: 24),
+                            _buildFeatureRow(
+                              Icons.local_offer,
+                              'Affordable Pricing',
+                              'Quality products at student-friendly prices.',
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Have questions or feedback? We\'d love to hear from you!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        height: 1.6,
+
+                      const SizedBox(height: 60),
+
+                      // Contact Section
+                      Container(
+                        padding: const EdgeInsets.all(40),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4d2963),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Get in Touch',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            const Text(
+                              'Have questions or feedback? We\'d love to hear from you!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                height: 1.6,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            _buildContactInfo(
+                                Icons.email, 'shop@upsu.net', Colors.white),
+                            const SizedBox(height: 12),
+                            _buildContactInfo(
+                                Icons.phone, '023 9284 3000', Colors.white),
+                            const SizedBox(height: 12),
+                            _buildContactInfo(
+                              Icons.location_on,
+                              'Students\' Union, Cambridge Road, Portsmouth, PO1 2EF',
+                              Colors.white,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Email: shop@upsu.net\nPhone: 023 9284 3000\nVisit: Students\' Union, Cambridge Road, Portsmouth, PO1 2EF',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        height: 1.6,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -137,48 +219,140 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget _buildValueItem(String title, String description) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildMissionCard() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: Color(0xFF4d2963),
-              shape: BoxShape.circle,
+          Icon(
+            Icons.flag,
+            size: 48,
+            color: const Color(0xFF4d2963),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Our Mission',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    height: 1.6,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 16),
+          const Text(
+            'To provide students with high-quality products that enhance the university experience and celebrate Portsmouth pride.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+              height: 1.6,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildValuesCard() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.favorite,
+            size: 48,
+            color: const Color(0xFF4d2963),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Our Values',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Quality, community, sustainability, and affordability are at the heart of everything we do.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureRow(IconData icon, String title, String description) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: 32,
+          color: const Color(0xFF4d2963),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactInfo(IconData icon, String text, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, size: 20, color: color),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: color,
+              height: 1.5,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
