@@ -35,8 +35,9 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Keep `UnionShopApp` in `lib/main.dart`; configure ThemeData, routes, navigatorKey and top-level providers inside `main.dart`.  
   - Reason: `main.dart` is now minimal, containing only `main()` function and `UnionShopApp` with theme, routes configuration.
 
-- [ ] S-03 — Shared header widget  
+- [x] S-03 — Shared header widget  
   - `lib/widgets/shared/shared_header.dart` implemented. Exposes header actions and Keys.
+  - Reason: SharedHeader widget created with callback properties (onLogoTap, onSearchTap, onAccountTap, onCartTap, onMenuTap) and test Keys (logoTap, app_logo, header_search, header_account, header_cart, header_menu, header_banner). Integrated into both HomeScreen and ProductPage.
 
 - [ ] S-04 — Shared footer widget  
   - `lib/widgets/shared/shared_footer.dart` implemented with Key('footer_main').
