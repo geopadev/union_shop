@@ -10,27 +10,31 @@ class SharedFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      key: const Key('footer_main'),
-      width: double.infinity,
-      color: Colors.grey[50],
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Placeholder Footer',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+    return Semantics(
+      label: 'Page footer with additional information',
+      container: true,
+      child: Container(
+        key: const Key('footer_main'),
+        width: double.infinity,
+        color: Colors.grey[50],
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Placeholder Footer',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          if (additionalContent != null) ...[
-            const SizedBox(height: 16),
-            additionalContent!,
+            if (additionalContent != null) ...[
+              const SizedBox(height: 16),
+              additionalContent!,
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
