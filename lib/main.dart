@@ -4,14 +4,10 @@ import 'package:union_shop/repositories/in_memory_collection_repository.dart';
 import 'package:union_shop/repositories/in_memory_product_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';
+import 'package:union_shop/router/app_router.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/view_models/home_view_model.dart';
 import 'package:union_shop/view_models/product_view_model.dart';
-import 'package:union_shop/views/about_view.dart';
-import 'package:union_shop/views/collections_overview_view.dart';
-import 'package:union_shop/views/collections_view.dart';
-import 'package:union_shop/views/home_view.dart';
-import 'package:union_shop/views/product_view.dart';
 
 void main() {
   runApp(createApp());
@@ -57,56 +53,16 @@ class UnionShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
+    // Create router configuration
+    final router = createRouter(navigatorKey: navigatorKey);
+
+    return MaterialApp.router(
+      routerConfig: router,
       title: 'Union Shop',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
       ),
-      home: const HomeScreen(),
-      initialRoute: '/',
-      routes: {
-        '/product': (context) => const ProductPage(),
-        '/about': (context) => const AboutPage(),
-        '/collections': (context) => const CollectionsOverviewPage(),
-      },
-      onGenerateRoute: (settings) {
-        // Handle nested product URLs: /collections/{collectionId}/products/{productId}
-        if (settings.name != null && settings.name!.contains('/products/')) {
-          final uri = Uri.parse(settings.name!);
-          final segments = uri.pathSegments;
-
-          // Expected format: ['collections', collectionId, 'products', productId]
-          if (segments.length == 4 &&
-              segments[0] == 'collections' &&
-              segments[2] == 'products') {
-            final collectionId = segments[1];
-            final productId = segments[3];
-
-            return MaterialPageRoute(
-              builder: (context) => ProductPage(
-                collectionId: collectionId,
-                productId: productId,
-              ),
-            );
-          }
-        }
-
-        // Handle collection URLs: /collections/{collectionId}
-        if (settings.name != null &&
-            settings.name!.startsWith('/collections/')) {
-          final collectionId = settings.name!.replaceFirst('/collections/', '');
-          // Avoid matching the overview page and nested product URLs
-          if (collectionId.isNotEmpty && !collectionId.contains('/')) {
-            return MaterialPageRoute(
-              builder: (context) => CollectionsPage(collectionId: collectionId),
-            );
-          }
-        }
-
-        return null;
-      },
     );
   }
 }
