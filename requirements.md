@@ -43,9 +43,10 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - `lib/widgets/shared/shared_footer.dart` implemented with Key('footer_main').
   - Reason: SharedFooter widget created with Key('footer_main') for testing and optional additionalContent parameter for pages that need supplemental footer content. Integrated into both HomeScreen and ProductPage for consistent footer across all pages.
 
-- [ ] S-05 — MVVM scaffolding
+- [x] S-05 — MVVM scaffolding
   - HomeViewModel and ProductViewModel now extend a new BaseViewModel (lib/view_models/base_view_model.dart)
   - BaseViewModel centralises loading state and helpers.
+  - Reason: BaseViewModel created with loading state management and helper methods (setLoading, runWithLoading). HomeViewModel and ProductViewModel created extending BaseViewModel. Both ViewModels currently use hardcoded data and will be connected to repositories in S-06. Provider package added to dependencies for state management.
 
 - [ ] S-06 — Repositories & DI  
   - `ProductRepository` interface and `InMemoryProductRepository` implemented with configurable latency.  
