@@ -39,8 +39,9 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - `lib/widgets/shared/shared_header.dart` implemented. Exposes header actions and Keys.
   - Reason: SharedHeader widget created with callback properties (onLogoTap, onSearchTap, onAccountTap, onCartTap, onMenuTap) and test Keys (logoTap, app_logo, header_search, header_account, header_cart, header_menu, header_banner). Integrated into both HomeScreen and ProductPage.
 
-- [ ] S-04 — Shared footer widget  
+- [x] S-04 — Shared footer widget  
   - `lib/widgets/shared/shared_footer.dart` implemented with Key('footer_main').
+  - Reason: SharedFooter widget created with Key('footer_main') for testing and optional additionalContent parameter for pages that need supplemental footer content. Integrated into both HomeScreen and ProductPage for consistent footer across all pages.
 
 - [ ] S-05 — MVVM scaffolding
   - HomeViewModel and ProductViewModel now extend a new BaseViewModel (lib/view_models/base_view_model.dart)
