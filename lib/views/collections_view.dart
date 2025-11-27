@@ -213,9 +213,22 @@ class _ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get collection context from the page
+    final collectionId =
+        context.findAncestorWidgetOfExactType<CollectionsPage>()?.collectionId;
+
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        // Navigate with collection context if available
+        if (collectionId != null) {
+          Navigator.pushNamed(
+            context,
+            '/collections/$collectionId/products/${product.id}',
+          );
+        } else {
+          // Fallback to old route if no collection context
+          Navigator.pushNamed(context, '/product');
+        }
       },
       child: Semantics(
         button: true,
