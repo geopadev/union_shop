@@ -158,10 +158,11 @@ Why: encourages expanding documentation beyond this file.
 
 ### Subtasks (Feature 6)
 
-- [ ] S-16 — **Navigation Model & Data**
+- [x] S-16 — **Navigation Model & Data**
   - Create NavigationItem model (lib/models/navigation_item.dart) with properties: title, route, children (for dropdowns)
   - Create Collection model (lib/models/collection.dart) with properties: id, name, description, imageUrl, products
   - Create sample collection data in repository
+  - Reason: NavigationItem model created with title, optional route, and optional children for dropdown menus, includes hasDropdown getter. Collection model created with id, name, description, imageUrl, and productIds. CollectionRepository interface created with fetchAll(), fetchById(), and fetchFeatured() methods. InMemoryCollectionRepository implemented with hardcoded data for 8 collections (Clothing, Merchandise, Halloween, Signature & Essential Range, Portsmouth City Collection, Pride Collection, Graduation, SALE) with configurable latency matching ProductRepository pattern.
 
 - [ ] S-17 — **Navigation Menu Widget**
   - Create NavigationMenu widget (lib/widgets/shared/navigation_menu.dart)
@@ -308,7 +309,7 @@ final carouselSlides = [
     buttonRoute: '/shop/halloween',
   ),
   // ... more slides
-];
+};
 ```
 
 ---
