@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:union_shop/views/product_view.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 

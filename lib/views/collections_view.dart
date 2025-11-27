@@ -79,6 +79,36 @@ class CollectionsPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Breadcrumb Navigation
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => Navigator.pushNamed(context, '/'),
+                                child: const Text(
+                                  'Home',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF4d2963),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                ' > ',
+                                style:
+                                    TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                              Text(
+                                collection.name,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+
                           // Collection Header
                           Text(
                             collection.name,
