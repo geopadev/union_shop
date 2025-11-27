@@ -86,12 +86,13 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Keys for testing: Key('nav_home'), Key('nav_shop'), Key('nav_printshack'), Key('nav_sale'), Key('nav_about')
   - Reason: Created NavigationData class (lib/data/navigation_data.dart) defining navigation structure with 5 main items and dropdown children. NavigationMenu widget created (lib/widgets/shared/navigation_menu.dart) displaying horizontal navigation with TextButtons for each item. Items with dropdowns show arrow indicator. Navigation menu integrated into SharedHeader below banner by wrapping header in Column. Test Keys added following pattern nav_{item_title}. Dropdown functionality placeholder added (will be implemented in S-18).
 
-- [ ] S-18 — **Dropdown Menus**
+- [x] S-18 — **Dropdown Menus**
   - Implement dropdown menu widget (lib/widgets/shared/dropdown_menu.dart)
   - SHOP dropdown: Clothing, Merchandise, Halloween 🎃, Signature & Essential Range, Portsmouth City Collection, Pride Collection 🏳️‍🌈, Graduation 🎓
   - The Print Shack dropdown: About, Personalisation
   - Make dropdowns accessible (keyboard navigation, proper ARIA labels)
   - Add hover behavior for desktop, tap behavior for mobile
+  - Reason: Created DropdownMenuWidget (lib/widgets/shared/dropdown_menu_widget.dart) using Overlay system for dropdown rendering. Implemented hover behavior with MouseRegion for desktop and tap behavior with GestureDetector for mobile. Added 200ms delay timer to prevent flickering between trigger and dropdown. Dropdown tracks hover state separately for trigger and overlay to allow smooth mouse movement. Added semantic labels to dropdown trigger and menu items for screen reader support. Integrated DropdownMenuWidget into NavigationMenu for items with children (SHOP and The Print Shack). Dropdown closes when clicking outside or selecting an item.
 
 - [ ] S-19 — **About Page**
   - Create AboutPage (lib/views/about_view.dart)
