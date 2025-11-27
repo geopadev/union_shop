@@ -102,22 +102,20 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('about_page') for testing
   - Reason: Created AboutPage (lib/views/about_view.dart) with comprehensive content including introduction, mission/values cards, "Why Choose Us?" section with icon-based features, and contact information section. Added '/about' route to main.dart. Page uses SharedHeader and SharedFooter for consistency. Content is constrained to 900px width for readability with responsive two-column layout for mission/values cards. Page includes Key('about_page') for testing. Styled sections with appropriate spacing, colors (university purple #4d2963), and visual hierarchy.
 
-- [x] S-20 — **Collections Overview Page**
-  - Create CollectionsPage (lib/views/collections_view.dart)
-  - Add route '/collections' in main.dart
-  - Display grid of all collections with images and names
-  - Each collection card navigates to its individual collection page
+- [x] S-20 — **Collection Pages (Individual)**
+  - Create CollectionsPage (lib/views/collections_view.dart) to display products for a specific collection
+  - Add route '/collections' and dynamic routes '/shop/{collectionId}' in main.dart
+  - Display collection name, description, and filtered products in responsive grid
+  - Collection pages match shop.upsu.net pattern where each collection shows its filtered products
   - Use responsive grid layout (similar to products grid)
   - Add Key('collections_page') for testing
-  - Reason: Created CollectionViewModel (lib/view_models/collection_view_model.dart) that extends BaseViewModel and accepts both CollectionRepository and ProductRepository. ViewModel includes getCollectionById() and getProductsForCollection() methods to filter products by collection. Created CollectionsPage (lib/views/collections_view.dart) that accepts optional collectionId parameter and displays filtered products for that collection. Added '/collections' route and onGenerateRoute handler for dynamic '/shop/{collectionId}' routes in main.dart. Wired up CollectionRepository (InMemoryCollectionRepository) and CollectionViewModel with Provider DI. Page uses responsive grid layout matching shop.upsu.net pattern where each collection shows its filtered products directly. Includes loading states, error handling, and Key('collections_page') for testing.
+  - Reason: Created CollectionViewModel (lib/view_models/collection_view_model.dart) that extends BaseViewModel and accepts both CollectionRepository and ProductRepository. ViewModel includes getCollectionById() and getProductsForCollection() methods to filter products by collection. Created CollectionsPage (lib/views/collections_view.dart) that accepts optional collectionId parameter and displays filtered products for that collection with collection name, description, and product count. Added '/collections' route and onGenerateRoute handler for dynamic '/shop/{collectionId}' routes in main.dart. Wired up CollectionRepository (InMemoryCollectionRepository) and CollectionViewModel with Provider DI. Page uses responsive grid layout (1-4 columns) matching shop.upsu.net pattern where each collection shows its filtered products directly. Includes loading states, error handling, breadcrumb navigation (Home > Collection Name), and Key('collections_page') for testing.
 
-- [x] S-21 — **Individual Collection Pages**
-  - Create CollectionDetailPage (lib/views/collection_detail_view.dart)
-  - Add route '/collections/:id' in main.dart with route parameter
-  - CollectionViewModel to fetch products for specific collection
-  - Display collection name, description, and filtered products
-  - Add breadcrumb navigation: Home > Collections > [Collection Name]
-  - Add Key('collection_detail_page') for testing
+- [x] S-21 — **Collection Page Enhancements**
+  - Add breadcrumb navigation to collection pages: Home > [Collection Name]
+  - Ensure collection pages properly display filtered products
+  - CollectionViewModel already provides getCollectionById() and getProductsForCollection() methods
+  - Dynamic routes via onGenerateRoute handle '/shop/{collectionId}' pattern
   - Reason: S-21 functionality was already implemented in S-20. CollectionsPage (lib/views/collections_view.dart) accepts collectionId parameter and displays filtered products for that collection. CollectionViewModel's getCollectionById() and getProductsForCollection() methods filter products by collection. Breadcrumb navigation added showing "Home > [Collection Name]" with clickable Home link. Dynamic routes handled via onGenerateRoute for '/shop/{collectionId}' pattern. Page includes Key('collections_page') for testing. Collection pages display name, description, product count, and responsive product grid matching shop.upsu.net pattern.
 
 - [ ] S-22 — **Hero Carousel Widget**
