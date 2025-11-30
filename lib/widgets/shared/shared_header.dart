@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/navigation_menu.dart';
 
@@ -116,20 +118,57 @@ class SharedHeader extends StatelessWidget {
                                 ),
                                 onPressed: onAccountTap,
                               ),
-                              IconButton(
-                                key: const Key('header_cart'),
-                                icon: const Icon(
-                                  Icons.shopping_bag_outlined,
-                                  size: 18,
-                                  color: Colors.grey,
-                                ),
-                                tooltip: 'Shopping cart',
-                                padding: const EdgeInsets.all(8),
-                                constraints: const BoxConstraints(
-                                  minWidth: 32,
-                                  minHeight: 32,
-                                ),
-                                onPressed: onCartTap,
+                              // Cart icon with badge
+                              Consumer<CartViewModel>(
+                                builder: (context, cartViewModel, child) {
+                                  final itemCount = cartViewModel.totalItems;
+                                  return Stack(
+                                    children: [
+                                      IconButton(
+                                        key: const Key('header_cart'),
+                                        icon: const Icon(
+                                          Icons.shopping_bag_outlined,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                        tooltip: 'Shopping cart',
+                                        padding: const EdgeInsets.all(8),
+                                        constraints: const BoxConstraints(
+                                          minWidth: 32,
+                                          minHeight: 32,
+                                        ),
+                                        onPressed: onCartTap,
+                                      ),
+                                      if (itemCount > 0)
+                                        Positioned(
+                                          right: 4,
+                                          top: 4,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFF4d2963),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            constraints: const BoxConstraints(
+                                              minWidth: 16,
+                                              minHeight: 16,
+                                            ),
+                                            child: Text(
+                                              itemCount > 9
+                                                  ? '9+'
+                                                  : '$itemCount',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                },
                               ),
                               // Only show hamburger menu on narrow screens
                               if (isNarrowScreen)
