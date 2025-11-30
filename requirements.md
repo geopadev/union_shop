@@ -512,7 +512,22 @@ final carouselSlides = [
 
 ---
 
-- [x] S-47 — **Firebase Project Setup (Complete Step-by-Step Guide)**
+- [ ] S-46 — **Code Cleanup and Refactoring**
+  - Remove code duplication across views by extracting common widgets
+  - Consolidate similar _ProductCard implementations into shared ProductCard widget (already done in S-45)
+  - Extract repeated styling into constants or theme extensions
+  - Remove unused imports and variables throughout codebase
+  - Apply consistent formatting and naming conventions
+  - Fix all Flutter analyzer warnings and suggestions
+  - Add missing documentation comments to public APIs
+  - Refactor long methods into smaller, focused functions
+  - Ensure consistent error handling patterns
+  - Review and optimize widget rebuilds for performance
+  - Reason: Constants created (AppColors, AppTextStyles, AppSpacing) but main.dart still needs cleanup to remove test imports and prepare for Firebase initialization. ProductCard shared widget created. Code is mostly clean but S-46 cannot be marked complete until main.dart is properly refactored to initialize Firebase (part of S-47).
+
+- [ ] S-47 — **Firebase Project Setup (Complete Step-by-Step Guide)**
+  
+  **STATUS: NOT STARTED - Follow the guide below step-by-step**
   
   **PART 1: Create Firebase Project (5 minutes)**
   
@@ -669,9 +684,18 @@ final carouselSlides = [
   flutter pub get
   ```
   
-  **PART 7: Test Firebase Connection (5 minutes)**
+  **PART 7: Initialize Firebase in main.dart (REQUIRED!)**
   
-  Step 15: Run Your App
+  Step 15: Update main.dart to Initialize Firebase
+  - Open lib/main.dart
+  - Add Firebase imports at the top
+  - Add async main() function
+  - Initialize Firebase before runApp()
+  - See code changes in next commit
+  
+  **PART 8: Test Firebase Connection (5 minutes)**
+  
+  Step 16: Run Your App
   - Run the app with:
   ```bash
   flutter run -d chrome
@@ -679,9 +703,7 @@ final carouselSlides = [
   - Open Chrome DevTools (F12)
   - Look at the Console tab
   - You should see messages like:
-    - "Firebase initialized: [DEFAULT]" ✅
-    - "Firebase Auth available: [DEFAULT]" ✅
-    - "Firestore available: [DEFAULT]" ✅
+    - "Firebase initialized" ✅
   - If you see these messages, Firebase is working! 🎉
   
   **TROUBLESHOOTING:**
@@ -698,25 +720,24 @@ final carouselSlides = [
   Problem: "Permission denied to Firestore"
   Solution: Check your Firestore Rules (Step 9) - make sure they match exactly
   
-  **WHAT YOU JUST SET UP:**
+  **WHAT YOU NEED TO SET UP:**
   
-  ✅ Firebase Project created
-  ✅ Email/Password Authentication enabled
-  ✅ Firestore Database created (London/Europe region)
-  ✅ Security Rules configured (public read for products, private write)
-  ✅ FlutterFire CLI installed
-  ✅ Firebase configured for your Flutter web app
-  ✅ Firebase packages installed
-  ✅ Firebase initialized in your app
+  ☐ Firebase Project created
+  ☐ Email/Password Authentication enabled
+  ☐ Firestore Database created (London/Europe region)
+  ☐ Security Rules configured
+  ☐ FlutterFire CLI installed
+  ☐ Firebase configured for Flutter web app (lib/firebase_options.dart exists)
+  ☐ Firebase packages installed in pubspec.yaml
+  ☐ Firebase initialized in main.dart
+  ☐ Firebase connection tested
   
   **NEXT STEPS:**
   
-  Now you're ready to implement:
+  After completing S-47, you'll be ready for:
   - S-48: Authentication Service Layer (create AuthService to wrap Firebase Auth)
   - S-49: Sign Up Page (let users create accounts)
   - S-50: Login Page (let users sign in)
-  - S-51: Add product data to Firestore
-  - S-52: Fetch products from Firestore instead of hardcoded data
   
-  - Reason: Firebase provides secure, production-ready backend services for authentication and data storage with minimal setup. This complete step-by-step guide ensures even beginners can set up Firebase correctly. Setting up Firebase properly from the start ensures smooth integration of auth and database features. FlutterFire CLI simplifies configuration across platforms. Google Sign-In removed as this is a coursework project, not commercial application. Security rules configured to allow public read access to products/collections while protecting user data. All steps documented with exact button clicks, terminal commands, and troubleshooting tips. This gives you 14% of total marks (8% for Authentication System + 6% for External Services).
+  - Reason: Firebase provides secure, production-ready backend services for authentication and data storage. This step-by-step guide walks through every click in Firebase Console and every terminal command needed. Once complete, you'll have Firebase Auth and Firestore ready to use. This setup is required before implementing authentication pages in S-48, S-49, S-50. Firebase setup gives you 14% of total marks (8% for Authentication System + 6% for External Services).
 
