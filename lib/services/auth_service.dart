@@ -66,6 +66,57 @@ class AuthService {
     await currentUser?.updateDisplayName(displayName);
   }
 
+  /// Send sign-in link to email (passwordless authentication)
+  /// User will receive an email with a magic link to sign in
+  Future<void> sendSignInLinkToEmail({required String email}) async {
+    try {
+      // Action code settings for email link
+      final actionCodeSettings = ActionCodeSettings(
+        // URL you want to redirect back to after email verification
+        url: 'https://union-shop-ec1b0.web.app/account/email-auth',
+        // This must be true for email link sign-in
+        handleCodeInApp: true,
+        // iOS settings (optional)
+        iOSBundleId: 'com.example.unionShop',
+        // Android settings (optional)
+        androidPackageName: 'com.example.union_shop',
+        // Whether to install the app if not available
+        androidInstallApp: true,
+        // Minimum version
+        androidMinimumVersion: '12',
+      );
+
+      await _auth.sendSignInLinkToEmail(
+        email: email,
+        actionCodeSettings: actionCodeSettings,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+
+  /// Check if the given link is a sign-in with email link
+  bool isSignInWithEmailLink(String link) {
+    return _auth.isSignInWithEmailLink(link);
+  }
+
+  /// Complete sign-in with email link
+  /// Returns User if successful, throws exception on error
+  Future<User?> signInWithEmailLink({
+    required String email,
+    required String link,
+  }) async {
+    try {
+      final userCredential = await _auth.signInWithEmailLink(
+        email: email,
+        emailLink: link,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+
   /// Handle Firebase Authentication exceptions
   /// Converts Firebase error codes to user-friendly messages
   String _handleAuthException(FirebaseAuthException e) {

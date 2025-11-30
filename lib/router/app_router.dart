@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/views/about_view.dart';
+import 'package:union_shop/views/auth/email_auth_view.dart';
 import 'package:union_shop/views/cart_view.dart';
 import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
@@ -82,6 +83,10 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
           final query = state.uri.queryParameters['q'];
           return SearchPage(initialQuery: query);
         },
+      ),
+      GoRoute(
+        path: '/account/email-auth',
+        builder: (context, state) => const EmailAuthPage(),
       ),
     ],
   );

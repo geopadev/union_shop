@@ -117,7 +117,8 @@ class SharedHeader extends StatelessWidget {
                                   minWidth: 32,
                                   minHeight: 32,
                                 ),
-                                onPressed: onAccountTap,
+                                onPressed: () =>
+                                    context.go('/account/email-auth'),
                               ),
                               // Cart icon with badge
                               Consumer<CartViewModel>(
