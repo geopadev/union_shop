@@ -379,6 +379,17 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - All tests should use zero-latency repositories for deterministic results
   - Reason: Comprehensive testing ensures new product features work correctly including options selection, sale price calculations, and search functionality. Tests verify UI displays correctly and integrates properly with existing cart system.
 
+- [ ] S-42 — **Real Product Data from Website**
+  - Research and document actual products from shop.upsu.net
+  - Create comprehensive product list with real names, descriptions, and prices
+  - Organize products by actual collections (Clothing, Merchandise, Portsmouth, Pride, etc.)
+  - Update InMemoryProductRepository with real product data
+  - Ensure accurate product information matching website
+  - Add proper product categories and tags
+  - Include realistic product variations (sizes, colors) where applicable
+  - Update collection assignments to match website organization
+  - Reason: Using real product data from shop.upsu.net makes the application more authentic and demonstrates thorough research. Accurate product names, descriptions, and pricing create a professional portfolio piece that closely resembles the actual union shop website. This shows attention to detail and understanding of the real-world application requirements. Products should be organized into appropriate collections matching the website structure for a realistic shopping experience.
+
 ---
 
 **🎉🎉🎉 PRINT SHACK FEATURE (S-33 through S-36) IS NOW 100% COMPLETE! 🎉🎉🎉**
