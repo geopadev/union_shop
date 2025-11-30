@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               onLogoTap: () => navigateToHome(context),
               onSearchTap: placeholderCallbackForButtons,
               onAccountTap: placeholderCallbackForButtons,
-              onCartTap: placeholderCallbackForButtons,
+              onCartTap: () => context.go('/cart'),
               onMenuTap: placeholderCallbackForButtons,
             ),
 
