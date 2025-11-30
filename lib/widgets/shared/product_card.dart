@@ -41,7 +41,9 @@ class _ProductCardState extends State<ProductCard> {
               'Product: ${widget.product.title}, Price: ${widget.product.price}',
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            transform: Matrix4.identity()..scale(_isHovering ? 1.03 : 1.0),
+            transform: _isHovering
+                ? (Matrix4.identity()..scale(1.03))
+                : Matrix4.identity(),
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: _isHovering
