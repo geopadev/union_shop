@@ -52,11 +52,12 @@ class _PersonalizationPageState extends State<PersonalizationPage> {
 
     // Create personalized product
     final textOption = _form.getOption('text');
-    final sizeOption = _form.getOption('size');
+    final price = _form.calculatePrice();
+
     final personalizedProduct = Product(
       id: 'personalized_${DateTime.now().millisecondsSinceEpoch}',
       title: 'Personalized: ${textOption?.value ?? "Custom Text"}',
-      price: _form.formattedPrice,
+      price: price.toStringAsFixed(2),
       imageUrl: 'assets/images/products/personalized_placeholder.jpg',
       description: _form.getPreviewText(),
     );

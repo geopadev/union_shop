@@ -55,8 +55,13 @@ class _NavigationItemState extends State<_NavigationItem> {
 
     if (hasDropdown) {
       return DropdownMenuWidget(
-        trigger: _buildTrigger(),
-        items: widget.item.children,
+        item: widget.item,
+        trigger: MouseRegion(
+          onEnter: (_) => setState(() => _isHovering = true),
+          onExit: (_) => setState(() => _isHovering = false),
+          child: _buildTrigger(),
+        ),
+        children: widget.item.children,
       );
     }
 

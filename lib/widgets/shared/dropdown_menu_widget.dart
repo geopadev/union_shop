@@ -11,7 +11,7 @@ class DropdownMenuWidget extends StatefulWidget {
   const DropdownMenuWidget({
     super.key,
     required this.item,
-    required this.trigger,
+    required this.trigger, required children,
   });
 
   @override
