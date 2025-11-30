@@ -205,28 +205,7 @@ class SharedFooter extends StatelessWidget {
   }
 
   Widget _buildFooterLink(dynamic link) {
-    return Builder(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: GestureDetector(
-            onTap: link.route != null ? () => context.go(link.route!) : null,
-            child: Text(
-              link.title,
-              style: TextStyle(
-                fontSize: 13,
-                color: link.route != null
-                    ? const Color(0xFF4d2963)
-                    : Colors.grey[600],
-                decoration:
-                    link.route != null ? TextDecoration.underline : null,
-                height: 1.5,
-              ),
-            ),
-          ),
-        );
-      },
-    );
+    return _FooterLinkItem(link: link);
   }
 
   Widget _buildSocialIcon(String platform, String url) {
@@ -272,6 +251,52 @@ class SharedFooter extends StatelessWidget {
             color: Colors.grey[600],
           ),
           textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterLinkItem extends StatefulWidget {
+  final dynamic link;
+
+  const _FooterLinkItem({required this.link});
+
+  @override
+  State<_FooterLinkItem> createState() => _FooterLinkItemState();
+}
+
+class _FooterLinkItemState extends State<_FooterLinkItem> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasRoute = widget.link.route != null;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: MouseRegion(
+        cursor: hasRoute ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        onEnter: hasRoute ? (_) => setState(() => _isHovering = true) : null,
+        onExit: hasRoute ? (_) => setState(() => _isHovering = false) : null,
+        child: GestureDetector(
+          onTap: hasRoute ? () => context.go(widget.link.route!) : null,
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 200),
+            style: TextStyle(
+              fontSize: 13,
+              color: hasRoute
+                  ? (_isHovering
+                      ? const Color(0xFF4d2963)
+                      : const Color(0xFF4d2963))
+                  : Colors.grey[600],
+              decoration: _isHovering && hasRoute
+                  ? TextDecoration.underline
+                  : (hasRoute ? TextDecoration.underline : null),
+              height: 1.5,
+            ),
+            child: Text(widget.link.title),
+          ),
         ),
       ),
     );
