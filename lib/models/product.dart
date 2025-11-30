@@ -7,19 +7,22 @@ class Product {
   final String price;
   final String imageUrl;
   final String description;
-  final List<ProductOption>? options;
   final bool isOnSale;
   final String? originalPrice;
+  final List<ProductOption>? options;
+  final List<String>?
+      collectionIds; // NEW: Track which collections this product belongs to
 
-  const Product({
+  Product({
     required this.id,
     required this.title,
     required this.price,
     required this.imageUrl,
     required this.description,
-    this.options,
     this.isOnSale = false,
     this.originalPrice,
+    this.options,
+    this.collectionIds, // NEW: Optional list of collection IDs
   });
 
   /// Helper to check if product has options
@@ -56,5 +59,11 @@ class Product {
 
     final saved = original - current;
     return 'Save £${saved.toStringAsFixed(2)}';
+  }
+
+  /// Get the primary collection ID (first collection the product belongs to)
+  String? get primaryCollectionId {
+    if (collectionIds == null || collectionIds!.isEmpty) return null;
+    return collectionIds!.first;
   }
 }
