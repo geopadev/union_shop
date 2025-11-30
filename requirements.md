@@ -194,13 +194,14 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Remove old "FEATURED PRODUCTS" section with hardcoded placeholder products
   - Reason: Updated home_view.dart to display 3 featured collections (Signature & Essential Range, Portsmouth City Collection, Pride Collection) using Consumer<CollectionViewModel>. Each section shows clickable collection name heading linking to /collections/{collectionId} and 2 products from that collection. Products link with collection context to /collections/{collectionId}/products/{productId}. Implemented responsive layout with LayoutBuilder - products displayed side-by-side on desktop (>600px width) and stacked vertically on mobile. Replaced old hardcoded "FEATURED PRODUCTS" section with real data from repositories. Updated home_test.dart to check for collection section headings instead of hardcoded product names. All tests updated to inject both ProductRepository and CollectionRepository with zero latency for deterministic testing. Homepage now matches shop.upsu.net pattern where collections act as category showcases.
 
-- [ ] S-25 — **Mobile Navigation (Hamburger Menu)**
+- [x] S-25 — **Mobile Navigation (Hamburger Menu)**
   - Create MobileNavigationDrawer widget (lib/widgets/shared/mobile_navigation_drawer.dart)
   - Show hamburger menu icon on mobile instead of full navigation
   - Implement expandable sections for SHOP and The Print Shack in drawer
   - Add proper animations and transitions
   - Ensure drawer closes after navigation
   - Add Key('mobile_nav_drawer') for testing
+  - Reason: Created MobileNavigationDrawer widget (lib/widgets/shared/mobile_navigation_drawer.dart) as a stateful widget with expandable sections for SHOP and The Print Shack menus. Drawer displays navigation items in vertical list with ListTiles. Sections with children are expandable/collapsible with expand_more/expand_less icons. Clicking any navigation item closes drawer and navigates to route using context.go(). Updated SharedHeader (lib/widgets/shared/shared_header.dart) to open drawer via Scaffold.of(context).openEndDrawer() when menu button is tapped. Added endDrawer: const MobileNavigationDrawer() to all main pages (HomeScreen, ProductPage, AboutPage, CollectionsOverviewPage, CollectionsPage). Drawer slides in from right with default Material animations. Includes Key('mobile_nav_drawer') for testing. Drawer header displays "Menu" title in university purple. Mobile navigation now fully functional across entire app.
 
 - [ ] S-26 — **Navigation & Carousel Tests**
   - Create tests for NavigationMenu widget
