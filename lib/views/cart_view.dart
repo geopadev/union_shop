@@ -287,29 +287,48 @@ class _CartItemCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Product Title
                 Text(
                   item.product.title,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
+
+                // Selected Options (if any)
+                if (item.selectedOptions.isNotEmpty) ...[
+                  ...item.selectedOptions.entries.map((entry) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        '${_formatOptionName(entry.key)}: ${entry.value}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  const SizedBox(height: 8),
+                ],
+
+                // Product Price
                 Text(
                   item.product.price,
                   style: const TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF4d2963),
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF4d2963),
                   ),
                 ),
                 const SizedBox(height: 12),
 
-                // Quantity Controls
+                // Quantity Controls and Remove Button
                 Row(
                   children: [
+                    // Quantity Controls
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey[300]!),
@@ -355,13 +374,19 @@ class _CartItemCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 12),
+
+                    // Remove Button
                     TextButton.icon(
                       onPressed: onRemove,
-                      icon: const Icon(Icons.delete_outline, size: 18),
+                      icon: const Icon(Icons.delete_outline, size: 16),
                       label: const Text('Remove'),
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                     ),
                   ],
@@ -372,5 +397,10 @@ class _CartItemCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Helper to format option names (e.g., 'size' -> 'Size')
+  String _formatOptionName(String optionId) {
+    return optionId[0].toUpperCase() + optionId.substring(1);
   }
 }
