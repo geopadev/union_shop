@@ -6,6 +6,7 @@ import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
 import 'package:union_shop/views/home_view.dart';
 import 'package:union_shop/views/product_view.dart';
+import 'package:union_shop/views/printshack/printshack_about_view.dart';
 
 /// Creates and returns the GoRouter configuration for the application
 /// This handles all routing including deep linking and browser URL updates
@@ -64,6 +65,10 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: '/cart',
         builder: (context, state) => const CartPage(),
+      ),
+      GoRoute(
+        path: '/printshack/about',
+        builder: (context, state) => const PrintShackAboutPage(),
       ),
     ],
   );
