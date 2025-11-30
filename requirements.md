@@ -390,9 +390,22 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update collection assignments to match website organization
   - Reason: Researched and documented 24 authentic products from shop.upsu.net organized across 6 collections. Updated InMemoryProductRepository (lib/repositories/in_memory_product_repository.dart) with real product data including: Classic Hoodie (£35.00), Classic Sweatshirt (£30.00), Polo Shirt (£18.00), Portsmouth Varsity Jacket (£45.00), UPSU Water Bottle (£12.00), Tote Bag (£6.00), Branded Notebook (£4.00), Lanyard (£3.00), Portsmouth City Magnet (£3.00), Portsmouth Mug (£8.00), Portsmouth Keyring (£4.00), Portsmouth Postcard Set (£5.00), Rainbow Pride Flag (£10.00), Pride Pin Badge (£3.00), Rainbow Lanyard (£5.00), Pride T-Shirt (£20.00), Halloween T-Shirt (£18.00), Spooky Sticker Pack (£4.00), Halloween Tote Bag (£7.00), Graduation Bear (£25.00), Graduation Frame (£15.00), and Graduation Card (£3.00). Each product includes realistic IDs (kebab-case like 'classic-hoodie'), accurate pricing (£3-£45 range), detailed descriptions explaining features and materials, and asset image paths (e.g., 'assets/images/products/classic_hoodie.jpg'). Updated InMemoryCollectionRepository (lib/repositories/in_memory_collection_repository.dart) with accurate product assignments: Clothing collection (5 products including hoodies, sweatshirts, polo shirt, varsity jacket, pride t-shirt), Merchandise collection (5 products including water bottle, tote bag, notebook, lanyard, pride pin), Halloween collection (3 products), Signature & Essential Range collection (5 core university items), Portsmouth City Collection (5 city-themed items), Pride Collection (4 LGBTQ+ support items), Graduation collection (3 celebration items), and SALE collection (5 discounted items). Products can appear in multiple collections matching real e-commerce behavior. Total of 24 unique real products replacing 4 placeholder products. Application now features authentic product catalog demonstrating thorough research of shop.upsu.net and attention to detail with professional descriptions matching real-world union shop offerings.
 
----
-
-**🎉🎉🎉 PRINT SHACK FEATURE (S-33 through S-36) IS NOW 100% COMPLETE! 🎉🎉🎉**
+- [ ] S-43 — **Real Website Footer Recreation**
+  - Research and document the footer structure from shop.upsu.net
+  - Create enhanced SharedFooter widget matching the real website layout
+  - Include four main sections: Shop, Help, About, and Follow Us
+  - Shop section: links to collections (Clothing, Merchandise, etc.)
+  - Help section: Contact Us, Delivery Information, Returns Policy, Terms & Conditions
+  - About section: About Us, Store Location, Opening Hours
+  - Follow Us section: Social media icons/links (Facebook, Instagram, Twitter)
+  - Add newsletter signup form at bottom
+  - Include copyright notice and payment method icons
+  - Use responsive layout: 4 columns on desktop, stacked on mobile
+  - Style with grey background (#f5f5f5), dark text, proper spacing
+  - Add divider line above footer
+  - Make all links functional where pages exist, placeholder otherwise
+  - Add Key('footer_shop'), Key('footer_help'), Key('footer_about'), Key('footer_social') for testing
+  - Reason: shop.upsu.net has a comprehensive footer with organized navigation links, contact information, social media links, and newsletter signup. This provides essential site navigation and information access. A well-designed footer improves user experience by offering quick access to important pages and information from anywhere on the site. The footer should be consistent across all pages and provide clear visual hierarchy with section headings.
 
 ---
 
