@@ -7,7 +7,9 @@ class Product {
   final String price;
   final String imageUrl;
   final String description;
-  final List<ProductOption>? options; // Optional list of product options
+  final List<ProductOption>? options;
+  final bool isOnSale;
+  final String? originalPrice;
 
   const Product({
     required this.id,
@@ -15,7 +17,9 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.description,
-    this.options, // Optional parameter
+    this.options,
+    this.isOnSale = false,
+    this.originalPrice,
   });
 
   /// Helper to check if product has options
@@ -37,29 +41,20 @@ class Product {
     }
   }
 
-  /// Create a Product from a Map
-  factory Product.fromMap(Map<String, dynamic> map) {
-    return Product(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      price: map['price'] as String,
-      imageUrl: map['imageUrl'] as String,
-      description: map['description'] as String,
-      options: (map['options'] as List<dynamic>?)
-          .map((option) => ProductOption.fromMap(option))
-          .toList(),
-    );
-  }
+  /// Get the display price (sale price if on sale, regular price otherwise)
+  String get displayPrice => price;
 
-  /// Convert Product to a Map
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'price': price,
-      'imageUrl': imageUrl,
-      'description': description,
-      'options': options?.map((option) => option.toMap()).toList(),
-    };
+  /// Get the savings amount if on sale
+  String? get savings {
+    if (!isOnSale || originalPrice == null) return null;
+
+    // Parse prices (assuming format £XX.XX)
+    final original = double.tryParse(originalPrice!.replaceAll('£', ''));
+    final current = double.tryParse(price.replaceAll('£', ''));
+
+    if (original == null || current == null) return null;
+
+    final saved = original - current;
+    return 'Save £${saved.toStringAsFixed(2)}';
   }
 }
