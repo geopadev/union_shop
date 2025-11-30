@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/models/product.dart';
+import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   final String? collectionId;
   final String? productId;
 
@@ -14,12 +17,58 @@ class ProductPage extends StatelessWidget {
     this.productId,
   });
 
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  int _quantity = 1;
+
   void navigateToHome(BuildContext context) {
     context.go('/');
   }
 
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
+  }
+
+  void _incrementQuantity() {
+    setState(() {
+      _quantity++;
+    });
+  }
+
+  void _decrementQuantity() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+      });
+    }
+  }
+
+  Future<void> _addToCart(BuildContext context) async {
+    // Placeholder product data (in real app, would fetch from ProductViewModel)
+    final product = Product(
+      id: '1',
+      title: 'Placeholder Product Name',
+      price: '£15.00',
+      imageUrl:
+          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      description: 'This is a placeholder description for the product.',
+    );
+
+    final cartViewModel = context.read<CartViewModel>();
+    await cartViewModel.addToCart(product, _quantity);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added $_quantity item(s) to cart'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: const Color(0xFF4d2963),
+        ),
+      );
+    }
   }
 
   @override
@@ -34,7 +83,7 @@ class ProductPage extends StatelessWidget {
               onLogoTap: () => navigateToHome(context),
               onSearchTap: placeholderCallbackForButtons,
               onAccountTap: placeholderCallbackForButtons,
-              onCartTap: placeholderCallbackForButtons,
+              onCartTap: () => context.go('/cart'),
               onMenuTap: placeholderCallbackForButtons,
             ),
 
@@ -46,7 +95,7 @@ class ProductPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Breadcrumb Navigation
-                  if (collectionId != null) ...[
+                  if (widget.collectionId != null) ...[
                     Row(
                       children: [
                         GestureDetector(
@@ -65,9 +114,12 @@ class ProductPage extends StatelessWidget {
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         GestureDetector(
-                          onTap: () => context.go('/collections/$collectionId'),
+                          onTap: () =>
+                              context.go('/collections/${widget.collectionId}'),
                           child: Text(
-                            collectionId!.replaceAll('-', ' ').toUpperCase(),
+                            widget.collectionId!
+                                .replaceAll('-', ' ')
+                                .toUpperCase(),
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF4d2963),
@@ -158,6 +210,78 @@ class ProductPage extends StatelessWidget {
                     ),
                   ),
 
+                  const SizedBox(height: 24),
+
+                  // Quantity Selector
+                  Row(
+                    children: [
+                      const Text(
+                        'Quantity:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              onPressed: _decrementQuantity,
+                              iconSize: 20,
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                '$_quantity',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: _incrementQuantity,
+                              iconSize: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Add to Cart Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      key: const Key('add_to_cart_button'),
+                      onPressed: () => _addToCart(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4d2963),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      child: const Text(
+                        'ADD TO CART',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 24),
 
                   // Product description
