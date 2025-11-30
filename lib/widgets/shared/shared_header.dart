@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:union_shop/constants/app_colors.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/widgets/shared/navigation_menu.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,7 @@ class SharedHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          color: Colors.white,
+          color: AppColors.secondary,
           child: Column(
             children: [
               // Top banner
@@ -38,11 +39,11 @@ class SharedHeader extends StatelessWidget {
                 key: const Key('header_banner'),
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                color: const Color(0xFF4d2963),
+                color: AppColors.primary,
                 child: const Text(
                   'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: AppColors.secondary, fontSize: 16),
                 ),
               ),
               // Main header
@@ -146,7 +147,7 @@ class SharedHeader extends StatelessWidget {
                                           child: Container(
                                             padding: const EdgeInsets.all(4),
                                             decoration: const BoxDecoration(
-                                              color: Color(0xFF4d2963),
+                                              color: AppColors.primary,
                                               shape: BoxShape.circle,
                                             ),
                                             constraints: const BoxConstraints(
@@ -158,7 +159,7 @@ class SharedHeader extends StatelessWidget {
                                                   ? '9+'
                                                   : '$itemCount',
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: AppColors.secondary,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                               ),

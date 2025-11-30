@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:union_shop/constants/app_colors.dart';
+import 'package:union_shop/constants/app_spacing.dart';
+import 'package:union_shop/constants/app_text_styles.dart';
 import 'package:union_shop/models/product.dart';
 
 /// Shared ProductCard widget used across home, collections, and search views
@@ -63,7 +66,8 @@ class _ProductCardState extends State<ProductCard> {
                           image: true,
                           label: 'Image of ${widget.product.title}',
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius:
+                                BorderRadius.circular(AppSpacing.radiusM),
                             child: Image.asset(
                               widget.product.imageUrl,
                               fit: BoxFit.cover,
@@ -75,16 +79,16 @@ class _ProductCardState extends State<ProductCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Icon(
+                                        Icon(
                                           Icons.image_not_supported,
-                                          color: Colors.grey,
-                                          size: 48,
+                                          color: AppColors.textSecondary,
+                                          size: AppSpacing.iconXL,
                                         ),
-                                        const SizedBox(height: 8),
+                                        SizedBox(height: AppSpacing.paddingS),
                                         Text(
                                           'Add image:\n${widget.product.imageUrl}',
                                           style: const TextStyle(
-                                            color: Colors.grey,
+                                            color: AppColors.textSecondary,
                                             fontSize: 10,
                                           ),
                                           textAlign: TextAlign.center,
@@ -101,21 +105,22 @@ class _ProductCardState extends State<ProductCard> {
                       // SALE badge
                       if (widget.product.isOnSale)
                         Positioned(
-                          top: 8,
-                          right: 8,
+                          top: AppSpacing.paddingS,
+                          right: AppSpacing.paddingS,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
+                              horizontal: AppSpacing.paddingS,
+                              vertical: AppSpacing.paddingXS,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4),
+                              color: AppColors.sale,
+                              borderRadius:
+                                  BorderRadius.circular(AppSpacing.radiusS),
                             ),
                             child: const Text(
                               'SALE',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.secondary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.2,
@@ -125,19 +130,15 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: AppSpacing.paddingM),
                   // Product title
                   Text(
                     widget.product.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: AppTextStyles.productTitle,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: AppSpacing.paddingS),
                   // Product price (with strikethrough if on sale)
                   if (widget.product.isOnSale &&
                       widget.product.originalPrice != null)
@@ -153,15 +154,11 @@ class _ProductCardState extends State<ProductCard> {
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: AppSpacing.paddingXS),
                         // Sale price
                         Text(
                           widget.product.price,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: AppTextStyles.productPriceSale,
                         ),
                       ],
                     )
@@ -169,11 +166,7 @@ class _ProductCardState extends State<ProductCard> {
                     // Regular price
                     Text(
                       widget.product.price,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF4d2963),
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTextStyles.productPrice,
                     ),
                 ],
               ),
