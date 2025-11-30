@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/data/navigation_data.dart';
-import 'package:union_shop/models/navigation_item.dart';
 import 'package:union_shop/widgets/shared/dropdown_menu_widget.dart';
 
 /// Navigation menu widget displayed below the header banner
@@ -9,87 +8,98 @@ import 'package:union_shop/widgets/shared/dropdown_menu_widget.dart';
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
 
-  void _handleNavigation(BuildContext context, String? route) {
-    if (route != null) {
-      context.go(route);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Only show on desktop/tablet
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Hide navigation menu on screens narrower than 768px
-        // Mobile users will use the hamburger menu instead
         if (constraints.maxWidth < 768) {
           return const SizedBox.shrink();
         }
 
-        // Show full navigation menu on wider screens
         return Container(
           color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: Center(
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: NavigationData.mainNavigation.map((item) {
-                return _buildNavItem(context, item);
-              }).toList(),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: NavigationData.mainNavigation.map((item) {
+                  return _NavigationItem(item: item);
+                }).toList(),
+              ),
             ),
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildNavItem(BuildContext context, NavigationItem item) {
-    final key = Key(
-        'nav_${item.title.toLowerCase().replaceAll(' ', '_').replaceAll('!', '')}');
+class _NavigationItem extends StatefulWidget {
+  final dynamic item;
 
-    final buttonContent = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          item.title,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: item.hasDropdown ? Colors.grey[700] : Colors.black,
-          ),
-        ),
-        if (item.hasDropdown) ...[
-          const SizedBox(width: 4),
-          Icon(
-            Icons.arrow_drop_down,
-            size: 20,
-            color: Colors.grey[700],
-          ),
-        ],
-      ],
-    );
+  const _NavigationItem({required this.item});
 
-    if (item.hasDropdown) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: DropdownMenuWidget(
-          item: item,
-          trigger: TextButton(
-            key: key,
-            onPressed: null,
-            child: buttonContent,
-          ),
-        ),
+  @override
+  State<_NavigationItem> createState() => _NavigationItemState();
+}
+
+class _NavigationItemState extends State<_NavigationItem> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasDropdown = widget.item.hasDropdown;
+
+    if (hasDropdown) {
+      return DropdownMenuWidget(
+        trigger: _buildTrigger(),
+        items: widget.item.children,
       );
     }
 
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      child: GestureDetector(
+        onTap: () {
+          if (widget.item.route != null) {
+            context.go(widget.item.route!);
+          }
+        },
+        child: _buildTrigger(),
+      ),
+    );
+  }
+
+  Widget _buildTrigger() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: TextButton(
-        key: key,
-        onPressed: () => _handleNavigation(context, item.route),
-        child: buttonContent,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: AnimatedDefaultTextStyle(
+        duration: const Duration(milliseconds: 200),
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: _isHovering ? const Color(0xFF4d2963) : Colors.black87,
+          decoration: _isHovering ? TextDecoration.underline : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.item.title),
+            if (widget.item.hasDropdown) ...[
+              const SizedBox(width: 4),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: 16,
+                color: _isHovering ? const Color(0xFF4d2963) : Colors.black87,
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
