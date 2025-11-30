@@ -25,26 +25,13 @@ void main() {
       expect(authService.currentUser, isNull);
     });
 
-    test('authStateChanges should emit Stream<User?>', () {
+    test('authStateChanges should emit Stream', () {
       expect(authService.authStateChanges, isA<Stream>());
     });
 
-    // Note: Full integration tests for signup/signin would require
-    // Firebase Test Lab or Firebase Emulator setup
-    // For now, we verify the service methods exist and are callable
-
-    test('signUp method should exist', () {
+    test('signInWithGoogle method should exist', () {
       expect(
-        () => authService.signUp(
-            email: 'test@example.com', password: 'password123'),
-        isA<Future>(),
-      );
-    });
-
-    test('signIn method should exist', () {
-      expect(
-        () => authService.signIn(
-            email: 'test@example.com', password: 'password123'),
+        () => authService.signInWithGoogle(),
         isA<Future>(),
       );
     });
@@ -56,11 +43,8 @@ void main() {
       );
     });
 
-    test('sendPasswordResetEmail method should exist', () {
-      expect(
-        () => authService.sendPasswordResetEmail(email: 'test@example.com'),
-        isA<Future>(),
-      );
-    });
+    // Note: Full integration tests for Google Sign-In would require
+    // Firebase Emulator setup or manual testing in browser
+    // These tests verify that the methods exist and are callable
   });
 }
