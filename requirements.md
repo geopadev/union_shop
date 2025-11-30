@@ -318,7 +318,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('personalization_page'), Key('personalization_text_input'), Key('add_personalized_to_cart') for testing
   - Reason: Created PersonalizationPage (lib/views/printshack/personalization_view.dart) as StatefulWidget managing PersonalizationForm state. Page displays interactive form with text input (20 char limit, Key: 'personalization_text_input'), font dropdown (Arial/Times New Roman/Courier), size dropdown (S/M/L/XL), color dropdown (Red/Blue/Black/White/Green). Live preview section shows current selections using getPreviewText() updating on every form change via setState(). Dynamic price calculation displays based on selected size with formattedPrice getter showing £5-£11 or "Select a size". Form validation checks isComplete before allowing add to cart. "Add to Cart" button (Key: 'add_personalized_to_cart') creates personalized Product with custom title "Personalized: [text]", dynamic price, description containing preview text, and selectedOptions map storing all form values. Integration with existing CartViewModel.addToCart() with SnackBar confirmations for validation errors (red) and success (purple). Added /printshack/personalisation route to app_router.dart. Uses SharedHeader and SharedFooter for consistency. Page constrained to 900px width. All form changes trigger setState() for real-time preview and price updates. Personalized items stored in cart with full customization details matching shop.upsu.net/products/personalise-text functionality.
 
-- [ ] S-36 — **Print Shack - Testing**
+- [x] S-36 — **Print Shack - Testing**
   - Create printshack_test.dart (test/printshack_test.dart) with tests for print shack functionality
   - Test navigation to print shack about page
   - Test navigation to personalization page
@@ -326,7 +326,11 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Test dropdown selections update preview and price
   - Test adding personalized item to cart
   - All tests should use zero-latency repositories for deterministic results
-  - Reason: Comprehensive tests ensure print shack functionality works correctly including navigation, form interactions, dynamic updates, and cart integration. Tests verify the form responds to user input and prices update correctly based on selections.
+  - Reason: Created comprehensive Print Shack test suite in printshack_test.dart (test/printshack_test.dart) with 8 test cases covering all Print Shack functionality. Tests include: navigation to Print Shack about page (verifies Key 'printshack_about_page' and 'The Print Shack' title), navigation to personalization page (verifies Key 'personalization_page'), all form fields display (text input Key 'personalization_text_input', font/size/color dropdowns, add to cart button Key 'add_personalized_to_cart'), text input updates preview (enters 'TEST TEXT' and verifies preview shows 'Your Text: "TEST TEXT"'), size selection updates price (selects Medium and verifies £7.00 price), validation error for incomplete form (verifies error message 'Please fill in all fields before adding to cart'), successful cart addition with complete form (fills all fields including text/font/size/color and verifies success SnackBar and cart badge shows '1'), and correct pricing for all sizes (tests S:£5, M:£7, L:£9, XL:£11). All tests use zero-latency repositories (InMemoryProductRepository, InMemoryCollectionRepository, InMemoryCartRepository with latency: Duration.zero) for deterministic results. Tests verify UI updates correctly after form interactions and confirm cart integration with personalized products. All Print Shack tests passing ensuring complete functionality from navigation to form submission.
+
+---
+
+**🎉🎉🎉 PRINT SHACK FEATURE (S-33 through S-36) IS NOW 100% COMPLETE! 🎉🎉🎉**
 
 ---
 
