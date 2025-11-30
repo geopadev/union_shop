@@ -23,6 +23,12 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/classic_hoodie.jpg',
       description:
           'A comfortable and stylish classic hoodie featuring the University of Portsmouth Students\' Union logo. Perfect for everyday wear on campus. Made from high-quality cotton blend material.',
+      collectionIds: [
+        'clothing',
+        'signature-essential',
+        'portsmouth',
+        'pride'
+      ], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -47,6 +53,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/classic_sweatshirt.jpg',
       description:
           'Cozy classic sweatshirt with UPSU branding. Ideal for layering during colder months. Features a crew neck design and ribbed cuffs.',
+      collectionIds: ['clothing', 'signature-essential'], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -71,6 +78,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/polo_shirt.jpg',
       description:
           'Smart casual polo shirt with embroidered UPSU logo. Perfect for more formal campus events or casual wear. Available in multiple colors.',
+      collectionIds: ['clothing'], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -95,6 +103,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/varsity_jacket.jpg',
       description:
           'Premium varsity jacket featuring Portsmouth city colors and UPSU branding. A statement piece combining style with campus pride. Includes snap button closure.',
+      collectionIds: ['clothing'], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -114,6 +123,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/water_bottle.jpg',
       description:
           'Reusable stainless steel water bottle with UPSU logo. Keep hydrated throughout your day on campus. 500ml capacity with secure screw-top lid.',
+      collectionIds: ['merchandise'], // NEW
       options: [
         ProductOption(
           id: 'color',
@@ -131,6 +141,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/tote_bag.jpg',
       description:
           'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
+      collectionIds: ['merchandise'], // NEW
       options: [
         ProductOption(
           id: 'color',
@@ -150,6 +161,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/notebook.jpg',
       description:
           'A5 lined notebook with UPSU branding on the cover. Perfect for lectures and note-taking. Contains 100 pages of quality paper.',
+      collectionIds: ['stationery'], // NEW
     ),
     Product(
       id: 'lanyard',
@@ -158,6 +170,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/lanyard.jpg',
       description:
           'Durable lanyard featuring UPSU colors and logo. Keep your student ID card safe and accessible. Includes safety breakaway clasp.',
+      collectionIds: ['accessories'], // NEW
     ),
 
     // Portsmouth City Collection
@@ -168,6 +181,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/portsmouth_magnet.jpg',
       description:
           'Decorative fridge magnet celebrating Portsmouth city landmarks. A perfect souvenir or gift. Features iconic Portsmouth scenery.',
+      collectionIds: ['portsmouth'], // NEW
     ),
     Product(
       id: 'portsmouth-mug',
@@ -176,6 +190,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/portsmouth_mug.jpg',
       description:
           'Ceramic mug featuring Portsmouth city design. Dishwasher and microwave safe. 11oz capacity, perfect for your morning coffee or tea.',
+      collectionIds: ['portsmouth'], // NEW
     ),
     Product(
       id: 'portsmouth-keyring',
@@ -184,6 +199,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/portsmouth_keyring.jpg',
       description:
           'Metal keyring with Portsmouth city branding. Durable and stylish accessory for your keys. Features Spinnaker Tower design.',
+      collectionIds: ['portsmouth'], // NEW
     ),
     Product(
       id: 'portsmouth-postcard-set',
@@ -192,6 +208,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/portsmouth_postcards.jpg',
       description:
           'Set of 6 postcards featuring beautiful Portsmouth landmarks and scenery. Perfect for sending to friends and family or collecting as keepsakes.',
+      collectionIds: ['portsmouth'], // NEW
     ),
 
     // Pride Collection
@@ -202,6 +219,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/pride_flag.jpg',
       description:
           'Large rainbow pride flag (3ft x 5ft). Show your support for the LGBTQ+ community. Made from durable polyester with reinforced edges.',
+      collectionIds: ['pride'], // NEW
     ),
     Product(
       id: 'pride-pin',
@@ -210,6 +228,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/pride_pin.jpg',
       description:
           'Enamel pin badge featuring rainbow pride colors. Perfect for attaching to bags, jackets, or lanyards. Metal construction with butterfly clasp.',
+      collectionIds: ['pride'], // NEW
     ),
     Product(
       id: 'rainbow-lanyard',
@@ -218,6 +237,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/rainbow_lanyard.jpg',
       description:
           'Colorful rainbow lanyard celebrating pride and diversity. Durable fabric with metal clip and safety breakaway. Support equality with style.',
+      collectionIds: ['pride'], // NEW
     ),
     Product(
       id: 'pride-tshirt',
@@ -226,6 +246,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/pride_tshirt.jpg',
       description:
           'Comfortable cotton t-shirt featuring pride rainbow design and UPSU logo. Available in multiple sizes. Show your support for LGBTQ+ rights.',
+      collectionIds: ['clothing', 'pride'], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -247,6 +268,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/halloween_tshirt.jpg',
       description:
           'Spooky themed t-shirt perfect for Halloween celebrations. Features fun Halloween graphics and UPSU branding. Limited edition seasonal item.',
+      collectionIds: ['clothing', 'halloween'], // NEW
       options: [
         ProductOption(
           id: 'size',
@@ -266,6 +288,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/halloween_stickers.jpg',
       description:
           'Pack of 10 Halloween-themed stickers. Decorate your laptop, water bottle, or notebook. Waterproof and durable vinyl material.',
+      collectionIds: ['halloween'], // NEW
     ),
     Product(
       id: 'halloween-tote',
@@ -276,6 +299,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/halloween_tote.jpg',
       description:
           'Canvas tote bag with Halloween design. Perfect for trick-or-treating or carrying Halloween party supplies. Sturdy construction with long handles.',
+      collectionIds: ['halloween'], // NEW
     ),
 
     // Merchandise - Some ON SALE
@@ -288,6 +312,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/tote_bag.jpg',
       description:
           'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
+      collectionIds: ['merchandise'], // NEW
       options: [
         ProductOption(
           id: 'color',
@@ -307,6 +332,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/notebook.jpg',
       description:
           'A5 lined notebook with UPSU branding on the cover. Perfect for lectures and note-taking. Contains 100 pages of quality paper.',
+      collectionIds: ['stationery'], // NEW
     ),
 
     // Graduation Collection
@@ -317,6 +343,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/graduation_bear.jpg',
       description:
           'Adorable teddy bear wearing graduation cap and gown. Perfect gift for celebrating graduation achievements. Approximately 30cm tall, soft and cuddly.',
+      collectionIds: ['graduation'], // NEW
     ),
     Product(
       id: 'graduation-frame',
@@ -325,6 +352,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/graduation_frame.jpg',
       description:
           'Elegant photo frame designed for graduation photos. Features "Congratulations" engraving and space for 6x4 photo. Perfect keepsake for this special milestone.',
+      collectionIds: ['graduation'], // NEW
     ),
     Product(
       id: 'graduation-card',
@@ -333,6 +361,7 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/graduation_card.jpg',
       description:
           'Congratulations card for graduation. High-quality card with graduation cap design and space for personal message inside. Includes envelope.',
+      collectionIds: ['graduation'], // NEW
     ),
   ];
 
