@@ -222,13 +222,7 @@ class _ProductCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigate with collection context if available
-        if (collectionId != null) {
-          context.go('/collections/$collectionId/products/${product.id}');
-        } else {
-          // Fallback to old route if no collection context
-          context.go('/product');
-        }
+        context.go('/collections/$collectionId/products/${product.id}');
       },
       child: Semantics(
         button: true,
@@ -236,22 +230,44 @@ class _ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            // Product image
+            AspectRatio(
+              aspectRatio: 1.0,
               child: Semantics(
                 image: true,
                 label: 'Image of ${product.title}',
-                child: Image.network(
-                  product.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Center(
-                        child:
-                            Icon(Icons.image_not_supported, color: Colors.grey),
-                      ),
-                    );
-                  },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    product.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey,
+                                size: 48,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Add image:\n${product.imageUrl}',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

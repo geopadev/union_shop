@@ -57,8 +57,7 @@ class _PersonalizationPageState extends State<PersonalizationPage> {
       id: 'personalized_${DateTime.now().millisecondsSinceEpoch}',
       title: 'Personalized: ${textOption?.value ?? "Custom Text"}',
       price: _form.formattedPrice,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: 'assets/images/products/personalized_placeholder.jpg',
       description: _form.getPreviewText(),
     );
 

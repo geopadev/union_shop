@@ -114,33 +114,49 @@ class _CollectionCardState extends State<_CollectionCard> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          context.go('/collections/${widget.collection.id}');
-        },
+    final collection = widget.collection;
+
+    return GestureDetector(
+      onTap: () => context.go('/collections/${collection.id}'),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          transform: Matrix4.identity()..scale(_isHovered ? 1.05 : 1.0),
+          duration: const Duration(milliseconds: 300),
+          transform: _isHovered
+              ? (Matrix4.identity()..scale(1.05))
+              : Matrix4.identity(),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
                 // Collection image
                 Positioned.fill(
-                  child: Image.network(
-                    widget.collection.imageUrl,
+                  child: Image.asset(
+                    collection.imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[300],
-                        child: const Center(
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: Colors.grey,
-                            size: 48,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey,
+                                size: 48,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Add image:\n${collection.imageUrl}',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -170,7 +186,7 @@ class _CollectionCardState extends State<_CollectionCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        widget.collection.name,
+                        collection.name,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 28,

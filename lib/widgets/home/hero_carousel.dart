@@ -172,78 +172,99 @@ class _HeroCarouselState extends State<HeroCarousel> {
   }
 
   Widget _buildSlide(CarouselSlide slide, int index) {
-    return Stack(
+    return Container(
       key: Key('carousel_slide_$index'),
-      children: [
-        // Background image
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(slide.imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.5),
-              ),
-            ),
+      width: double.infinity,
+      height: 400,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background image
+          Image.asset(
+            slide.imageUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[300],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                        size: 64,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Add image:\n${slide.imageUrl}',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
-        ),
 
-        // Content overlay
-        Positioned(
-          left: 24,
-          right: 24,
-          top: 80,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                slide.title,
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                slide.subtitle,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                key: index == 0 ? const Key('browse_collection_button') : null,
-                onPressed: () => context.go(slide.buttonRoute),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4d2963),
-                  foregroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+          // Content overlay
+          Positioned(
+            left: 24,
+            right: 24,
+            top: 80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  slide.title,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    height: 1.2,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  slide.subtitle,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  key:
+                      index == 0 ? const Key('browse_collection_button') : null,
+                  onPressed: () => context.go(slide.buttonRoute),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4d2963),
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: Text(
+                    slide.buttonText,
+                    style: const TextStyle(fontSize: 14, letterSpacing: 1),
                   ),
                 ),
-                child: Text(
-                  slide.buttonText,
-                  style: const TextStyle(fontSize: 14, letterSpacing: 1),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
