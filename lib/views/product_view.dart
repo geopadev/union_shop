@@ -195,11 +195,12 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             const Text(
                               ' > ',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                             GestureDetector(
-                              onTap: () => context.go(
-                                  '/collections/${widget.collectionId}'),
+                              onTap: () => context
+                                  .go('/collections/${widget.collectionId}'),
                               child: Text(
                                 widget.collectionId!
                                     .replaceAll('-', ' ')
@@ -213,7 +214,8 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             const Text(
                               ' > ',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                             Text(
                               product.title,
@@ -248,7 +250,8 @@ class _ProductPageState extends State<ProductPage> {
                                   color: Colors.grey[300],
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.image_not_supported,
@@ -470,9 +473,9 @@ class _ProductPageState extends State<ProductPage> {
                 // Footer
                 const SharedFooter(),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
