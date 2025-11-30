@@ -14,7 +14,7 @@ class InMemoryProductRepository implements ProductRepository {
 
   /// Hardcoded product data
   static final List<Product> _products = [
-    Product(
+    const Product(
       id: '1',
       title: 'Placeholder Product 1',
       price: '£10.00',
@@ -22,7 +22,7 @@ class InMemoryProductRepository implements ProductRepository {
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
       description: 'This is a description for product 1.',
     ),
-    Product(
+    const Product(
       id: '2',
       title: 'Placeholder Product 2',
       price: '£15.00',
@@ -30,7 +30,7 @@ class InMemoryProductRepository implements ProductRepository {
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
       description: 'This is a description for product 2.',
     ),
-    Product(
+    const Product(
       id: '3',
       title: 'Placeholder Product 3',
       price: '£20.00',
@@ -38,7 +38,7 @@ class InMemoryProductRepository implements ProductRepository {
           'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
       description: 'This is a description for product 3.',
     ),
-    Product(
+    const Product(
       id: '4',
       title: 'Placeholder Product 4',
       price: '£25.00',
@@ -74,8 +74,7 @@ class InMemoryProductRepository implements ProductRepository {
     return _products
         .where((product) =>
             product.title.toLowerCase().contains(lowercaseQuery) ||
-            (product.description?.toLowerCase().contains(lowercaseQuery) ??
-                false))
+            (product.description.toLowerCase().contains(lowercaseQuery)))
         .toList();
   }
 }
