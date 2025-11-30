@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// App-wide spacing constants
 class AppSpacing {
   // Padding

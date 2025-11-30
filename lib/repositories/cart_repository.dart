@@ -1,9 +1,7 @@
 import 'package:union_shop/models/cart.dart';
-import 'package:union_shop/models/cart_item.dart';
 import 'package:union_shop/models/product.dart';
 
-/// Abstract repository interface for shopping cart data access
-/// Implementations can be in-memory, network-based, or local storage-backed
+/// Repository interface for shopping cart operations
 abstract class CartRepository {
   /// Get the current cart
   Future<Cart> getCart();
