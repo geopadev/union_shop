@@ -75,73 +75,83 @@ class SharedHeader extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 600),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            key: const Key('header_search'),
-                            icon: const Icon(
-                              Icons.search,
-                              size: 18,
-                              color: Colors.grey,
-                            ),
-                            tooltip: 'Search',
-                            padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            onPressed: onSearchTap,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Check if we're on a narrow screen
+                        final isNarrowScreen =
+                            MediaQuery.of(context).size.width < 768;
+
+                        return ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                key: const Key('header_search'),
+                                icon: const Icon(
+                                  Icons.search,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                tooltip: 'Search',
+                                padding: const EdgeInsets.all(8),
+                                constraints: const BoxConstraints(
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                ),
+                                onPressed: onSearchTap,
+                              ),
+                              IconButton(
+                                key: const Key('header_account'),
+                                icon: const Icon(
+                                  Icons.person_outline,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                tooltip: 'Account',
+                                padding: const EdgeInsets.all(8),
+                                constraints: const BoxConstraints(
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                ),
+                                onPressed: onAccountTap,
+                              ),
+                              IconButton(
+                                key: const Key('header_cart'),
+                                icon: const Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                tooltip: 'Shopping cart',
+                                padding: const EdgeInsets.all(8),
+                                constraints: const BoxConstraints(
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                ),
+                                onPressed: onCartTap,
+                              ),
+                              // Only show hamburger menu on narrow screens
+                              if (isNarrowScreen)
+                                IconButton(
+                                  key: const Key('header_menu'),
+                                  icon: const Icon(
+                                    Icons.menu,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                  tooltip: 'Menu',
+                                  padding: const EdgeInsets.all(8),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () => _openMobileDrawer(context),
+                                ),
+                            ],
                           ),
-                          IconButton(
-                            key: const Key('header_account'),
-                            icon: const Icon(
-                              Icons.person_outline,
-                              size: 18,
-                              color: Colors.grey,
-                            ),
-                            tooltip: 'Account',
-                            padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            onPressed: onAccountTap,
-                          ),
-                          IconButton(
-                            key: const Key('header_cart'),
-                            icon: const Icon(
-                              Icons.shopping_bag_outlined,
-                              size: 18,
-                              color: Colors.grey,
-                            ),
-                            tooltip: 'Shopping cart',
-                            padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            onPressed: onCartTap,
-                          ),
-                          IconButton(
-                            key: const Key('header_menu'),
-                            icon: const Icon(
-                              Icons.menu,
-                              size: 18,
-                              color: Colors.grey,
-                            ),
-                            tooltip: 'Menu',
-                            padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            onPressed: () => _openMobileDrawer(context),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),
