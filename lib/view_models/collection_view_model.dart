@@ -4,16 +4,17 @@ import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';
 import 'package:union_shop/view_models/base_view_model.dart';
 
-/// ViewModel for the Collections screen
-/// Manages collection and product data for collection pages
+/// ViewModel for collection-related screens
+/// Manages collection and product data with filtering capabilities
 class CollectionViewModel extends BaseViewModel {
   final CollectionRepository _collectionRepository;
   final ProductRepository _productRepository;
+
   List<Collection> _collections = [];
   List<Product> _allProducts = [];
 
-  /// Unmodifiable list of collections
-  List<Collection> get collections => List.unmodifiable(_collections);
+  /// Unmodifiable list of all collections
+  List<Collection> get allCollections => List.unmodifiable(_collections);
 
   CollectionViewModel(this._collectionRepository, this._productRepository) {
     _loadData();
