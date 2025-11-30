@@ -227,8 +227,8 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
 
 - [x] S-28 — **Authentication System with Firebase**
   - Implement full user authentication system matching shop.upsu.net/account functionality
-  - Integrate Firebase Authentication for user sign-in/sign-up (email/password and Google sign-in)
-  - Create login page (lib/views/auth/login_view.dart) with email/password fields and "Sign in with Google" button
+  - Integrate Firebase Authentication for user sign-in/sign-up (email/password)
+  - Create login page (lib/views/auth/login_view.dart) with email/password fields
   - Create signup page (lib/views/auth/signup_view.dart) with email/password/confirm password fields
   - Create account dashboard page (lib/views/auth/account_view.dart) showing user info, order history, addresses
   - Add routes: '/account/login', '/account/signup', '/account' (protected route requiring authentication)
@@ -528,7 +528,6 @@ final carouselSlides = [
 - [ ] S-47 — **Firebase Project Setup**
   - Create Firebase project at console.firebase.google.com
   - Enable Firebase Authentication with Email/Password provider
-  - Enable Google Sign-In provider in Firebase Authentication
   - Create Cloud Firestore database in production mode
   - Add Firebase configuration to Flutter project using FlutterFire CLI
   - Install required Firebase packages: firebase_core, firebase_auth, cloud_firestore
@@ -536,27 +535,25 @@ final carouselSlides = [
   - Configure platform-specific setup for web (Firebase config in index.html)
   - Test Firebase connection and verify initialization
   - Add Firebase configuration instructions to README
-  - Reason: Firebase provides secure, production-ready backend services for authentication and data storage with minimal setup. Setting up Firebase properly from the start ensures smooth integration of auth and database features. FlutterFire CLI simplifies configuration across platforms.
+  - Reason: Firebase provides secure, production-ready backend services for authentication and data storage with minimal setup. Setting up Firebase properly from the start ensures smooth integration of auth and database features. FlutterFire CLI simplifies configuration across platforms. Google Sign-In removed as this is a coursework project, not commercial application.
 
 - [ ] S-48 — **Authentication Service Layer**
   - Create AuthService (lib/services/auth_service.dart) wrapping Firebase Authentication
   - Implement signup with email/password (createUserWithEmailAndPassword)
   - Implement login with email/password (signInWithEmailAndPassword)
-  - Implement Google Sign-In integration with Firebase
   - Implement password reset via email (sendPasswordResetEmail)
   - Implement sign out functionality (signOut)
   - Expose authentication state stream (authStateChanges)
-  - Add error handling for common auth errors (weak password, email in use, etc.)
+  - Add error handling for common auth errors (weak password, email in use, invalid credentials, etc.)
   - Create User model (lib/models/user.dart) for authenticated user data
   - Add loading states and error messages for all auth operations
-  - Reason: Creating a service layer abstracts Firebase Auth complexity from UI. This makes code testable, maintainable, and allows swapping auth providers in future. Proper error handling provides good user experience by showing meaningful error messages. Stream-based auth state enables reactive UI updates.
+  - Reason: Creating a service layer abstracts Firebase Auth complexity from UI. This makes code testable, maintainable, and allows swapping auth providers in future. Proper error handling provides good user experience by showing meaningful error messages. Stream-based auth state enables reactive UI updates. Email/password authentication only for coursework simplicity.
 
 - [ ] S-49 — **Sign Up Page UI**
   - Create SignUpPage (lib/views/auth/signup_view.dart) matching shop.upsu.net/account/register design
   - Add form with fields: Email, Password, Confirm Password
   - Implement form validation: email format, password strength (min 6 chars), passwords match
   - Add "Sign Up" button that calls AuthService.signup()
-  - Add "Sign in with Google" button for Google authentication
   - Show loading indicator during signup process
   - Display error messages below form fields for validation errors
   - Show success message and navigate to home on successful signup
@@ -565,14 +562,13 @@ final carouselSlides = [
   - Style with university purple (#4d2963) buttons matching brand
   - Add route '/account/register' to app_router.dart
   - Add Key('signup_page'), Key('signup_email_input'), Key('signup_password_input'), Key('signup_button') for testing
-  - Reason: Sign up page is essential for user registration matching shop.upsu.net functionality. Clean form validation ensures data quality and good UX. Google Sign-In provides convenient alternative to email/password. Loading states and error messages keep users informed during auth process.
+  - Reason: Sign up page is essential for user registration. Clean form validation ensures data quality and good UX. Loading states and error messages keep users informed during auth process. Email/password only for coursework simplicity.
 
 - [ ] S-50 — **Login Page UI**
   - Create LoginPage (lib/views/auth/login_view.dart) matching shop.upsu.net/account/login design
   - Add form with fields: Email, Password
   - Implement form validation: email format, password not empty
   - Add "Sign In" button that calls AuthService.login()
-  - Add "Sign in with Google" button for Google authentication
   - Add "Forgot password?" link that shows password reset dialog
   - Show loading indicator during login process
   - Display error messages for incorrect credentials or other errors
@@ -582,7 +578,7 @@ final carouselSlides = [
   - Style with university purple buttons matching brand
   - Add route '/account/login' to app_router.dart
   - Add Key('login_page'), Key('login_email_input'), Key('login_password_input'), Key('login_button') for testing
-  - Reason: Login page allows existing users to access their accounts. Password reset functionality helps users recover access. Google Sign-In provides quick authentication option. Clear error messages guide users when credentials are incorrect.
+  - Reason: Login page allows existing users to access their accounts. Password reset functionality helps users recover access. Clear error messages guide users when credentials are incorrect. Email/password only for coursework simplicity.
 
 - [ ] S-51 — **Firebase Firestore Data Structure**
   - Design Firestore collections structure: products, collections, users, orders

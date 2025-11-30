@@ -122,6 +122,32 @@ Your editor should automatically prompt you to install the required dependencies
 flutter pub get
 ```
 
+### Firebase Setup
+
+This project uses Firebase for authentication and data storage. To run the project, you need to configure Firebase:
+
+1. **Create a Firebase project** at [console.firebase.google.com](https://console.firebase.google.com)
+2. **Enable Authentication**:
+   - Go to Authentication → Sign-in method
+   - Enable Email/Password provider
+3. **Create Firestore Database**:
+   - Go to Firestore Database
+   - Create database in production mode
+   - Select your preferred region
+4. **Install FlutterFire CLI**:
+   ```bash
+   dart pub global activate flutterfire_cli
+   ```
+5. **Configure Firebase for Flutter**:
+   ```bash
+   flutterfire configure
+   ```
+   - Select your Firebase project
+   - Choose "web" platform
+   - This creates `lib/firebase_options.dart` automatically
+
+Firebase is now configured and ready to use!
+
 ### Run the Application
 
 This application is primarily designed to run on the **web** and should be viewed in **mobile view** using your browser's developer tools. We recommend using Google Chrome.

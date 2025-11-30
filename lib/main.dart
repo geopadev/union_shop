@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:union_shop/firebase_options.dart';
 import 'package:union_shop/repositories/cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_collection_repository.dart';
@@ -12,8 +14,20 @@ import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/view_models/home_view_model.dart';
 import 'package:union_shop/view_models/product_view_model.dart';
 import 'package:union_shop/view_models/search_view_model.dart';
+import 'package:union_shop/services/firebase_test.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter bindings are initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Test Firebase connection (remove this in production)
+  await testFirebaseConnection();
+
   runApp(createApp());
 }
 
