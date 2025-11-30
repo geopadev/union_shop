@@ -287,7 +287,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update main.dart createApp() to accept optional CartRepository parameter
   - Reason: Created comprehensive cart test suite in cart_test.dart (test/cart_test.dart) with 8 test cases covering all cart functionality. Tests include: empty cart state display, adding items from product page, cart badge displaying correct item count, navigating to cart page and viewing items, updating item quantities with +/- buttons, removing items from cart, cart totals display, and cart badge with multiple items. All tests use zero-latency repositories (InMemoryProductRepository, InMemoryCollectionRepository, InMemoryCartRepository with latency: Duration.zero) for deterministic results. Tests use proper Keys to find widgets (cart_page, add_to_cart_button, cart_item_0, header_cart). Tests verify UI updates correctly after cart operations including SnackBar confirmations, badge updates, and empty cart state transitions. CartRepository parameter already added to createApp() in main.dart accepting optional cartRepo for testing. All cart tests passing with zero-latency repositories ensuring fast, deterministic test execution.
 
-- [ ] S-33 — **Print Shack - About Page**
+- [x] S-33 — **Print Shack - About Page**
   - Create Print Shack About page (lib/views/printshack/printshack_about_view.dart)
   - Display information about the print shack service
   - Explain what text personalization is and how it works
@@ -295,7 +295,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add route '/printshack/about' to app_router.dart
   - Use SharedHeader and SharedFooter for consistency
   - Add Key('printshack_about_page') for testing
-  - Reason: Print Shack is a service offered by the Union Shop where students can personalize items with custom text. The about page provides information about this service before users start personalizing. This matches shop.upsu.net/products/personalise-text pattern where users can learn about the service before using it.
+  - Reason: Created PrintShackAboutPage (lib/views/printshack/printshack_about_view.dart) with comprehensive information about the Print Shack text personalization service. Page explains custom text options (up to 20 characters), multiple fonts (Arial, Times New Roman, Courier), color options, and size selections (S, M, L, XL). Displays detailed pricing information: Small £5.00, Medium £7.00, Large £9.00, Extra Large £11.00 including text personalization and printing. Shows turnaround time of 3-5 business days with express options. Features four icon-based feature cards explaining service offerings. Includes "START PERSONALIZING" button linking to /printshack/personalisation. Added /printshack/about route to app_router.dart. Uses SharedHeader and SharedFooter for consistency. Page constrained to 900px width for readability. Styled with university purple (#4d2963) accent color. Includes Key('printshack_about_page') for testing.
 
 - [ ] S-34 — **Print Shack - Personalization Page Model**
   - Create PersonalizationOption model (lib/models/personalization_option.dart) with properties: type (dropdown/text/color), label, options (for dropdown), value
