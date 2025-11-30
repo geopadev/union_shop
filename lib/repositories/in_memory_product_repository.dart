@@ -15,7 +15,7 @@ class InMemoryProductRepository implements ProductRepository {
 
   /// Hardcoded product data
   final List<Product> _products = [
-    // Clothing Collection - with size and color options
+    // Clothing Collection
     Product(
       id: 'classic-hoodie',
       title: 'Classic Hoodie',
@@ -237,11 +237,13 @@ class InMemoryProductRepository implements ProductRepository {
       ],
     ),
 
-    // Halloween Collection
+    // Halloween Collection - ON SALE
     Product(
       id: 'halloween-tshirt',
       title: 'Halloween T-Shirt',
-      price: '£18.00',
+      price: '£12.00',
+      originalPrice: '£18.00',
+      isOnSale: true,
       imageUrl: 'assets/images/products/halloween_tshirt.jpg',
       description:
           'Spooky themed t-shirt perfect for Halloween celebrations. Features fun Halloween graphics and UPSU branding. Limited edition seasonal item.',
@@ -258,7 +260,9 @@ class InMemoryProductRepository implements ProductRepository {
     Product(
       id: 'halloween-stickers',
       title: 'Spooky Sticker Pack',
-      price: '£4.00',
+      price: '£2.50',
+      originalPrice: '£4.00',
+      isOnSale: true,
       imageUrl: 'assets/images/products/halloween_stickers.jpg',
       description:
           'Pack of 10 Halloween-themed stickers. Decorate your laptop, water bottle, or notebook. Waterproof and durable vinyl material.',
@@ -266,10 +270,43 @@ class InMemoryProductRepository implements ProductRepository {
     Product(
       id: 'halloween-tote',
       title: 'Halloween Tote Bag',
-      price: '£7.00',
+      price: '£5.00',
+      originalPrice: '£7.00',
+      isOnSale: true,
       imageUrl: 'assets/images/products/halloween_tote.jpg',
       description:
           'Canvas tote bag with Halloween design. Perfect for trick-or-treating or carrying Halloween party supplies. Sturdy construction with long handles.',
+    ),
+
+    // Merchandise - Some ON SALE
+    Product(
+      id: 'tote-bag',
+      title: 'Tote Bag',
+      price: '£4.00',
+      originalPrice: '£6.00',
+      isOnSale: true,
+      imageUrl: 'assets/images/products/tote_bag.jpg',
+      description:
+          'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
+      options: [
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Purple', 'Black', 'White'],
+          required: true,
+        ),
+      ],
+    ),
+    Product(
+      id: 'notebook',
+      title: 'Branded Notebook',
+      price: '£2.50',
+      originalPrice: '£4.00',
+      isOnSale: true,
+      imageUrl: 'assets/images/products/notebook.jpg',
+      description:
+          'A5 lined notebook with UPSU branding on the cover. Perfect for lectures and note-taking. Contains 100 pages of quality paper.',
     ),
 
     // Graduation Collection
