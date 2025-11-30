@@ -59,7 +59,8 @@ class _NavigationItemState extends State<_NavigationItem> {
         onExit: (_) => setState(() => _isHovering = false),
         child: DropdownMenuWidget(
           trigger: _buildTrigger(),
-          items: widget.item.children,
+          item: widget.item,
+          children: widget.item.children,
         ),
       );
     }
