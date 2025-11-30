@@ -512,7 +512,7 @@ final carouselSlides = [
 
 ---
 
-- [ ] S-46 — **Code Cleanup and Refactoring**
+- [x] S-46 — **Code Cleanup and Refactoring**
   - Remove code duplication across views by extracting common widgets
   - Consolidate similar _ProductCard implementations into shared ProductCard widget (already done in S-45)
   - Extract repeated styling into constants or theme extensions
@@ -632,11 +632,130 @@ final carouselSlides = [
   
   - Reason: Firebase provides secure, production-ready backend services for authentication and data storage with minimal setup. Complete step-by-step Firebase setup successfully completed following comprehensive guide with exact button clicks, terminal commands, and verification steps. Firebase project created in console with Email/Password authentication enabled and Firestore database configured with proper security rules. FlutterFire CLI installed and used to configure Firebase for Flutter web platform, generating firebase_options.dart automatically. Firebase initialized in main.dart with async main() function ensuring Firebase is ready before app starts. Created firebase_test.dart service to verify connection showing all Firebase services (Auth, Firestore) are available. Tested in Chrome and confirmed Firebase initialization messages appear in console. Firebase setup complete and ready for authentication implementation in S-48. This gives you 14% of total marks (8% for Authentication System + 6% for External Services). Security rules properly configured to allow public read access to products/collections while protecting user data with authentication checks.
 
-- [ ] S-48 — **Authentication Service Layer**
-  - Create AuthService (lib/services/auth_service.dart) to wrap Firebase Auth methods
-  - Implement methods: signUp(email, password), signIn(email, password), signOut()
-  - Use FirebaseAuth.instance for authentication operations
-  - Reason: AuthService provides a clean abstraction over Firebase Auth methods, making it easy to switch to another authentication system in the future if needed. Centralizes authentication logic in one place.
+- [x] S-48 — **Authentication Service Layer**
+  
+  **AUTHENTICATION SERVICE COMPLETED SUCCESSFULLY! ✅**
+  
+  **What Was Implemented:**
+  
+  ✅ **AuthService Class Created**
+  - Created AuthService (lib/services/auth_service.dart) wrapping Firebase Auth
+  - Clean abstraction over Firebase Authentication with simple, easy-to-use methods
+  - No direct Firebase imports needed in UI code - service handles everything
+  
+  ✅ **Core Authentication Methods**
+  - signUp(email, password): Creates new user account with email/password
+  - signIn(email, password): Logs in existing user with credentials
+  - signOut(): Logs out current user
+  - sendPasswordResetEmail(email): Sends password reset link to email
+  - updateDisplayName(displayName): Updates user's display name
+  
+  ✅ **User State Access**
+  - currentUser getter: Returns current authenticated User or null
+  - authStateChanges stream: Real-time stream of authentication state changes
+  - Reactive authentication - UI updates automatically when auth state changes
+  
+  ✅ **Error Handling**
+  - _handleAuthException() method converts Firebase error codes to user-friendly messages
+  - Handles all common Firebase Auth errors:
+    - weak-password: "Password too weak (minimum 6 characters)"
+    - email-already-in-use: "Account already exists with this email"
+    - invalid-email: "Email address is not valid"
+    - user-not-found: "No user found with this email"
+    - wrong-password: "Incorrect password"
+    - user-disabled: "Account has been disabled"
+    - too-many-requests: "Too many failed attempts"
+    - network-request-failed: "Network error"
+  - All errors thrown as descriptive strings for easy display in UI
+  
+  ✅ **Provider Integration**
+  - AuthService wired into app via Provider in main.dart
+  - Available throughout app via Provider.of<AuthService>(context)
+  - Injectable for testing - createApp() accepts optional authService parameter
+  - Follows same DI pattern as repositories for consistency
+  
+  ✅ **Unit Tests Created**
+  - Created auth_service_test.dart (test/auth_service_test.dart)
+  - Tests verify service structure and method availability
+  - Tests confirm authStateChanges returns Stream<User?>
+  - Tests validate currentUser getter functionality
+  - Full integration tests would require Firebase Emulator (documented in tests)
+  
+  **AuthService Usage Example:**
+  
+  ```dart
+  // Get service from Provider
+  final authService = Provider.of<AuthService>(context, listen: false);
+  
+  // Sign up new user
+  try {
+    final user = await authService.signUp(
+      email: 'user@example.com',
+      password: 'securePassword123',
+    );
+    print('User created: ${user?.email}');
+  } catch (e) {
+    print('Error: $e'); // User-friendly error message
+  }
+  
+  // Sign in existing user
+  try {
+    final user = await authService.signIn(
+      email: 'user@example.com',
+      password: 'securePassword123',
+    );
+    print('Logged in: ${user?.email}');
+  } catch (e) {
+    print('Error: $e');
+  }
+  
+  // Listen to auth state changes
+  authService.authStateChanges.listen((user) {
+    if (user != null) {
+      print('User signed in: ${user.email}');
+    } else {
+      print('User signed out');
+    }
+  });
+  
+  // Sign out
+  await authService.signOut();
+  ```
+  
+  **Architecture Benefits:**
+  
+  - **Clean Abstraction**: UI code doesn't need to know about Firebase internals
+  - **Testability**: Service can be mocked for unit testing UI components
+  - **Maintainability**: Changing auth provider (e.g., to Azure) only requires updating AuthService
+  - **Consistency**: Follows same repository/service pattern used throughout app
+  - **Error Handling**: Centralized error handling with user-friendly messages
+  - **Type Safety**: Returns User objects, not dynamic types
+  
+  **Files Created/Modified:**
+  - ✅ lib/services/auth_service.dart (created AuthService class)
+  - ✅ lib/main.dart (added AuthService to Provider)
+  - ✅ test/auth_service_test.dart (created unit tests)
+  
+  **Next Steps Ready:**
+  - S-49: Sign Up Page UI (create signup form using AuthService)
+  - S-50: Login Page UI (create login form using AuthService)
+  - S-54: Protected Routes (restrict access to authenticated users only)
+  - S-55: Account Dashboard (show user profile, orders, addresses)
+  
+  **Integration with Existing Code:**
+  - AuthService added to createApp() factory function parameters
+  - Default AuthService() instance created if none provided
+  - AuthService injected via Provider for app-wide access
+  - All existing repositories (ProductRepository, CollectionRepository, CartRepository) continue to work alongside AuthService
+  - No breaking changes to existing functionality
+  
+  **Testing Notes:**
+  - Basic unit tests verify service structure
+  - Full integration tests would require Firebase Emulator setup
+  - For testing UI components, inject mock AuthService via createApp()
+  - Example: createApp(authService: MockAuthService())
+  
+  - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Sign Up Page and S-50 Login Page). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
 
 - [ ] S-49 — **Sign Up Page UI**
   - Create SignUpPage (lib/views/auth/signup_view.dart) with email/password fields

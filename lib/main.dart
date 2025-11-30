@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/firebase_options.dart';
 import 'package:union_shop/services/firebase_test.dart';
+import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/repositories/cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_collection_repository.dart';
@@ -37,12 +38,14 @@ Widget createApp({
   ProductRepository? productRepo,
   CollectionRepository? collectionRepo,
   CartRepository? cartRepo,
+  AuthService? authService,
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
   // Use provided repositories or create defaults with 500ms latency
   final productRepository = productRepo ?? InMemoryProductRepository();
   final collectionRepository = collectionRepo ?? InMemoryCollectionRepository();
   final cartRepository = cartRepo ?? InMemoryCartRepository();
+  final authenticationService = authService ?? AuthService();
 
   return MultiProvider(
     providers: [
@@ -50,6 +53,9 @@ Widget createApp({
       Provider<ProductRepository>.value(value: productRepository),
       Provider<CollectionRepository>.value(value: collectionRepository),
       Provider<CartRepository>.value(value: cartRepository),
+
+      // Service providers
+      Provider<AuthService>.value(value: authenticationService),
 
       // ViewModel providers
       ChangeNotifierProvider<HomeViewModel>(
