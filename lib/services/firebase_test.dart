@@ -12,6 +12,7 @@ Future<void> testFirebaseConnection() async {
     // Check Firebase Auth
     final auth = FirebaseAuth.instance;
     print('✅ Firebase Auth available: ${auth.app.name}');
+    print('   Current user: ${auth.currentUser?.email ?? "Not signed in"}');
 
     // Check Firestore
     final firestore = FirebaseFirestore.instance;

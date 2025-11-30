@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/firebase_options.dart';
+import 'package:union_shop/services/firebase_test.dart';
 import 'package:union_shop/repositories/cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_collection_repository.dart';
@@ -23,6 +24,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Test Firebase connection (remove this in production)
+  await testFirebaseConnection();
 
   runApp(createApp());
 }
