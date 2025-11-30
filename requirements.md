@@ -328,6 +328,57 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - All tests should use zero-latency repositories for deterministic results
   - Reason: Created comprehensive Print Shack test suite in printshack_test.dart (test/printshack_test.dart) with 8 test cases covering all Print Shack functionality. Tests include: navigation to Print Shack about page (verifies Key 'printshack_about_page' and 'The Print Shack' title), navigation to personalization page (verifies Key 'personalization_page'), all form fields display (text input Key 'personalization_text_input', font/size/color dropdowns, add to cart button Key 'add_personalized_to_cart'), text input updates preview (enters 'TEST TEXT' and verifies preview shows 'Your Text: "TEST TEXT"'), size selection updates price (selects Medium and verifies £7.00 price), validation error for incomplete form (verifies error message 'Please fill in all fields before adding to cart'), successful cart addition with complete form (fills all fields including text/font/size/color and verifies success SnackBar and cart badge shows '1'), and correct pricing for all sizes (tests S:£5, M:£7, L:£9, XL:£11). All tests use zero-latency repositories (InMemoryProductRepository, InMemoryCollectionRepository, InMemoryCartRepository with latency: Duration.zero) for deterministic results. Tests verify UI updates correctly after form interactions and confirm cart integration with personalized products. All Print Shack tests passing ensuring complete functionality from navigation to form submission.
 
+- [ ] S-37 — **Product Assets and Images**
+  - Create assets folder structure (assets/images/products/)
+  - Add product images as local assets instead of network images
+  - Update pubspec.yaml to include assets folder
+  - Update Product model to use asset paths
+  - Update InMemoryProductRepository with asset image paths
+  - Update all product displays (home, collections, product page) to use Image.asset()
+  - Reason: Using local assets provides better performance, offline support, and eliminates dependency on external image URLs. Assets folder structure allows organized management of product images by category/collection.
+
+- [ ] S-38 — **Product Options System**
+  - Create ProductOption model (lib/models/product_option.dart) with properties: id, name, type (size/color/material), values, required
+  - Update Product model to include optional List<ProductOption> options field
+  - Create product option selector widget (lib/widgets/product/product_options_selector.dart)
+  - Display option selectors on product page (dropdowns for size, color pickers, etc.)
+  - Different product categories have different options:
+    - Clothing: Size (XS/S/M/L/XL/XXL), Color
+    - Merchandise: Color only (no size options)
+    - Accessories: Material, Color
+  - Store selected options when adding to cart
+  - Display selected options in cart item details
+  - Reason: Products on shop.upsu.net have various customization options. Clothing requires size selection, merchandise doesn't need sizing, and different product types have different available options. This matches real e-commerce behavior where product options vary by category.
+
+- [ ] S-39 — **Sale Products with Strikethrough Pricing**
+  - Add sale-related fields to Product model: isOnSale (bool), originalPrice (String), salePrice (String)
+  - Update product display widgets to show strikethrough original price when isOnSale is true
+  - Display sale price in prominent color (e.g., red) next to strikethrough original price
+  - Add "SALE" badge to product cards for sale items
+  - Update cart to use sale price for calculations when applicable
+  - Update InMemoryProductRepository to include sale products with both prices
+  - Reason: shop.upsu.net displays sale items with strikethrough original prices and discounted prices. This visual treatment helps customers identify deals and savings. Sale badge draws attention to promotional items.
+
+- [ ] S-40 — **Search Functionality**
+  - Create SearchViewModel (lib/view_models/search_view_model.dart) extending BaseViewModel
+  - Implement search() method in ProductRepository using product titles and descriptions
+  - Create SearchPage (lib/views/search_view.dart) displaying search results
+  - Update SharedHeader search icon to navigate to search page or show search dialog
+  - Implement search bar with TextField that filters products as user types
+  - Display search results in grid layout matching collections page
+  - Show "No results found" state when search returns empty
+  - Add route '/search' to app_router.dart with optional query parameter
+  - Support deep linking for searches (e.g., /search?q=hoodie)
+  - Add Key('search_page'), Key('search_input'), Key('search_result_0') for testing
+  - Reason: Search is a fundamental e-commerce feature allowing users to quickly find specific products. shop.upsu.net has search functionality in header and footer. Search should filter across all products regardless of collection, providing quick product discovery.
+
+- [ ] S-41 — **Testing for New Features**
+  - Create product_options_test.dart testing size/color selection and cart integration
+  - Create sale_products_test.dart testing strikethrough pricing display
+  - Create search_test.dart testing search functionality and results display
+  - All tests should use zero-latency repositories for deterministic results
+  - Reason: Comprehensive testing ensures new product features work correctly including options selection, sale price calculations, and search functionality. Tests verify UI displays correctly and integrates properly with existing cart system.
+
 ---
 
 **🎉🎉🎉 PRINT SHACK FEATURE (S-33 through S-36) IS NOW 100% COMPLETE! 🎉🎉🎉**
