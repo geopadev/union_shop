@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/navigation_menu.dart';
+import 'package:go_router/go_router.dart';
 
 class SharedHeader extends StatelessWidget {
   final VoidCallback? onLogoTap;
@@ -101,7 +102,7 @@ class SharedHeader extends StatelessWidget {
                                   minWidth: 32,
                                   minHeight: 32,
                                 ),
-                                onPressed: onSearchTap,
+                                onPressed: () => context.go('/search'),
                               ),
                               IconButton(
                                 key: const Key('header_account'),

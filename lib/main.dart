@@ -11,6 +11,7 @@ import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/view_models/home_view_model.dart';
 import 'package:union_shop/view_models/product_view_model.dart';
+import 'package:union_shop/view_models/search_view_model.dart';
 
 void main() {
   runApp(createApp());
@@ -49,6 +50,9 @@ Widget createApp({
       ),
       ChangeNotifierProvider<CartViewModel>(
         create: (_) => CartViewModel(cartRepository),
+      ),
+      ChangeNotifierProvider<SearchViewModel>(
+        create: (_) => SearchViewModel(productRepository),
       ),
     ],
     child: UnionShopApp(navigatorKey: navigatorKey),
