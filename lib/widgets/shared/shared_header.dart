@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/navigation_menu.dart';
 
 class SharedHeader extends StatelessWidget {
@@ -16,6 +17,10 @@ class SharedHeader extends StatelessWidget {
     this.onCartTap,
     this.onMenuTap,
   });
+
+  void _openMobileDrawer(BuildContext context) {
+    Scaffold.of(context).openEndDrawer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +138,7 @@ class SharedHeader extends StatelessWidget {
                               minWidth: 32,
                               minHeight: 32,
                             ),
-                            onPressed: onMenuTap,
+                            onPressed: () => _openMobileDrawer(context),
                           ),
                         ],
                       ),
