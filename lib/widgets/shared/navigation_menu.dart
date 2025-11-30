@@ -17,19 +17,30 @@ class NavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 8,
-          runSpacing: 8,
-          children: NavigationData.mainNavigation.map((item) {
-            return _buildNavItem(context, item);
-          }).toList(),
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Hide navigation menu on screens narrower than 768px
+        // Mobile users will use the hamburger menu instead
+        if (constraints.maxWidth < 768) {
+          return const SizedBox.shrink();
+        }
+
+        // Show full navigation menu on wider screens
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Center(
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: NavigationData.mainNavigation.map((item) {
+                return _buildNavItem(context, item);
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 
