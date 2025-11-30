@@ -650,6 +650,8 @@ final carouselSlides = [
   - sendPasswordResetEmail(email): Sends password reset link to email
   - updateDisplayName(displayName): Updates user's display name
   
+  **NOTE:** These methods will be updated in S-49 to use Firebase email link authentication instead of password-based auth to match shop.upsu.net behavior where users only enter email and receive verification code.
+  
   ✅ **User State Access**
   - currentUser getter: Returns current authenticated User or null
   - authStateChanges stream: Real-time stream of authentication state changes
@@ -737,10 +739,9 @@ final carouselSlides = [
   - ✅ test/auth_service_test.dart (created unit tests)
   
   **Next Steps Ready:**
-  - S-49: Sign Up Page UI (create signup form using AuthService)
-  - S-50: Login Page UI (create login form using AuthService)
+  - S-49: Email Authentication Page (single page for email entry and verification code, no passwords)
   - S-54: Protected Routes (restrict access to authenticated users only)
-  - S-55: Account Dashboard (show user profile, orders, addresses)
+  - S-55: Account Dashboard (show user profile, cart persistence)
   
   **Integration with Existing Code:**
   - AuthService added to createApp() factory function parameters
@@ -755,29 +756,64 @@ final carouselSlides = [
   - For testing UI components, inject mock AuthService via createApp()
   - Example: createApp(authService: MockAuthService())
   
-  - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Sign Up Page and S-50 Login Page). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
+  - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Email Authentication Page). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
 
-- [ ] S-49 — **Sign Up Page UI**
-  - Create SignUpPage (lib/views/auth/signup_view.dart) with email/password fields
-  - Add "Sign Up" button that calls AuthService.signUp()
-  - Display validation errors (e.g., email already in use)
-  - Reason: Allows users to create a new account with email and password. Integrates with AuthService for backend communication.
+- [ ] S-49 — **Email Authentication Page (Magic Link)**
+  - Create single EmailAuthPage (lib/views/auth/email_auth_view.dart) matching shop.upsu.net authentication flow
+  - Page should have email input field only (no password field, no separate signup/login pages)
+  - User enters email address and clicks "Continue" button
+  - System sends verification email with magic link/code to user's email
+  - User clicks link in email or enters verification code to authenticate
+  - Update AuthService to support email link authentication (Firebase Auth signInWithEmailLink)
+  - Add sendSignInLinkToEmail(email) method to AuthService
+  - Add isSignInWithEmailLink(link) method to check if URL is a sign-in link
+  - Add signInWithEmailLink(email, link) method to complete authentication
+  - Form validation: email format validation only
+  - Loading states during email sending and verification
+  - Error handling with user-friendly messages
+  - After successful authentication, redirect to /account dashboard
+  - Add route '/account/email-auth' to app_router.dart
+  - Update SharedHeader account button to navigate to /account/email-auth if not signed in
+  - Visual styling matching shop.upsu.net (clean form layout, university purple buttons)
+  - Add Key('email_auth_page'), Key('email_input'), Key('continue_button') for testing
+  - Store user email in localStorage/SharedPreferences for magic link verification
+  - Handle deep links when user clicks verification link in email
+  - Reason: Shop.upsu.net uses passwordless authentication where users only provide email address and receive verification code/link via email. This is simpler and more secure than password-based auth - no passwords to remember or store. Firebase Auth supports this via email link authentication (signInWithEmailLink). Single page handles both new users and returning users - no need for separate signup/login flows. Cart data persists based on email address allowing users to access their cart from any device by verifying their email. This matches modern e-commerce patterns like Amazon where users can shop without creating traditional accounts. Authentication happens in background - user enters email, receives code, enters code, and is signed in. Much better UX than traditional username/password forms.
 
-- [ ] S-50 — **Login Page UI**
-  - Create LoginPage (lib/views/auth/login_view.dart) with email/password fields
-  - Add "Log In" button that calls AuthService.signIn()
-  - Display validation errors (e.g., incorrect password)
-  - Reason: Allows users to log in to their existing account. Integrates with AuthService for backend communication.
+- [ ] S-50 — **REMOVED - No Separate Login/Signup Pages Needed**
+  - This subtask is no longer required as shop.upsu.net uses single email authentication page
+  - Email verification handles both new users (signup) and existing users (login) in one flow
+  - See S-49 for implementation details
+  - Reason: Real website doesn't have separate login and signup pages - everything is handled through email verification flow in a single page.
 
-- [ ] S-51 — **Firestore Data Structure**
-  - Design Firestore data structure for products, users, and orders
-  - Create initial Firestore documents for testing
-  - Reason: Defines how data is organized in Firestore. Essential for storing and retrieving app data.
+- [ ] S-54 — **Protected Routes and Auth State Management**
+  - Implement route guards using GoRouter's redirect callback to protect authenticated routes
+  - Routes requiring authentication: /account (account dashboard)
+  - If user is not signed in and tries to access /account, redirect to /account/email-auth
+  - If user is signed in and tries to access /account/email-auth, redirect to /account
+  - Use StreamBuilder or Consumer to reactively update navigation based on authStateChanges
+  - Update app_router.dart to check authentication state before allowing route access
+  - Add AuthService.authStateChanges listener to router for reactive updates
+  - Persist authentication state using Firebase Auth's persistence (automatic)
+  - Show loading indicator while checking authentication state
+  - Reason: Protected routes ensure users must authenticate before accessing account-specific features. GoRouter's redirect callback provides clean way to guard routes based on authentication state. Firebase Auth automatically persists user sessions across app restarts so users stay logged in. Reactive navigation ensures UI updates immediately when user signs in or out. This prevents unauthorized access to account dashboard and provides smooth authentication-aware navigation throughout app.
 
-- [ ] S-52 — **Firebase Product Repository**
-  - Update ProductRepository to fetch products from Firestore
-  - Implement caching and offline support
-  - Reason: Integrates Firestore with the repository pattern, allowing products to be loaded from the backend. Caching and offline support improve performance and usability.
-
----
+- [ ] S-55 — **Account Dashboard Page**
+  - Create AccountPage (lib/views/auth/account_view.dart) showing user info and cart persistence
+  - Display welcome message with user email address
+  - Show "Sign Out" button (Key: 'sign_out_button') that calls AuthService.signOut()
+  - Display user's persisted cart items (cart data stored in Firestore linked to user email)
+  - Cart persistence: when user signs in, load their cart from Firestore
+  - Cart persistence: when user adds items to cart while signed in, save to Firestore
+  - Cart persistence: when user signs out, cart data remains in Firestore for next session
+  - Update CartRepository to save cart to Firestore when user is authenticated
+  - Add optional email parameter to cart operations for associating cart with user
+  - Display "Order History" section (placeholder with message "No orders yet")
+  - Display "Saved Addresses" section (placeholder with message "No addresses saved")
+  - Use SharedHeader and SharedFooter for consistency
+  - Add Key('account_page') for testing
+  - Protected route - only accessible when authenticated (handled by S-54)
+  - Match visual styling of shop.upsu.net account page (clean layout, sections)
+  - After sign out, redirect to homepage
+  - Reason: Shop.upsu.net account dashboard shows user email and persists cart across sessions via email-based identification. Cart data is tied to email address so users can access their cart from any device after email verification. Account page provides central location for viewing cart persistence, order history (future feature), and saved addresses (future feature). Sign out functionality allows users to end session while cart data remains stored in Firestore. This matches shop.upsu.net behavior where cart items are remembered between visits after email verification. Firestore integration enables real cart persistence unlike current in-memory implementation which loses data on app refresh.
 
