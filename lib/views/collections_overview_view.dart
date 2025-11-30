@@ -34,7 +34,7 @@ class CollectionsOverviewPage extends StatelessWidget {
               onMenuTap: placeholderCallbackForButtons,
             ),
 
-            // Collections Content
+            // Collections Grid
             Consumer<CollectionViewModel>(
               builder: (context, viewModel, child) {
                 if (viewModel.isLoading) {
@@ -48,84 +48,42 @@ class CollectionsOverviewPage extends StatelessWidget {
                   );
                 }
 
-                final collections = viewModel.collections;
+                final collections = viewModel.allCollections;
 
                 return Container(
                   color: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 1200),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Page Title
-                          const Text(
-                            'Collections',
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            '${collections.length} collections',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          const SizedBox(height: 32),
+                  padding: const EdgeInsets.all(16),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Calculate responsive columns
+                      int crossAxisCount;
+                      if (constraints.maxWidth > 1200) {
+                        crossAxisCount = 4;
+                      } else if (constraints.maxWidth > 800) {
+                        crossAxisCount = 3;
+                      } else if (constraints.maxWidth > 600) {
+                        crossAxisCount = 2;
+                      } else {
+                        crossAxisCount = 1;
+                      }
 
-                          // Collections Grid
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              int crossAxisCount;
-                              double childAspectRatio;
-
-                              if (constraints.maxWidth > 1200) {
-                                crossAxisCount = 4;
-                                childAspectRatio = 0.8;
-                              } else if (constraints.maxWidth > 800) {
-                                crossAxisCount = 3;
-                                childAspectRatio = 0.85;
-                              } else if (constraints.maxWidth > 600) {
-                                crossAxisCount = 2;
-                                childAspectRatio = 0.9;
-                              } else {
-                                crossAxisCount = 1;
-                                childAspectRatio = 1.5;
-                              }
-
-                              return GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: crossAxisCount,
-                                  childAspectRatio: childAspectRatio,
-                                  crossAxisSpacing: 24,
-                                  mainAxisSpacing: 24,
-                                ),
-                                itemCount: collections.length,
-                                itemBuilder: (context, index) {
-                                  final collection = collections[index];
-                                  return _CollectionCard(
-                                    collectionId: collection.id,
-                                    name: collection.name,
-                                    description: collection.description,
-                                    imageUrl: collection.imageUrl,
-                                    productCount: collection.productIds.length,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemCount: collections.length,
+                        itemBuilder: (context, index) {
+                          return _CollectionCard(
+                            collection: collections[index],
+                          );
+                        },
+                      );
+                    },
                   ),
                 );
               },
@@ -140,106 +98,94 @@ class CollectionsOverviewPage extends StatelessWidget {
   }
 }
 
-class _CollectionCard extends StatelessWidget {
-  final String collectionId;
-  final String name;
-  final String description;
-  final String imageUrl;
-  final int productCount;
+class _CollectionCard extends StatefulWidget {
+  final dynamic collection;
 
   const _CollectionCard({
-    required this.collectionId,
-    required this.name,
-    required this.description,
-    required this.imageUrl,
-    required this.productCount,
+    required this.collection,
   });
 
   @override
+  State<_CollectionCard> createState() => _CollectionCardState();
+}
+
+class _CollectionCardState extends State<_CollectionCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.go('/collections/$collectionId');
-      },
-      child: Semantics(
-        button: true,
-        label: 'Collection: $name, $productCount products',
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () {
+          context.go('/collections/${widget.collection.id}');
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          transform: Matrix4.identity()..scale(_isHovered ? 1.05 : 1.0),
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Collection Image
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(8)),
-                    color: Colors.grey[200],
-                  ),
-                  child: ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(8)),
-                    child: Image.network(
-                      imageUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[300],
-                          child: const Center(
-                            child: Icon(Icons.collections,
-                                size: 48, color: Colors.grey),
+            child: Stack(
+              children: [
+                // Collection image
+                Positioned.fill(
+                  child: Image.network(
+                    widget.collection.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                            size: 48,
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Dark overlay
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // Collection Info
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '$productCount products',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF4d2963),
-                        fontWeight: FontWeight.w500,
+
+                // Collection name overlay
+                Positioned.fill(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        widget.collection.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
