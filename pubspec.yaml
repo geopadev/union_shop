@@ -21,3 +21,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # Assets configuration
+  assets:
+    - assets/images/products/
+    - assets/images/collections/
+    - assets/images/carousel/
