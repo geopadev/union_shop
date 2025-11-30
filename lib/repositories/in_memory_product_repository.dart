@@ -13,38 +13,34 @@ class InMemoryProductRepository implements ProductRepository {
   });
 
   /// Hardcoded product data
-  static final List<Product> _products = [
-    const Product(
+  final List<Product> _products = [
+    Product(
       id: '1',
       title: 'Placeholder Product 1',
-      price: '£10.00',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-      description: 'This is a description for product 1.',
+      price: '£15.00',
+      imageUrl: 'assets/images/products/product_1.jpg',
+      description: 'This is a placeholder description for product 1.',
     ),
-    const Product(
+    Product(
       id: '2',
       title: 'Placeholder Product 2',
-      price: '£15.00',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-      description: 'This is a description for product 2.',
+      price: '£20.00',
+      imageUrl: 'assets/images/products/product_2.jpg',
+      description: 'This is a placeholder description for product 2.',
     ),
-    const Product(
+    Product(
       id: '3',
       title: 'Placeholder Product 3',
-      price: '£20.00',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-      description: 'This is a description for product 3.',
+      price: '£25.00',
+      imageUrl: 'assets/images/products/product_3.jpg',
+      description: 'This is a placeholder description for product 3.',
     ),
-    const Product(
+    Product(
       id: '4',
       title: 'Placeholder Product 4',
-      price: '£25.00',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-      description: 'This is a description for product 4.',
+      price: '£30.00',
+      imageUrl: 'assets/images/products/product_4.jpg',
+      description: 'This is a placeholder description for product 4.',
     ),
   ];
 

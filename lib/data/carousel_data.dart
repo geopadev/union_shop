@@ -7,25 +7,22 @@ class CarouselData {
     CarouselSlide(
       title: 'Explore Portsmouth City Collection',
       subtitle: 'Discover unique items celebrating our city',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+      imageUrl: 'assets/images/carousel/slide_1.jpg',
       buttonText: 'BROWSE COLLECTION',
       buttonRoute: '/collections/portsmouth',
     ),
     CarouselSlide(
       title: 'Halloween Special 🎃',
       subtitle: 'Spooky season essentials',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+      imageUrl: 'assets/images/carousel/slide_2.jpg',
       buttonText: 'SHOP NOW',
       buttonRoute: '/collections/halloween',
     ),
     CarouselSlide(
       title: 'Pride Collection 🏳️‍🌈',
-      subtitle: 'Show your pride with our inclusive range',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      buttonText: 'DISCOVER MORE',
+      subtitle: 'Show your pride with our rainbow collection',
+      imageUrl: 'assets/images/carousel/slide_3.jpg',
+      buttonText: 'VIEW COLLECTION',
       buttonRoute: '/collections/pride',
     ),
   ];

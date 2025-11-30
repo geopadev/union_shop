@@ -13,85 +13,62 @@ class InMemoryCollectionRepository implements CollectionRepository {
   });
 
   /// Hardcoded collection data
-  static final List<Collection> _collections = [
+  final List<Collection> _collections = [
     Collection(
       id: 'clothing',
       name: 'Clothing',
-      description: 'Explore our range of comfortable and stylish clothing',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2', '3'], // Products 1, 2, 3 in Clothing
+      description: 'Explore our range of clothing items',
+      imageUrl: 'assets/images/collections/clothing.jpg',
+      productIds: ['1', '2'],
     ),
     Collection(
       id: 'merchandise',
       name: 'Merchandise',
-      description: 'University branded merchandise and accessories',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: [
-        '2',
-        '4'
-      ], // Products 2, 4 in Merchandise (2 is shared with Clothing)
+      description: 'University merchandise and accessories',
+      imageUrl: 'assets/images/collections/merchandise.jpg',
+      productIds: ['2', '3'],
     ),
     Collection(
       id: 'halloween',
       name: 'Halloween 🎃',
-      description: 'Spooky season essentials and Halloween specials',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: [
-        '1',
-        '3',
-        '4'
-      ], // Products 1, 3, 4 (shared with Clothing and Merchandise)
+      description: 'Spooky season essentials',
+      imageUrl: 'assets/images/collections/halloween.jpg',
+      productIds: ['1', '3'],
     ),
     Collection(
       id: 'signature-essential',
       name: 'Signature & Essential Range',
-      description: 'Our core collection of everyday essentials',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: [
-        '1',
-        '2',
-        '3',
-        '4'
-      ], // All products (shared across all collections)
+      description: 'Our signature collection',
+      imageUrl: 'assets/images/collections/signature.jpg',
+      productIds: ['1', '2', '3'],
     ),
     Collection(
       id: 'portsmouth',
       name: 'Portsmouth City Collection',
-      description: 'Celebrate Portsmouth with our exclusive city collection',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2', '4'], // Products 1, 2, 4 (shared)
+      description: 'Celebrate Portsmouth with our city collection',
+      imageUrl: 'assets/images/collections/portsmouth.jpg',
+      productIds: ['1', '2', '4'],
     ),
     Collection(
       id: 'pride',
       name: 'Pride Collection 🏳️‍🌈',
-      description: 'Show your pride with our inclusive collection',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: [
-        '1',
-        '3'
-      ], // Products 1, 3 (shared with Clothing, Halloween, etc.)
+      description: 'Show your pride with our rainbow collection',
+      imageUrl: 'assets/images/collections/pride.jpg',
+      productIds: ['1', '3', '4'],
     ),
     Collection(
       id: 'graduation',
       name: 'Graduation 🎓',
-      description: 'Celebrate your graduation with our special collection',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['2', '3', '4'], // Products 2, 3, 4 (shared)
+      description: 'Graduation essentials and memorabilia',
+      imageUrl: 'assets/images/collections/graduation.jpg',
+      productIds: ['2', '3', '4'],
     ),
     Collection(
       id: 'sale',
-      name: 'SALE!',
-      description: 'Amazing deals on selected items',
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-      productIds: ['1', '2'], // Products 1, 2 on sale
+      name: 'SALE',
+      description: 'Amazing deals and discounts',
+      imageUrl: 'assets/images/collections/sale.jpg',
+      productIds: ['1', '2', '3', '4'],
     ),
   ];
 
