@@ -759,36 +759,27 @@ final carouselSlides = [
   
   - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Sign Up Page UI). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
 
-- [ ] S-49 — **Sign Up Page UI**
-  - Create SignUpPage (lib/views/auth/signup_view.dart) with email and password fields
-  - Add email input field with validation (valid email format)
-  - Add password input field with validation (minimum 6 characters)
-  - Add confirm password field with validation (matches password)
-  - Add "Sign Up" button that calls AuthService.signUp()
-  - Display validation errors (e.g., email already in use, weak password)
-  - Add loading state while creating account
-  - Show success message and redirect to /account after successful signup
-  - Add "Already have an account? Log in" link that navigates to /account/login
-  - Add route '/account/signup' to app_router.dart
-  - Match visual styling (clean form layout, university purple buttons)
-  - Add Key('signup_page'), Key('email_input'), Key('password_input'), Key('confirm_password_input'), Key('signup_button') for testing
-  - Reason: Allows users to create a new account with email and password. Integrates with AuthService for backend communication with Firebase Auth. Form validates email format and password strength before submission. User experience matches modern web applications with clear error messages and loading states.
-
-- [ ] S-50 — **Login Page UI**
-  - Create LoginPage (lib/views/auth/login_view.dart) with email and password fields
-  - Add email input field with validation
-  - Add password input field with validation
-  - Add "Log In" button that calls AuthService.signIn()
-  - Display validation errors (e.g., incorrect password, user not found)
-  - Add loading state while signing in
-  - Show success message and redirect to /account after successful login
-  - Add "Don't have an account? Sign up" link that navigates to /account/signup
-  - Add "Forgot password?" link that shows dialog or navigates to password reset page
-  - Add route '/account/login' to app_router.dart
+- [ ] S-49 — **Google Sign-In Page UI**
+  - Create GoogleSignInPage (lib/views/auth/google_signin_view.dart) with single "Sign in with Google" button
+  - Add Google logo and branding following Google's sign-in button design guidelines
+  - Add "Sign in with Google" button that calls AuthService.signInWithGoogle()
+  - Display loading state while signing in with Google
+  - Show error messages if sign-in fails (e.g., popup closed, network error)
+  - After successful sign-in, redirect to /account dashboard
+  - Add route '/account/login' to app_router.dart (Google sign-in page)
   - Update SharedHeader account button to navigate to /account/login if not signed in, /account if signed in
-  - Match visual styling (clean form layout, university purple buttons)
-  - Add Key('login_page'), Key('email_input'), Key('password_input'), Key('login_button'), Key('forgot_password_link') for testing
-  - Reason: Allows users to log in to their existing account with email and password. Integrates with AuthService for backend communication with Firebase Auth. Form validates credentials before submission with clear error handling for common authentication failures.
+  - Match visual styling (clean layout, Google button styling, university purple accents)
+  - Add Key('google_signin_page'), Key('google_signin_button') for testing
+  - Page should explain that users sign in with their Google account
+  - Include privacy notice about Google authentication
+  - Reason: Google Sign-In provides secure, passwordless authentication without requiring users to create or remember passwords. Users authenticate using their existing Google accounts which is familiar and trusted. Firebase Auth integrates seamlessly with Google Sign-In requiring minimal configuration. This matches modern authentication patterns used by major e-commerce platforms. Single sign-on improves user experience by reducing friction in the authentication process.
+
+- [ ] S-50 — **REMOVED - No Separate Signup Page Needed**
+  - This subtask is no longer required with Google authentication
+  - Google Sign-In handles both new user registration and existing user login in one flow
+  - When user signs in with Google for the first time, Firebase automatically creates their account
+  - See S-49 for implementation details
+  - Reason: Google authentication eliminates the need for separate signup and login pages. Users click "Sign in with Google" and authenticate via Google's OAuth flow. If it's their first time, Firebase creates a new user account automatically. If they've signed in before, they're logged into their existing account. This unified flow simplifies the authentication UX significantly.
 
 - [ ] S-54 — **Protected Routes and Auth State Management**
   - Implement route guards using GoRouter's redirect callback to protect authenticated routes
