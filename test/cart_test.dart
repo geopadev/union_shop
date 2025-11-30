@@ -213,8 +213,7 @@ void main() {
       expect(find.text('PROCEED TO CHECKOUT'), findsOneWidget);
     });
 
-    testWidgets('should show correct badge for multiple items',
-        (tester) async {
+    testWidgets('should show correct badge for multiple items', (tester) async {
       final productRepo = InMemoryProductRepository(latency: Duration.zero);
       final collectionRepo =
           InMemoryCollectionRepository(latency: Duration.zero);

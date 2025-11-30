@@ -275,7 +275,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('cart_page'), Key('add_to_cart_button'), Key('cart_item_0') for testing
   - Reason: Updated ProductPage (lib/views/product_view.dart) to StatefulWidget with quantity state management (_quantity). Added quantity selector with +/- IconButtons allowing users to adjust quantity before adding to cart. Implemented "Add to Cart" button (Key: 'add_to_cart_button') that calls CartViewModel.addToCart() and shows SnackBar confirmation with item count. Updated SharedHeader (lib/widgets/shared/shared_header.dart) to wrap cart icon in Consumer<CartViewModel> displaying badge with item count (shows "9+" if >9 items) positioned in top-right corner with purple background. Cart icon navigates to /cart on all pages (home, product, collections). Created CartPage (lib/views/cart_view.dart) with Key('cart_page') displaying cart items in scrollable list. Each cart item (Key: 'cart_item_0', 'cart_item_1', etc.) shows product image, name, price, quantity controls (+/- buttons calling updateQuantity()), and remove button (calling removeFromCart()). Cart page displays subtotal, total items count, and "Proceed to Checkout" button (placeholder with SnackBar). Empty cart state shows large cart icon, "Your cart is empty" message, and "Continue Shopping" button linking to homepage. Added '/cart' route to app_router.dart. Cart badge updates reactively via notifyListeners(). All cart operations integrate with CartViewModel for reactive state management.
 
-- [ ] S-32 — **Shopping Cart - Testing**
+- [x] S-32 — **Shopping Cart - Testing**
   - Create cart_test.dart (test/cart_test.dart) with comprehensive cart functionality tests
   - Test adding items to cart from product page
   - Test cart icon badge displays correct item count
@@ -285,7 +285,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Test empty cart state display
   - All tests should use zero-latency CartRepository for deterministic results
   - Update main.dart createApp() to accept optional CartRepository parameter
-  - Reason: Comprehensive tests ensure cart functionality works correctly including adding items, quantity management, removal, and UI state updates. Tests verify cart persists correctly and UI responds to cart changes. Zero-latency repository ensures tests run fast and deterministically.
+  - Reason: Created comprehensive cart test suite in cart_test.dart (test/cart_test.dart) with 8 test cases covering all cart functionality. Tests include: empty cart state display, adding items from product page, cart badge displaying correct item count, navigating to cart page and viewing items, updating item quantities with +/- buttons, removing items from cart, cart totals display, and cart badge with multiple items. All tests use zero-latency repositories (InMemoryProductRepository, InMemoryCollectionRepository, InMemoryCartRepository with latency: Duration.zero) for deterministic results. Tests use proper Keys to find widgets (cart_page, add_to_cart_button, cart_item_0, header_cart). Tests verify UI updates correctly after cart operations including SnackBar confirmations, badge updates, and empty cart state transitions. CartRepository parameter already added to createApp() in main.dart accepting optional cartRepo for testing. All cart tests passing with zero-latency repositories ensuring fast, deterministic test execution.
 
 ---
 
