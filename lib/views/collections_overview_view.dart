@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
+import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -20,6 +21,7 @@ class CollectionsOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: const Key('collections_page'),
+      endDrawer: const MobileNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
