@@ -178,7 +178,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update main.dart with all new named routes:
     - '/about' → AboutPage
     - '/collections' → CollectionsOverviewPage
-    - '/collections/:id' → CollectionsPage
+    - '/collections/:id' → CollectionDetailPage
     - '/collections/:id/products/:productId' → ProductPage
   - Test all routes with browser URL bar navigation
   - Reason: S-24 was already completed in S-21.3 with go_router implementation. All routes are defined in app_router.dart (lib/router/app_router.dart) using GoRouter with declarative routing. Routes include: '/' → HomeScreen, '/about' → AboutPage, '/collections' → CollectionsOverviewPage, '/collections/:collectionId' → CollectionsPage with dynamic parameter extraction, '/collections/:collectionId/products/:productId' → ProductPage with nested route parameters, '/product' → ProductPage as fallback. All navigation links throughout the app use context.go() with proper URL paths. Browser URL bar updates on navigation, URLs can be copied/bookmarked/shared, back/forward buttons work correctly. All collection routes (clothing, merchandise, halloween, signature-essential, portsmouth, pride, graduation, sale) work via dynamic routing with the collectionId parameter. Print Shack routes (/printshack/about, /printshack/personalisation) can be added similarly if needed in future. Deep linking fully functional matching shop.upsu.net behavior.
@@ -224,6 +224,68 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Match visual styling of shop.upsu.net/collections exactly
   - Keep existing test Key('collections_page') for testing
   - Reason: Completely redesigned CollectionsOverviewPage (lib/views/collections_overview_view.dart) to match shop.upsu.net/collections visual style. Each collection now displays as a large image card with collection name overlaid directly on the image. Removed product counts and descriptions from cards. Implemented Stack widget with three layers: full-bleed collection image, dark gradient overlay (30%-60% black opacity for text readability), and centered collection name in large white text (28px, bold, letter-spacing 1.2). Added MouseRegion for hover detection and AnimatedContainer for smooth scale transformation (1.05x zoom) on desktop hover. Maintains responsive grid layout with LayoutBuilder (1-4 columns based on screen width with 0.8 aspect ratio). Cards use ClipRRect for 8px rounded corners. Navigation to /collections/{collectionId} via GestureDetector. Magazine-style visual browsing experience matching shop.upsu.net exactly. Kept existing Key('collections_page') for testing compatibility.
+
+- [ ] S-28 — **Authentication System with Firebase**
+  - Implement full user authentication system matching shop.upsu.net/account functionality
+  - Integrate Firebase Authentication for user sign-in/sign-up (email/password and Google sign-in)
+  - Create login page (lib/views/auth/login_view.dart) with email/password fields and "Sign in with Google" button
+  - Create signup page (lib/views/auth/signup_view.dart) with email/password/confirm password fields
+  - Create account dashboard page (lib/views/auth/account_view.dart) showing user info, order history, addresses
+  - Add routes: '/account/login', '/account/signup', '/account' (protected route requiring authentication)
+  - Update header account button (person_outline icon) to navigate to /account/login if not signed in, /account if signed in
+  - Account dashboard should display: Welcome message with user name/email, "Sign Out" button, order history section, saved addresses section
+  - Implement AuthService (lib/services/auth_service.dart) to manage authentication state with Firebase
+  - Use StreamBuilder or Consumer to reactively update UI based on authentication state
+  - Store user data in Firebase Firestore (users collection with userId, email, displayName, addresses, orders)
+  - Add persistent authentication (user stays logged in after closing app)
+  - Add password reset functionality on login page ("Forgot password?" link)
+  - Implement form validation for all auth forms (email format, password strength, matching passwords)
+  - Add loading states and error handling for all auth operations
+  - Match visual styling of shop.upsu.net account pages (clean form layouts, university purple buttons)
+  - Add Keys for testing: Key('login_page'), Key('signup_page'), Key('account_page'), Key('sign_out_button')
+  - Reason: Shop.upsu.net has a full authentication system where users can create accounts, sign in, and access a personalized dashboard at /account showing their profile information, order history, and saved addresses. This feature enables user-specific functionality like saving cart items, viewing order history, and managing account settings. Firebase Authentication provides secure, production-ready user authentication with minimal backend code. The account button in the header should check authentication state and navigate to appropriate page (login if not authenticated, dashboard if authenticated).
+
+- [ ] S-29 — **Shopping Cart - Models and Repository**
+  - Create CartItem model (lib/models/cart_item.dart) with properties: product, quantity, selectedOptions (size, color, etc.)
+  - Create Cart model (lib/models/cart.dart) with properties: items list, totalPrice getter, totalItems getter
+  - Create CartRepository interface (lib/repositories/cart_repository.dart) with methods: getCart(), addItem(), removeItem(), updateQuantity(), clearCart()
+  - Create InMemoryCartRepository (lib/repositories/in_memory_cart_repository.dart) implementing CartRepository with local storage simulation
+  - Cart should persist items (simulate persistence with in-memory storage, can be enhanced with shared_preferences later)
+  - Reason: Shopping cart requires models to represent cart items and the cart itself, plus a repository to manage cart data persistence and operations. CartItem needs product reference, quantity tracking, and optional variant selections. Cart model aggregates items and provides convenience getters for totals. Repository pattern allows cart data to be stored and retrieved consistently with configurable latency for testing.
+
+- [ ] S-30 — **Shopping Cart - ViewModel and State Management**
+  - Create CartViewModel (lib/view_models/cart_view_model.dart) extending BaseViewModel
+  - CartViewModel should expose: cart items, total price, total items count, loading state
+  - Implement methods: addToCart(product, quantity), removeFromCart(itemId), updateQuantity(itemId, quantity), clearCart()
+  - Use CartRepository for all data operations
+  - Notify listeners on any cart changes so UI updates reactively
+  - Wire CartViewModel into Provider in main.dart for dependency injection
+  - Reason: CartViewModel centralizes cart business logic and state management following MVVM pattern. It exposes cart data and operations to UI layer while delegating persistence to repository. Provider integration ensures cart state is accessible throughout app and UI updates automatically when cart changes.
+
+- [ ] S-31 — **Shopping Cart - UI Integration**
+  - Update ProductPage (lib/views/product_view.dart) to add "Add to Cart" button with quantity selector
+  - "Add to Cart" button should call CartViewModel.addToCart() and show confirmation (SnackBar or dialog)
+  - Update SharedHeader cart icon to show badge with item count from CartViewModel
+  - Cart icon should navigate to /cart route when tapped
+  - Create CartPage (lib/views/cart_view.dart) displaying cart items with images, names, prices, quantities
+  - Each cart item should have quantity controls (+/- buttons) and remove button
+  - Show subtotal, total items count, and "Checkout" button (placeholder functionality)
+  - Add empty cart state with message and "Continue Shopping" button
+  - Add route '/cart' to app_router.dart routing to CartPage
+  - Add Key('cart_page'), Key('add_to_cart_button'), Key('cart_item_0') for testing
+  - Reason: Users need to add products to cart from product pages, see cart item count in header, and view/manage cart contents. CartPage provides full cart management UI with quantity editing and removal. Cart icon badge gives instant feedback on cart status. Integration with CartViewModel ensures all operations update cart state reactively.
+
+- [ ] S-32 — **Shopping Cart - Testing**
+  - Create cart_test.dart (test/cart_test.dart) with comprehensive cart functionality tests
+  - Test adding items to cart from product page
+  - Test cart icon badge displays correct item count
+  - Test navigating to cart page and viewing items
+  - Test updating item quantities in cart
+  - Test removing items from cart
+  - Test empty cart state display
+  - All tests should use zero-latency CartRepository for deterministic results
+  - Update main.dart createApp() to accept optional CartRepository parameter
+  - Reason: Comprehensive tests ensure cart functionality works correctly including adding items, quantity management, removal, and UI state updates. Tests verify cart persists correctly and UI responds to cart changes. Zero-latency repository ensures tests run fast and deterministically.
 
 ---
 
