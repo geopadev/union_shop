@@ -14,7 +14,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
 
   /// Hardcoded collection data
   final List<Collection> _collections = [
-    Collection(
+    const Collection(
       id: 'clothing',
       name: 'Clothing',
       description: 'Explore our range of university branded clothing',
@@ -27,7 +27,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'pride-tshirt',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'merchandise',
       name: 'Merchandise',
       description: 'University merchandise and accessories',
@@ -40,7 +40,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'pride-pin',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'halloween',
       name: 'Halloween 🎃',
       description: 'Spooky season essentials and Halloween themed items',
@@ -51,7 +51,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'halloween-tote',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'signature-essential',
       name: 'Signature & Essential Range',
       description: 'Our signature collection of essential university items',
@@ -64,7 +64,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'notebook',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'portsmouth',
       name: 'Portsmouth City Collection',
       description: 'Celebrate Portsmouth with our city-themed collection',
@@ -77,7 +77,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'varsity-jacket',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'pride',
       name: 'Pride Collection 🏳️‍🌈',
       description:
@@ -90,7 +90,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'pride-tshirt',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'graduation',
       name: 'Graduation 🎓',
       description: 'Graduation essentials and celebration memorabilia',
@@ -101,7 +101,7 @@ class InMemoryCollectionRepository implements CollectionRepository {
         'graduation-card',
       ],
     ),
-    Collection(
+    const Collection(
       id: 'sale',
       name: 'SALE',
       description: 'Amazing deals and discounts on selected items',
