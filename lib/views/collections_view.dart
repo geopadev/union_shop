@@ -187,7 +187,10 @@ class CollectionsPage extends StatelessWidget {
                                   itemCount: products.length,
                                   itemBuilder: (context, index) {
                                     final product = products[index];
-                                    return _ProductCard(product: product);
+                                    return _ProductCard(
+                                      product: product,
+                                      collectionId: collectionId!,
+                                    );
                                   },
                                 );
                               },
@@ -211,31 +214,27 @@ class CollectionsPage extends StatelessWidget {
 
 class _ProductCard extends StatelessWidget {
   final Product product;
+  final String collectionId;
 
-  const _ProductCard({required this.product});
+  const _ProductCard({
+    required this.product,
+    required this.collectionId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Get collection context from the page
-    final collectionId =
-        context.findAncestorWidgetOfExactType<CollectionsPage>()?.collectionId;
-
     return GestureDetector(
       onTap: () {
         context.go('/collections/$collectionId/products/${product.id}');
       },
-      child: Semantics(
-        button: true,
-        label: 'Product: ${product.title}, Price: ${product.price}',
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product image
-            AspectRatio(
-              aspectRatio: 1.0,
-              child: Semantics(
-                image: true,
-                label: 'Image of ${product.title}',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Product image with SALE badge
+          Stack(
+            children: [
+              AspectRatio(
+                aspectRatio: 1.0,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
@@ -244,25 +243,11 @@ class _ProductCard extends StatelessWidget {
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[300],
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.image_not_supported,
-                                color: Colors.grey,
-                                size: 48,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Add image:\n${product.imageUrl}',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 10,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                        child: const Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                            size: 48,
                           ),
                         ),
                       );
@@ -270,25 +255,83 @@ class _ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
+              // SALE badge
+              if (product.isOnSale)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Text(
+                      'SALE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Product title
+          Text(
+            product.title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(height: 8),
-            Text(
-              product.title,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          // Product price (with strikethrough if on sale)
+          if (product.isOnSale && product.originalPrice != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Original price with strikethrough
+                Text(
+                  product.originalPrice!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // Sale price
+                Text(
+                  product.price,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            )
+          else
+            // Regular price
             Text(
               product.price,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 color: Color(0xFF4d2963),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
