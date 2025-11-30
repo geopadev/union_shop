@@ -407,6 +407,24 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('footer_shop'), Key('footer_help'), Key('footer_about'), Key('footer_social') for testing
   - Reason: Created FooterData class (lib/data/footer_data.dart) organizing footer links into four logical sections: shopLinks (6 collection links including Clothing, Merchandise, Portsmouth, Pride, Graduation, Sale), helpLinks (5 support links including Contact, Delivery, Returns, Terms, Privacy as placeholders), aboutLinks (3 informational links including About Us with 2 placeholders), socialLinks (map with Facebook, Instagram, Twitter URLs), static copyright text and newsletter text. Completely redesigned SharedFooter widget (lib/widgets/shared/shared_footer.dart) matching shop.upsu.net footer structure with four main sections displayed in responsive layout: desktop shows 4 columns side-by-side (>768px width), mobile shows stacked sections. Shop section (Key: footer_shop) displays 6 collection links in purple with underlines. Help section (Key: footer_help) shows 5 support links, placeholders in grey without underlines. About section (Key: footer_about) shows 3 info links with About Us functional. Follow Us section (Key: footer_social) displays social media icons (Facebook, Instagram, Twitter) as 36x36 purple containers with white icons, newsletter title and description text below icons. Footer styled with light grey background (#F5F5F5), divider line above bottom section, copyright notice in bottom section with grey text, 40px padding on desktop/24px on mobile, constrained to 1200px max width on desktop. Links navigate via go_router's context.go() for functional routes, placeholder links shown in grey without underlines. Updated home_test.dart and product_test.dart to verify all four footer sections present (footer_shop, footer_help, footer_about, footer_social) and section headings (SHOP, HELP, ABOUT, FOLLOW US). Footer provides comprehensive site navigation and information access matching shop.upsu.net design with organized link hierarchy and professional styling.
 
+- [ ] S-44 — **Interactive Hover Effects and Cursor Management**
+  - Implement mouse cursor changes for clickable elements (pointer cursor on hover)
+  - Add hover effects to all interactive elements matching shop.upsu.net behavior
+  - Navigation links: underline on hover, color change on hover
+  - Product cards: scale/shadow effect on hover, cursor pointer
+  - Buttons: background color change on hover, cursor pointer
+  - Footer links: underline on hover, color change on hover
+  - Cart icon, search icon, account icon: opacity/color change on hover
+  - Collection cards: zoom effect on hover (already implemented in S-27)
+  - Use MouseRegion widget to detect hover state
+  - Use SystemMouseCursors.click for pointer cursor on clickable elements
+  - Wrap clickable widgets in MouseRegion with onEnter/onExit callbacks
+  - Add AnimatedContainer or AnimatedOpacity for smooth hover transitions
+  - Ensure hover effects are disabled on touch devices (mobile/tablet)
+  - Test hover effects on desktop Chrome to match website behavior
+  - Add consistent hover styling across all pages for unified UX
+  - Reason: shop.upsu.net uses hover effects extensively to provide visual feedback when users interact with clickable elements. The cursor changes to a pointer (hand) when hovering over links, buttons, and interactive elements, and elements often highlight or transform slightly to indicate they are clickable. This improves user experience by making the interface more intuitive and responsive, clearly indicating what elements are interactive. Hover effects should include color changes, underlines for links, scale transformations for cards, and opacity changes for icons. These effects should be smooth with appropriate transition durations (typically 200-300ms) and should only apply on desktop devices with mouse input.
+
 ---
 
 ## Implementation Notes
