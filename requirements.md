@@ -287,6 +287,47 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update main.dart createApp() to accept optional CartRepository parameter
   - Reason: Created comprehensive cart test suite in cart_test.dart (test/cart_test.dart) with 8 test cases covering all cart functionality. Tests include: empty cart state display, adding items from product page, cart badge displaying correct item count, navigating to cart page and viewing items, updating item quantities with +/- buttons, removing items from cart, cart totals display, and cart badge with multiple items. All tests use zero-latency repositories (InMemoryProductRepository, InMemoryCollectionRepository, InMemoryCartRepository with latency: Duration.zero) for deterministic results. Tests use proper Keys to find widgets (cart_page, add_to_cart_button, cart_item_0, header_cart). Tests verify UI updates correctly after cart operations including SnackBar confirmations, badge updates, and empty cart state transitions. CartRepository parameter already added to createApp() in main.dart accepting optional cartRepo for testing. All cart tests passing with zero-latency repositories ensuring fast, deterministic test execution.
 
+- [ ] S-33 — **Print Shack - About Page**
+  - Create Print Shack About page (lib/views/printshack/printshack_about_view.dart)
+  - Display information about the print shack service
+  - Explain what text personalization is and how it works
+  - Include information about pricing, turnaround time, and available options
+  - Add route '/printshack/about' to app_router.dart
+  - Use SharedHeader and SharedFooter for consistency
+  - Add Key('printshack_about_page') for testing
+  - Reason: Print Shack is a service offered by the Union Shop where students can personalize items with custom text. The about page provides information about this service before users start personalizing. This matches shop.upsu.net/products/personalise-text pattern where users can learn about the service before using it.
+
+- [ ] S-34 — **Print Shack - Personalization Page Model**
+  - Create PersonalizationOption model (lib/models/personalization_option.dart) with properties: type (dropdown/text/color), label, options (for dropdown), value
+  - Create PersonalizationForm model (lib/models/personalization_form.dart) with properties: product info, list of PersonalizationOptions, price calculation
+  - Model should support: text input fields, dropdown selections (font, size, color), color picker
+  - Calculate dynamic pricing based on selections (e.g., different prices for different sizes or colors)
+  - Reason: Text personalization requires a flexible form structure that can handle multiple input types (text, dropdowns, color pickers). The model needs to track user selections and calculate prices dynamically based on those selections. This matches shop.upsu.net/products/personalise-text where users fill out a form with various options.
+
+- [ ] S-35 — **Print Shack - Personalization Page UI**
+  - Create Personalization page (lib/views/printshack/personalization_view.dart)
+  - Display form with text input for custom text
+  - Add dropdown for font selection (e.g., Arial, Times New Roman, Courier)
+  - Add dropdown for size selection (S, M, L, XL) with different prices
+  - Add dropdown for text color (Red, Blue, Black, White, etc.)
+  - Show live preview of selected options (text displaying "Your Text: [user input] in [selected font] and [selected color]")
+  - Display dynamic price calculation based on selections
+  - Add "Add to Cart" button (can use existing cart functionality)
+  - Form should update dynamically as user makes selections
+  - Add route '/printshack/personalisation' to app_router.dart
+  - Add Key('personalization_page'), Key('personalization_text_input'), Key('add_personalized_to_cart') for testing
+  - Reason: The personalization page is the core of the Print Shack feature. Users fill out a form to customize their text, see a live preview of their choices, and see the price update dynamically. This interactive experience matches shop.upsu.net/products/personalise-text functionality where selections immediately update the display and pricing.
+
+- [ ] S-36 — **Print Shack - Testing**
+  - Create printshack_test.dart (test/printshack_test.dart) with tests for print shack functionality
+  - Test navigation to print shack about page
+  - Test navigation to personalization page
+  - Test text input field updates preview
+  - Test dropdown selections update preview and price
+  - Test adding personalized item to cart
+  - All tests should use zero-latency repositories for deterministic results
+  - Reason: Comprehensive tests ensure print shack functionality works correctly including navigation, form interactions, dynamic updates, and cart integration. Tests verify the form responds to user input and prices update correctly based on selections.
+
 ---
 
 ## Implementation Notes
