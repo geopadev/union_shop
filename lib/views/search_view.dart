@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/view_models/search_view_model.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
+import 'package:union_shop/widgets/shared/product_card.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -261,79 +262,14 @@ class _SearchPageState extends State<SearchPage> {
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
-            return _ProductCard(
+            return ProductCard(
               key: Key('search_result_$index'),
               product: products[index],
+              // No collectionId provided - ProductCard will use product's primaryCollectionId
             );
           },
         );
       },
-    );
-  }
-}
-
-class _ProductCard extends StatelessWidget {
-  final Product product;
-
-  const _ProductCard({super.key, required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigate to product without collection context
-        context.go('/product');
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Product image
-          AspectRatio(
-            aspectRatio: 1.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                product.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: Colors.grey,
-                        size: 48,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          // Product title
-          Text(
-            product.title,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 8),
-          // Product price
-          Text(
-            product.price,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Color(0xFF4d2963),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
