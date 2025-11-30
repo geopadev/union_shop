@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
@@ -18,11 +19,88 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
   final _emailController = TextEditingController();
   bool _isLoading = false;
   bool _emailSent = false;
+  String? _verificationError;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check if this is a deep link from email verification
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkForEmailLink();
+    });
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     super.dispose();
+  }
+
+  /// Check if the current URL is an email verification link
+  Future<void> _checkForEmailLink() async {
+    final authService = context.read<AuthService>();
+
+    // Get the current URL
+    final currentUrl = Uri.base.toString();
+
+    // Check if this is a sign-in link
+    if (authService.isSignInWithEmailLink(currentUrl)) {
+      setState(() => _isLoading = true);
+
+      try {
+        // Get the stored email from SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        final email = prefs.getString('emailForSignIn');
+
+        if (email == null) {
+          // Email not found - ask user to enter it again
+          setState(() {
+            _isLoading = false;
+            _verificationError =
+                'Please enter your email address to complete sign-in';
+          });
+          return;
+        }
+
+        // Complete the sign-in with the email link
+        await authService.signInWithEmailLink(
+          email: email,
+          link: currentUrl,
+        );
+
+        // Clear the stored email
+        await prefs.remove('emailForSignIn');
+
+        if (mounted) {
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Successfully signed in!'),
+              backgroundColor: Color(0xFF4d2963),
+              duration: Duration(seconds: 2),
+            ),
+          );
+
+          // Navigate to account dashboard
+          context.go('/account');
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+          _verificationError = e.toString();
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: $e'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    }
   }
 
   void _navigateToHome(BuildContext context) {
@@ -42,12 +120,12 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
       final authService = context.read<AuthService>();
       final email = _emailController.text.trim();
 
+      // Store email in SharedPreferences for verification later
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('emailForSignIn', email);
+
       // Send sign-in link to email
       await authService.sendSignInLinkToEmail(email: email);
-
-      // Store email locally for verification later
-      // In a real app, you'd use SharedPreferences or similar
-      // For now, we'll just show success message
 
       setState(() {
         _emailSent = true;
@@ -62,6 +140,53 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
             duration: const Duration(seconds: 5),
           ),
         );
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _verifyEmailManually() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final authService = context.read<AuthService>();
+      final email = _emailController.text.trim();
+      final currentUrl = Uri.base.toString();
+
+      // Complete the sign-in with the email link
+      await authService.signInWithEmailLink(
+        email: email,
+        link: currentUrl,
+      );
+
+      // Clear the stored email
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('emailForSignIn');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully signed in!'),
+            backgroundColor: Color(0xFF4d2963),
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to account dashboard
+        context.go('/account');
       }
     } catch (e) {
       setState(() => _isLoading = false);
@@ -120,21 +245,49 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
 
                       const SizedBox(height: 16),
 
-                      // Description
-                      Text(
-                        _emailSent
-                            ? 'Check your email for the verification link'
-                            : 'Enter your email address to receive a sign-in link',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[700],
+                      // Description or Error Message
+                      if (_verificationError != null) ...[
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.orange[50],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.warning_amber_rounded,
+                                size: 48,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                _verificationError!,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.orange,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                      ] else
+                        Text(
+                          _emailSent
+                              ? 'Check your email for the verification link'
+                              : 'Enter your email address to receive a sign-in link',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
 
                       const SizedBox(height: 40),
 
-                      if (!_emailSent) ...[
+                      if (!_emailSent || _verificationError != null) ...[
                         // Email Form
                         Form(
                           key: _formKey,
@@ -171,13 +324,16 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
 
                               const SizedBox(height: 24),
 
-                              // Continue Button
+                              // Continue/Verify Button
                               SizedBox(
                                 height: 50,
                                 child: ElevatedButton(
                                   key: const Key('continue_button'),
-                                  onPressed:
-                                      _isLoading ? null : _sendSignInLink,
+                                  onPressed: _isLoading
+                                      ? null
+                                      : (_verificationError != null
+                                          ? _verifyEmailManually
+                                          : _sendSignInLink),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF4d2963),
                                     foregroundColor: Colors.white,
@@ -197,9 +353,11 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
                                             ),
                                           ),
                                         )
-                                      : const Text(
-                                          'CONTINUE',
-                                          style: TextStyle(
+                                      : Text(
+                                          _verificationError != null
+                                              ? 'VERIFY'
+                                              : 'CONTINUE',
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             letterSpacing: 1.2,
@@ -271,6 +429,7 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
                           onPressed: () {
                             setState(() {
                               _emailSent = false;
+                              _verificationError = null;
                             });
                           },
                           child: const Text('Send to a different email'),
