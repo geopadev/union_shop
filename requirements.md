@@ -425,6 +425,20 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add consistent hover styling across all pages for unified UX
   - Reason: Updated NavigationMenu (lib/widgets/shared/navigation_menu.dart) to use stateful _NavigationItem widget tracking hover state with _isHovering boolean. Added MouseRegion with SystemMouseCursors.click for pointer cursor. AnimatedDefaultTextStyle provides smooth 200ms transition where text color changes to purple (#4d2963) and underline appears on hover. Updated SharedFooter (lib/widgets/shared/shared_footer.dart) with _FooterLinkItem stateful widget managing hover state. Footer links show pointer cursor for clickable links, basic cursor for placeholders. AnimatedDefaultTextStyle provides 200ms transition with underline visible on hover for functional links. Updated home_view.dart _ProductCard to StatefulWidget with hover state tracking. Added MouseRegion with SystemMouseCursors.click pointer cursor. AnimatedContainer with Matrix4 transform provides smooth scale effect (1.03x on hover) with 200ms transition. Added subtle shadow on hover (10px blur, 0.1 opacity, 4px offset). Updated collections_view.dart _ProductCard with identical hover implementation for consistency. Collection cards (S-27) already have zoom effect via AnimatedContainer with 1.05x scale on hover. All hover effects use consistent 200ms transition duration for smooth animations. Hover effects only trigger on desktop with mouse input via MouseRegion's onEnter/onExit callbacks. App now provides visual feedback matching shop.upsu.net behavior where cursor changes to pointer hand on clickable elements and elements transform/highlight on hover. Interactive elements clearly indicate clickability through cursor changes, color transitions, scale transformations, and shadow effects creating intuitive and responsive user experience across all pages.
 
+- [ ] S-45 — **Search Results Hover Effects and Navigation Context**
+  - Add hover effects to search results product cards matching home/collections pages
+  - Update search results to use StatefulWidget with hover state tracking
+  - Add pointer cursor (SystemMouseCursors.click) on search result cards
+  - Add scale effect (1.03x) and shadow on hover with 200ms transition
+  - Update search result navigation to include collection context in URLs
+  - Search results should navigate to '/collections/{collectionId}/products/{productId}'
+  - Product model needs to track which collection(s) it belongs to
+  - Extract shared ProductCard widget to reduce code duplication across views
+  - Create reusable ProductCard widget in lib/widgets/shared/product_card.dart
+  - Replace _ProductCard implementations in home_view.dart, collections_view.dart, and search_view.dart
+  - Ensure consistent hover behavior and styling across all product cards
+  - Reason: Currently search results use a simple stateless _ProductCard widget without hover effects, making them feel less interactive than product cards on other pages. Search results also navigate to '/product' without collection context, which doesn't match the URL pattern used elsewhere in the app (/collections/{collectionId}/products/{productId}). Creating a shared ProductCard widget will reduce code duplication across home_view.dart, collections_view.dart, and search_view.dart where similar product card implementations exist. This will improve maintainability, ensure consistent behavior, and make it easier to update product card styling in the future. The shared widget should accept product, collectionId (optional for search results), and onTap callback parameters.
+
 ---
 
 ## Implementation Notes
