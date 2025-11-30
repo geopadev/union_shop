@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/views/about_view.dart';
+import 'package:union_shop/views/cart_view.dart';
 import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
 import 'package:union_shop/views/home_view.dart';
@@ -59,6 +60,10 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: '/product',
         builder: (context, state) => const ProductPage(),
+      ),
+      GoRoute(
+        path: '/cart',
+        builder: (context, state) => const CartPage(),
       ),
     ],
   );
