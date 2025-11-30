@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:union_shop/constants/app_colors.dart';
+import 'package:union_shop/constants/app_text_styles.dart';
 import 'package:union_shop/data/navigation_data.dart';
 import 'package:union_shop/widgets/shared/dropdown_menu_widget.dart';
 
@@ -84,10 +86,8 @@ class _NavigationItemState extends State<_NavigationItem> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: AnimatedDefaultTextStyle(
         duration: const Duration(milliseconds: 200),
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: _isHovering ? const Color(0xFF4d2963) : Colors.black87,
+        style: AppTextStyles.navigationItem.copyWith(
+          color: _isHovering ? AppColors.primary : AppColors.textPrimary,
           decoration: _isHovering ? TextDecoration.underline : null,
         ),
         child: Row(
@@ -99,7 +99,7 @@ class _NavigationItemState extends State<_NavigationItem> {
               Icon(
                 Icons.keyboard_arrow_down,
                 size: 16,
-                color: _isHovering ? const Color(0xFF4d2963) : Colors.black87,
+                color: _isHovering ? AppColors.primary : AppColors.textPrimary,
               ),
             ],
           ],
