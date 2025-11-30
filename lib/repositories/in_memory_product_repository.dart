@@ -66,11 +66,18 @@ class InMemoryProductRepository implements ProductRepository {
   Future<List<Product>> search(String query) async {
     // Simulate network delay
     await Future.delayed(latency);
-    final lowercaseQuery = query.toLowerCase();
-    return _products
-        .where((product) =>
-            product.title.toLowerCase().contains(lowercaseQuery) ||
-            (product.description.toLowerCase().contains(lowercaseQuery)))
-        .toList();
+
+    if (query.isEmpty) {
+      return _products;
+    }
+
+    // Search in product title and description (case-insensitive)
+    final lowerQuery = query.toLowerCase();
+    return _products.where((product) {
+      final titleMatch = product.title.toLowerCase().contains(lowerQuery);
+      final descriptionMatch =
+          product.description.toLowerCase().contains(lowerQuery);
+      return titleMatch || descriptionMatch;
+    }).toList();
   }
 }

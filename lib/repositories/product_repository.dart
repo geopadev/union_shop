@@ -1,17 +1,15 @@
 import 'package:union_shop/models/product.dart';
 
-/// Abstract repository interface for product data access
-/// Implementations can be in-memory, network-based, or database-backed
+/// Repository interface for product data access
+/// Implementations should provide configurable latency for testing
 abstract class ProductRepository {
   /// Fetch all products
-  /// Returns a list of all available products
   Future<List<Product>> fetchAll();
 
-  /// Fetch a single product by ID
-  /// Returns the product if found, null otherwise
+  /// Fetch a specific product by ID
   Future<Product?> fetchById(String id);
 
-  /// Search products by query string
-  /// Returns products matching the search criteria
+  /// Search products by query string (searches title and description)
+  /// Returns list of products matching the query
   Future<List<Product>> search(String query);
 }
