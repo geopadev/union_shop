@@ -1,4 +1,5 @@
 import 'package:union_shop/models/product.dart';
+import 'package:union_shop/models/product_option.dart';
 import 'package:union_shop/repositories/product_repository.dart';
 
 /// In-memory implementation of ProductRepository
@@ -14,7 +15,7 @@ class InMemoryProductRepository implements ProductRepository {
 
   /// Hardcoded product data
   final List<Product> _products = [
-    // Clothing Collection
+    // Clothing Collection - with size and color options
     Product(
       id: 'classic-hoodie',
       title: 'Classic Hoodie',
@@ -22,6 +23,22 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/classic_hoodie.jpg',
       description:
           'A comfortable and stylish classic hoodie featuring the University of Portsmouth Students\' Union logo. Perfect for everyday wear on campus. Made from high-quality cotton blend material.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+          required: true,
+        ),
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Black', 'Purple', 'White'],
+          required: true,
+        ),
+      ],
     ),
     Product(
       id: 'classic-sweatshirt',
@@ -30,6 +47,22 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/classic_sweatshirt.jpg',
       description:
           'Cozy classic sweatshirt with UPSU branding. Ideal for layering during colder months. Features a crew neck design and ribbed cuffs.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['S', 'M', 'L', 'XL'],
+          required: true,
+        ),
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Purple', 'Black', 'Grey'],
+          required: true,
+        ),
+      ],
     ),
     Product(
       id: 'polo-shirt',
@@ -38,6 +71,22 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/polo_shirt.jpg',
       description:
           'Smart casual polo shirt with embroidered UPSU logo. Perfect for more formal campus events or casual wear. Available in multiple colors.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['XS', 'S', 'M', 'L', 'XL'],
+          required: true,
+        ),
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Purple', 'White', 'Black'],
+          required: true,
+        ),
+      ],
     ),
     Product(
       id: 'varsity-jacket',
@@ -46,9 +95,18 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/varsity_jacket.jpg',
       description:
           'Premium varsity jacket featuring Portsmouth city colors and UPSU branding. A statement piece combining style with campus pride. Includes snap button closure.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['S', 'M', 'L', 'XL', 'XXL'],
+          required: true,
+        ),
+      ],
     ),
 
-    // Merchandise
+    // Merchandise - color options only (no size)
     Product(
       id: 'water-bottle',
       title: 'UPSU Water Bottle',
@@ -56,6 +114,15 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/water_bottle.jpg',
       description:
           'Reusable stainless steel water bottle with UPSU logo. Keep hydrated throughout your day on campus. 500ml capacity with secure screw-top lid.',
+      options: [
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Purple', 'Black', 'Blue'],
+          required: true,
+        ),
+      ],
     ),
     Product(
       id: 'tote-bag',
@@ -64,7 +131,18 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/tote_bag.jpg',
       description:
           'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
+      options: [
+        ProductOption(
+          id: 'color',
+          name: 'Color',
+          type: ProductOptionType.color,
+          values: ['Purple', 'Black', 'White'],
+          required: true,
+        ),
+      ],
     ),
+
+    // Products without options
     Product(
       id: 'notebook',
       title: 'Branded Notebook',
@@ -148,6 +226,15 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/pride_tshirt.jpg',
       description:
           'Comfortable cotton t-shirt featuring pride rainbow design and UPSU logo. Available in multiple sizes. Show your support for LGBTQ+ rights.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['S', 'M', 'L', 'XL'],
+          required: true,
+        ),
+      ],
     ),
 
     // Halloween Collection
@@ -158,6 +245,15 @@ class InMemoryProductRepository implements ProductRepository {
       imageUrl: 'assets/images/products/halloween_tshirt.jpg',
       description:
           'Spooky themed t-shirt perfect for Halloween celebrations. Features fun Halloween graphics and UPSU branding. Limited edition seasonal item.',
+      options: [
+        ProductOption(
+          id: 'size',
+          name: 'Size',
+          type: ProductOptionType.size,
+          values: ['S', 'M', 'L', 'XL'],
+          required: true,
+        ),
+      ],
     ),
     Product(
       id: 'halloween-stickers',
