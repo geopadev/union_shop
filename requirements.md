@@ -212,7 +212,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update existing tests to accommodate new navigation structure
   - Reason: Created comprehensive test suite in navigation_test.dart (test/navigation_test.dart) covering NavigationMenu widget display, navigation to About page, navigation back to home, mobile drawer opening, and drawer closing after navigation. Created carousel_test.dart (test/carousel_test.dart) with tests for navigation dots display (expects 3 dots), next/previous arrow button navigation, pause/play button toggle functionality, and carousel button navigation to collections. All tests use zero-latency repositories (InMemoryProductRepository and InMemoryCollectionRepository with latency: Duration.zero) for deterministic results. Tests use widget predicates to find specific UI elements like circular navigation dots and icon buttons. All existing tests (home_test.dart, product_test.dart) updated to inject both repositories. Complete test coverage for navigation menu, mobile drawer, and carousel functionality ensuring all major user interactions are tested.
 
-- [ ] S-27 — **Redesign Collections Overview Page to Match Website**
+- [x] S-27 — **Redesign Collections Overview Page to Match Website**
   - Update CollectionsOverviewPage (lib/views/collections_overview_view.dart) to match shop.upsu.net/collections layout
   - Each collection should display as a large image card with collection name overlaid on the image
   - Remove product count, description from collection cards (only show image + name overlay)
@@ -223,7 +223,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add hover effect on desktop (image zoom or brightness change)
   - Match visual styling of shop.upsu.net/collections exactly
   - Keep existing test Key('collections_page') for testing
-  - Reason: Current collections overview page displays small images with descriptions and product counts in a card layout. Shop.upsu.net uses large full-width image cards with collection names overlaid directly on the images for a more visual, magazine-style browsing experience. This provides better visual hierarchy and allows users to browse collections by their aesthetic rather than reading descriptions. Images should use the collection's imageUrl with a dark overlay and centered white text for the collection name.
+  - Reason: Completely redesigned CollectionsOverviewPage (lib/views/collections_overview_view.dart) to match shop.upsu.net/collections visual style. Each collection now displays as a large image card with collection name overlaid directly on the image. Removed product counts and descriptions from cards. Implemented Stack widget with three layers: full-bleed collection image, dark gradient overlay (30%-60% black opacity for text readability), and centered collection name in large white text (28px, bold, letter-spacing 1.2). Added MouseRegion for hover detection and AnimatedContainer for smooth scale transformation (1.05x zoom) on desktop hover. Maintains responsive grid layout with LayoutBuilder (1-4 columns based on screen width with 0.8 aspect ratio). Cards use ClipRRect for 8px rounded corners. Navigation to /collections/{collectionId} via GestureDetector. Magazine-style visual browsing experience matching shop.upsu.net exactly. Kept existing Key('collections_page') for testing compatibility.
 
 ---
 
