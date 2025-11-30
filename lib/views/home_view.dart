@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:union_shop/data/carousel_data.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/widgets/home/hero_carousel.dart';
+import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
@@ -21,6 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const MobileNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
