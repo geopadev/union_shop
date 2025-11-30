@@ -203,13 +203,14 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Add Key('mobile_nav_drawer') for testing
   - Reason: Created MobileNavigationDrawer widget (lib/widgets/shared/mobile_navigation_drawer.dart) as a stateful widget with expandable sections for SHOP and The Print Shack menus. Drawer displays navigation items in vertical list with ListTiles. Sections with children are expandable/collapsible with expand_more/expand_less icons. Clicking any navigation item closes drawer and navigates to route using context.go(). Updated SharedHeader (lib/widgets/shared/shared_header.dart) to open drawer via Scaffold.of(context).openEndDrawer() when menu button is tapped. Added endDrawer: const MobileNavigationDrawer() to all main pages (HomeScreen, ProductPage, AboutPage, CollectionsOverviewPage, CollectionsPage). Drawer slides in from right with default Material animations. Includes Key('mobile_nav_drawer') for testing. Drawer header displays "Menu" title in university purple. Mobile navigation now fully functional across entire app.
 
-- [ ] S-26 — **Navigation & Carousel Tests**
+- [x] S-26 — **Navigation & Carousel Tests**
   - Create tests for NavigationMenu widget
   - Test dropdown menu interactions
   - Test route navigation for all links
   - Test carousel auto-advance and manual navigation
   - Test mobile drawer functionality
   - Update existing tests to accommodate new navigation structure
+  - Reason: Created comprehensive test suite in navigation_test.dart (test/navigation_test.dart) covering NavigationMenu widget display, navigation to About page, navigation back to home, mobile drawer opening, and drawer closing after navigation. Created carousel_test.dart (test/carousel_test.dart) with tests for navigation dots display (expects 3 dots), next/previous arrow button navigation, pause/play button toggle functionality, and carousel button navigation to collections. All tests use zero-latency repositories (InMemoryProductRepository and InMemoryCollectionRepository with latency: Duration.zero) for deterministic results. Tests use widget predicates to find specific UI elements like circular navigation dots and icon buttons. All existing tests (home_test.dart, product_test.dart) updated to inject both repositories. Complete test coverage for navigation menu, mobile drawer, and carousel functionality ensuring all major user interactions are tested.
 
 ---
 
