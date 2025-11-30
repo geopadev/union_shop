@@ -241,12 +241,14 @@ class _ProductCardState extends State<_ProductCard> {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
+          // ignore: deprecated_member_use
           transform: Matrix4.identity()..scale(_isHovering ? 1.03 : 1.0),
           child: Container(
             decoration: BoxDecoration(
               boxShadow: _isHovering
                   ? [
                       BoxShadow(
+                        // ignore: deprecated_member_use
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 4),

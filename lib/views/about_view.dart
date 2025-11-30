@@ -211,15 +211,15 @@ class AboutPage extends StatelessWidget {
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
+      child: const Column(
         children: [
           Icon(
             Icons.flag,
             size: 48,
-            color: const Color(0xFF4d2963),
+            color: Color(0xFF4d2963),
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'Our Mission',
             style: TextStyle(
               fontSize: 20,
@@ -227,8 +227,8 @@ class AboutPage extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'To provide students with high-quality products that enhance the university experience and celebrate Portsmouth pride.',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -250,15 +250,15 @@ class AboutPage extends StatelessWidget {
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
+      child: const Column(
         children: [
           Icon(
             Icons.favorite,
             size: 48,
-            color: const Color(0xFF4d2963),
+            color: Color(0xFF4d2963),
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'Our Values',
             style: TextStyle(
               fontSize: 20,
@@ -266,8 +266,8 @@ class AboutPage extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'Quality, community, sustainability, and affordability are at the heart of everything we do.',
             textAlign: TextAlign.center,
             style: TextStyle(

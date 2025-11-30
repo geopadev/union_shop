@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -284,7 +286,7 @@ class _PersonalizationPageState extends State<PersonalizationPage> {
             ),
             const SizedBox(height: 8),
             TextField(
-              key: Key('personalization_text_input'),
+              key: const Key('personalization_text_input'),
               decoration: InputDecoration(
                 hintText: 'Enter your text here',
                 border: OutlineInputBorder(
@@ -325,7 +327,7 @@ class _PersonalizationPageState extends State<PersonalizationPage> {
                 ),
               ),
               hint: Text('Select ${option.label}'),
-              value: option.value.isEmpty ? null : option.value,
+              initialValue: option.value.isEmpty ? null : option.value,
               items: option.options?.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -365,7 +367,7 @@ class _PersonalizationPageState extends State<PersonalizationPage> {
                 ),
               ),
               hint: const Text('Select Color'),
-              value: option.value.isEmpty ? null : option.value,
+              initialValue: option.value.isEmpty ? null : option.value,
               items: option.options?.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

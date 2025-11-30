@@ -88,7 +88,7 @@ class _HeroCarouselState extends State<HeroCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       key: const Key('hero_carousel'),
       height: 400,
       width: double.infinity,
@@ -172,7 +172,7 @@ class _HeroCarouselState extends State<HeroCarousel> {
   }
 
   Widget _buildSlide(CarouselSlide slide, int index) {
-    return Container(
+    return SizedBox(
       key: Key('carousel_slide_$index'),
       width: double.infinity,
       height: 400,

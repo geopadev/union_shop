@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/constants/app_colors.dart';
@@ -81,12 +83,12 @@ class _ProductCardState extends State<ProductCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.image_not_supported,
                                           color: AppColors.textSecondary,
                                           size: AppSpacing.iconXL,
                                         ),
-                                        SizedBox(height: AppSpacing.paddingS),
+                                        const SizedBox(height: AppSpacing.paddingS),
                                         Text(
                                           'Add image:\n${widget.product.imageUrl}',
                                           style: const TextStyle(
@@ -132,7 +134,7 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                     ],
                   ),
-                  SizedBox(height: AppSpacing.paddingM),
+                  const SizedBox(height: AppSpacing.paddingM),
                   // Product title
                   Text(
                     widget.product.title,
@@ -140,7 +142,7 @@ class _ProductCardState extends State<ProductCard> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: AppSpacing.paddingS),
+                  const SizedBox(height: AppSpacing.paddingS),
                   // Product price (with strikethrough if on sale)
                   if (widget.product.isOnSale &&
                       widget.product.originalPrice != null)
@@ -156,7 +158,7 @@ class _ProductCardState extends State<ProductCard> {
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
-                        SizedBox(height: AppSpacing.paddingXS),
+                        const SizedBox(height: AppSpacing.paddingXS),
                         // Sale price
                         Text(
                           widget.product.price,

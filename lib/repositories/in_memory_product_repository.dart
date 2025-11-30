@@ -30,14 +30,14 @@ class InMemoryProductRepository implements ProductRepository {
         'pride'
       ], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
           values: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
           required: true,
         ),
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
@@ -55,14 +55,14 @@ class InMemoryProductRepository implements ProductRepository {
           'Cozy classic sweatshirt with UPSU branding. Ideal for layering during colder months. Features a crew neck design and ribbed cuffs.',
       collectionIds: ['clothing', 'signature-essential'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
           values: ['S', 'M', 'L', 'XL'],
           required: true,
         ),
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
@@ -80,14 +80,14 @@ class InMemoryProductRepository implements ProductRepository {
           'Smart casual polo shirt with embroidered UPSU logo. Perfect for more formal campus events or casual wear. Available in multiple colors.',
       collectionIds: ['clothing'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
           values: ['XS', 'S', 'M', 'L', 'XL'],
           required: true,
         ),
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
@@ -105,7 +105,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Premium varsity jacket featuring Portsmouth city colors and UPSU branding. A statement piece combining style with campus pride. Includes snap button closure.',
       collectionIds: ['clothing'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
@@ -125,7 +125,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Reusable stainless steel water bottle with UPSU logo. Keep hydrated throughout your day on campus. 500ml capacity with secure screw-top lid.',
       collectionIds: ['merchandise'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
@@ -143,7 +143,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
       collectionIds: ['merchandise'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
@@ -248,7 +248,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Comfortable cotton t-shirt featuring pride rainbow design and UPSU logo. Available in multiple sizes. Show your support for LGBTQ+ rights.',
       collectionIds: ['clothing', 'pride'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
@@ -270,7 +270,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Spooky themed t-shirt perfect for Halloween celebrations. Features fun Halloween graphics and UPSU branding. Limited edition seasonal item.',
       collectionIds: ['clothing', 'halloween'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'size',
           name: 'Size',
           type: ProductOptionType.size,
@@ -314,7 +314,7 @@ class InMemoryProductRepository implements ProductRepository {
           'Practical cotton tote bag perfect for carrying books and essentials. Features the UPSU logo and is environmentally friendly. Strong shoulder straps.',
       collectionIds: ['merchandise'], // NEW
       options: [
-        ProductOption(
+        const ProductOption(
           id: 'color',
           name: 'Color',
           type: ProductOptionType.color,
