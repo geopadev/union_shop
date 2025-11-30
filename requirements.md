@@ -739,7 +739,8 @@ final carouselSlides = [
   - ✅ test/auth_service_test.dart (created unit tests)
   
   **Next Steps Ready:**
-  - S-49: Email Authentication Page (single page for email entry and verification code, no passwords)
+  - S-49: Sign Up Page UI (let users create accounts)
+  - S-50: Login Page UI (let users sign in)
   - S-54: Protected Routes (restrict access to authenticated users only)
   - S-55: Account Dashboard (show user profile, cart persistence)
   
@@ -756,35 +757,38 @@ final carouselSlides = [
   - For testing UI components, inject mock AuthService via createApp()
   - Example: createApp(authService: MockAuthService())
   
-  - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Email Authentication Page). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
+  - Reason: AuthService provides clean abstraction over Firebase Authentication wrapping all auth operations (signup, signin, signout, password reset) in simple, easy-to-use methods with user-friendly error handling. Service converts Firebase error codes into readable messages eliminating need for UI code to understand Firebase internals. Integrated into Provider dependency injection system following same pattern as repositories for consistency and testability. AuthService exposes currentUser getter and authStateChanges stream enabling reactive UI updates when authentication state changes. All authentication operations return User objects from Firebase Auth maintaining type safety throughout app. Service supports display name updates and password reset functionality preparing app for full account management features. Wired into main.dart via Provider making AuthService accessible throughout app via context. createApp() factory function accepts optional authService parameter allowing injection of mock implementations for testing. Unit tests created verifying service structure and method signatures. AuthService now ready to be consumed by authentication UI pages (S-49 Sign Up Page UI). Clean architecture enables easy switching to different auth providers (Azure, Auth0, etc.) in future by implementing new service with same interface. Error handling centralized in _handleAuthException() method covering all common Firebase Auth errors with user-friendly messages suitable for display in SnackBars or dialogs. AuthService follows single responsibility principle handling only authentication concerns while leaving UI state management to view models.
 
-- [ ] S-49 — **Email Authentication Page (Magic Link)**
-  - Create single EmailAuthPage (lib/views/auth/email_auth_view.dart) matching shop.upsu.net authentication flow
-  - Page should have email input field only (no password field, no separate signup/login pages)
-  - User enters email address and clicks "Continue" button
-  - System sends verification email with magic link/code to user's email
-  - User clicks link in email or enters verification code to authenticate
-  - Update AuthService to support email link authentication (Firebase Auth signInWithEmailLink)
-  - Add sendSignInLinkToEmail(email) method to AuthService
-  - Add isSignInWithEmailLink(link) method to check if URL is a sign-in link
-  - Add signInWithEmailLink(email, link) method to complete authentication
-  - Form validation: email format validation only
-  - Loading states during email sending and verification
-  - Error handling with user-friendly messages
-  - After successful authentication, redirect to /account dashboard
-  - Add route '/account/email-auth' to app_router.dart
-  - Update SharedHeader account button to navigate to /account/email-auth if not signed in
-  - Visual styling matching shop.upsu.net (clean form layout, university purple buttons)
-  - Add Key('email_auth_page'), Key('email_input'), Key('continue_button') for testing
-  - Store user email in localStorage/SharedPreferences for magic link verification
-  - Handle deep links when user clicks verification link in email
-  - Reason: Shop.upsu.net uses passwordless authentication where users only provide email address and receive verification code/link via email. This is simpler and more secure than password-based auth - no passwords to remember or store. Firebase Auth supports this via email link authentication (signInWithEmailLink). Single page handles both new users and returning users - no need for separate signup/login flows. Cart data persists based on email address allowing users to access their cart from any device by verifying their email. This matches modern e-commerce patterns like Amazon where users can shop without creating traditional accounts. Authentication happens in background - user enters email, receives code, enters code, and is signed in. Much better UX than traditional username/password forms.
+- [ ] S-49 — **Sign Up Page UI**
+  - Create SignUpPage (lib/views/auth/signup_view.dart) with email and password fields
+  - Add email input field with validation (valid email format)
+  - Add password input field with validation (minimum 6 characters)
+  - Add confirm password field with validation (matches password)
+  - Add "Sign Up" button that calls AuthService.signUp()
+  - Display validation errors (e.g., email already in use, weak password)
+  - Add loading state while creating account
+  - Show success message and redirect to /account after successful signup
+  - Add "Already have an account? Log in" link that navigates to /account/login
+  - Add route '/account/signup' to app_router.dart
+  - Match visual styling (clean form layout, university purple buttons)
+  - Add Key('signup_page'), Key('email_input'), Key('password_input'), Key('confirm_password_input'), Key('signup_button') for testing
+  - Reason: Allows users to create a new account with email and password. Integrates with AuthService for backend communication with Firebase Auth. Form validates email format and password strength before submission. User experience matches modern web applications with clear error messages and loading states.
 
-- [ ] S-50 — **REMOVED - No Separate Login/Signup Pages Needed**
-  - This subtask is no longer required as shop.upsu.net uses single email authentication page
-  - Email verification handles both new users (signup) and existing users (login) in one flow
-  - See S-49 for implementation details
-  - Reason: Real website doesn't have separate login and signup pages - everything is handled through email verification flow in a single page.
+- [ ] S-50 — **Login Page UI**
+  - Create LoginPage (lib/views/auth/login_view.dart) with email and password fields
+  - Add email input field with validation
+  - Add password input field with validation
+  - Add "Log In" button that calls AuthService.signIn()
+  - Display validation errors (e.g., incorrect password, user not found)
+  - Add loading state while signing in
+  - Show success message and redirect to /account after successful login
+  - Add "Don't have an account? Sign up" link that navigates to /account/signup
+  - Add "Forgot password?" link that shows dialog or navigates to password reset page
+  - Add route '/account/login' to app_router.dart
+  - Update SharedHeader account button to navigate to /account/login if not signed in, /account if signed in
+  - Match visual styling (clean form layout, university purple buttons)
+  - Add Key('login_page'), Key('email_input'), Key('password_input'), Key('login_button'), Key('forgot_password_link') for testing
+  - Reason: Allows users to log in to their existing account with email and password. Integrates with AuthService for backend communication with Firebase Auth. Form validates credentials before submission with clear error handling for common authentication failures.
 
 - [ ] S-54 — **Protected Routes and Auth State Management**
   - Implement route guards using GoRouter's redirect callback to protect authenticated routes
