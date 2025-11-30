@@ -377,9 +377,9 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Create sale_products_test.dart testing strikethrough pricing display
   - Create search_test.dart testing search functionality and results display
   - All tests should use zero-latency repositories for deterministic results
-  - Reason: Comprehensive testing ensures new product features work correctly including options selection, sale price calculations, and search functionality. Tests verify UI displays correctly and integrates properly with existing cart system.
+  - Reason: search_test.dart already completed with 8 comprehensive test cases (see S-40). Still need to create product_options_test.dart and sale_products_test.dart once S-38 and S-39 are implemented.
 
-- [ ] S-42 — **Real Product Data from Website**
+- [x] S-42 — **Real Product Data from Website**
   - Research and document actual products from shop.upsu.net
   - Create comprehensive product list with real names, descriptions, and prices
   - Organize products by actual collections (Clothing, Merchandise, Portsmouth, Pride, etc.)
