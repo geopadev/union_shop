@@ -512,3 +512,213 @@ final carouselSlides = [
 
 ---
 
+- [ ] S-46 — **Code Cleanup and Refactoring**
+  - Remove code duplication across views by extracting common widgets
+  - Consolidate similar _ProductCard implementations into shared ProductCard widget (already done in S-45)
+  - Extract repeated styling into constants or theme extensions
+  - Remove unused imports and variables throughout codebase
+  - Apply consistent formatting and naming conventions
+  - Fix all Flutter analyzer warnings and suggestions
+  - Add missing documentation comments to public APIs
+  - Refactor long methods into smaller, focused functions
+  - Ensure consistent error handling patterns
+  - Review and optimize widget rebuilds for performance
+  - Reason: Currently the codebase has some code duplication and could benefit from refactoring before adding complex features like Firebase integration. Clean code is easier to maintain and extend with new features. Removing duplication reduces bugs and makes future changes easier. Proper documentation helps team members understand the codebase.
+
+- [ ] S-47 — **Firebase Project Setup**
+  - Create Firebase project at console.firebase.google.com
+  - Enable Firebase Authentication with Email/Password provider
+  - Enable Google Sign-In provider in Firebase Authentication
+  - Create Cloud Firestore database in production mode
+  - Add Firebase configuration to Flutter project using FlutterFire CLI
+  - Install required Firebase packages: firebase_core, firebase_auth, cloud_firestore
+  - Initialize Firebase in main.dart before runApp()
+  - Configure platform-specific setup for web (Firebase config in index.html)
+  - Test Firebase connection and verify initialization
+  - Add Firebase configuration instructions to README
+  - Reason: Firebase provides secure, production-ready backend services for authentication and data storage with minimal setup. Setting up Firebase properly from the start ensures smooth integration of auth and database features. FlutterFire CLI simplifies configuration across platforms.
+
+- [ ] S-48 — **Authentication Service Layer**
+  - Create AuthService (lib/services/auth_service.dart) wrapping Firebase Authentication
+  - Implement signup with email/password (createUserWithEmailAndPassword)
+  - Implement login with email/password (signInWithEmailAndPassword)
+  - Implement Google Sign-In integration with Firebase
+  - Implement password reset via email (sendPasswordResetEmail)
+  - Implement sign out functionality (signOut)
+  - Expose authentication state stream (authStateChanges)
+  - Add error handling for common auth errors (weak password, email in use, etc.)
+  - Create User model (lib/models/user.dart) for authenticated user data
+  - Add loading states and error messages for all auth operations
+  - Reason: Creating a service layer abstracts Firebase Auth complexity from UI. This makes code testable, maintainable, and allows swapping auth providers in future. Proper error handling provides good user experience by showing meaningful error messages. Stream-based auth state enables reactive UI updates.
+
+- [ ] S-49 — **Sign Up Page UI**
+  - Create SignUpPage (lib/views/auth/signup_view.dart) matching shop.upsu.net/account/register design
+  - Add form with fields: Email, Password, Confirm Password
+  - Implement form validation: email format, password strength (min 6 chars), passwords match
+  - Add "Sign Up" button that calls AuthService.signup()
+  - Add "Sign in with Google" button for Google authentication
+  - Show loading indicator during signup process
+  - Display error messages below form fields for validation errors
+  - Show success message and navigate to home on successful signup
+  - Add "Already have an account? Sign in" link to login page
+  - Use SharedHeader and SharedFooter for consistency
+  - Style with university purple (#4d2963) buttons matching brand
+  - Add route '/account/register' to app_router.dart
+  - Add Key('signup_page'), Key('signup_email_input'), Key('signup_password_input'), Key('signup_button') for testing
+  - Reason: Sign up page is essential for user registration matching shop.upsu.net functionality. Clean form validation ensures data quality and good UX. Google Sign-In provides convenient alternative to email/password. Loading states and error messages keep users informed during auth process.
+
+- [ ] S-50 — **Login Page UI**
+  - Create LoginPage (lib/views/auth/login_view.dart) matching shop.upsu.net/account/login design
+  - Add form with fields: Email, Password
+  - Implement form validation: email format, password not empty
+  - Add "Sign In" button that calls AuthService.login()
+  - Add "Sign in with Google" button for Google authentication
+  - Add "Forgot password?" link that shows password reset dialog
+  - Show loading indicator during login process
+  - Display error messages for incorrect credentials or other errors
+  - Navigate to home page on successful login
+  - Add "Don't have an account? Sign up" link to signup page
+  - Use SharedHeader and SharedFooter for consistency
+  - Style with university purple buttons matching brand
+  - Add route '/account/login' to app_router.dart
+  - Add Key('login_page'), Key('login_email_input'), Key('login_password_input'), Key('login_button') for testing
+  - Reason: Login page allows existing users to access their accounts. Password reset functionality helps users recover access. Google Sign-In provides quick authentication option. Clear error messages guide users when credentials are incorrect.
+
+- [ ] S-51 — **Firebase Firestore Data Structure**
+  - Design Firestore collections structure: products, collections, users, orders
+  - Create security rules for Firestore allowing read access to products/collections, write access only for authenticated users to their own data
+  - Migrate product data from InMemoryProductRepository to Firestore
+  - Migrate collection data from InMemoryCollectionRepository to Firestore
+  - Create scripts or admin functions to populate Firestore with initial data
+  - Update Product model to include Firestore document ID field
+  - Update Collection model to include Firestore document ID field
+  - Add timestamps (createdAt, updatedAt) to all Firestore documents
+  - Test Firestore queries and verify data structure
+  - Document Firestore structure in README
+  - Reason: Firestore provides real-time, scalable cloud database for products and collections. Proper data structure design ensures efficient queries and data organization. Security rules protect user data while allowing public product access. Timestamps enable sorting and tracking data changes.
+
+- [ ] S-52 — **Firebase Product Repository**
+  - Create FirebaseProductRepository (lib/repositories/firebase_product_repository.dart) implementing ProductRepository interface
+  - Replace InMemoryProductRepository with FirebaseProductRepository in production
+  - Implement fetchAll() fetching products from Firestore collection
+  - Implement fetchById() querying Firestore by document ID
+  - Implement search() using Firestore queries or filtering in-memory
+  - Add caching strategy to reduce Firestore reads and improve performance
+  - Handle Firestore errors gracefully with user-friendly messages
+  - Keep InMemoryProductRepository for testing purposes
+  - Update main.dart to use FirebaseProductRepository by default
+  - Add loading states while fetching from Firestore
+  - Reason: Firebase repository provides real products from cloud database instead of hardcoded data. This allows dynamic product updates without app redeployment. Proper error handling ensures app doesn't crash on network issues. Caching improves performance and reduces Firebase costs.
+
+- [ ] S-53 — **Firebase Collection Repository**
+  - Create FirebaseCollectionRepository (lib/repositories/firebase_collection_repository.dart) implementing CollectionRepository interface
+  - Replace InMemoryCollectionRepository with FirebaseCollectionRepository in production
+  - Implement fetchAll() fetching collections from Firestore
+  - Implement fetchById() querying Firestore by document ID
+  - Implement fetchFeatured() querying featured collections
+  - Add caching strategy to reduce Firestore reads
+  - Handle Firestore errors gracefully
+  - Keep InMemoryCollectionRepository for testing
+  - Update main.dart to use FirebaseCollectionRepository by default
+  - Add loading states while fetching from Firestore
+  - Reason: Similar to products, collections need to be fetched from Firestore for dynamic content management. Featured collections can be marked in Firestore and queried efficiently. Caching ensures smooth user experience even with slow network.
+
+- [ ] S-54 — **Protected Routes and Auth State Management**
+  - Update app_router.dart to check authentication state for protected routes
+  - Redirect unauthenticated users from /account to /account/login
+  - Redirect authenticated users from /account/login and /account/register to /account
+  - Update SharedHeader account icon to check auth state
+  - Navigate to /account if authenticated, /account/login if not
+  - Show user email or name in header when authenticated
+  - Add sign out button in account dropdown or page
+  - Use StreamBuilder or Provider to listen to auth state changes
+  - Update UI reactively based on authentication state
+  - Persist authentication state across app restarts
+  - Reason: Protected routes ensure users must be authenticated to access account pages. Redirects provide seamless navigation flow based on auth state. Reactive UI updates show user their login status. Firebase Auth automatically persists sessions across restarts.
+
+- [ ] S-55 — **Account Dashboard Page**
+  - Create AccountPage (lib/views/auth/account_view.dart) for authenticated users
+  - Display user information: name, email, member since date
+  - Show "Sign Out" button calling AuthService.signOut()
+  - Add sections for: Order History (placeholder), Saved Addresses (placeholder)
+  - Add "Edit Profile" option (placeholder or basic implementation)
+  - Use SharedHeader and SharedFooter for consistency
+  - Add route '/account' to app_router.dart (protected route)
+  - Style with university purple accent matching brand
+  - Add Key('account_page'), Key('sign_out_button') for testing
+  - Show loading state while fetching user data
+  - Reason: Account dashboard provides central hub for user account management. Users can view their profile and access account-related features. Sign out functionality allows users to log out securely. Order history and addresses are essential e-commerce features for future implementation.
+
+---
+
+## Implementation Notes
+
+### Navigation Structure
+```
+HOME
+SHOP ▼
+  ├─ Clothing
+  ├─ Merchandise
+  ├─ Halloween 🎃
+  ├─ Signature & Essential Range
+  ├─ Portsmouth City Collection
+  ├─ Pride Collection 🏳️‍🌈
+  └─ Graduation 🎓
+The Print Shack ▼
+  ├─ About
+  └─ Personalisation
+SALE!
+About
+```
+
+### Route Structure
+```
+/                              → HomeScreen
+/about                         → AboutPage
+/collections                   → CollectionsPage
+/collections/:id               → CollectionDetailPage
+/shop/clothing                 → CollectionDetailPage(clothing)
+/shop/merchandise              → CollectionDetailPage(merchandise)
+/shop/halloween                → CollectionDetailPage(halloween)
+/shop/signature-essential      → CollectionDetailPage(signature-essential)
+/shop/portsmouth               → CollectionDetailPage(portsmouth)
+/shop/pride                    → CollectionDetailPage(pride)
+/shop/graduation               → CollectionDetailPage(graduation)
+/printshack/about              → AboutPage (print shack)
+/printshack/personalisation    → PersonalisationPage
+/sale                          → CollectionDetailPage(sale)
+/product/:id                   → ProductPage
+```
+
+### Hero Carousel Data Structure Example
+```dart
+final carouselSlides = [
+  CarouselSlide(
+    title: 'Explore Portsmouth City Collection',
+    subtitle: 'Discover unique items celebrating our city',
+    imageUrl: 'https://...',
+    buttonText: 'BROWSE COLLECTION',
+    buttonRoute: '/shop/portsmouth',
+  ),
+  CarouselSlide(
+    title: 'Halloween Special 🎃',
+    subtitle: 'Spooky season essentials',
+    imageUrl: 'https://...',
+    buttonText: 'SHOP NOW',
+    buttonRoute: '/shop/halloween',
+  ),
+  // ... more slides
+};
+```
+
+---
+
+**Why this feature matters:**
+- Improves content discoverability through organized navigation
+- Provides multiple pathways to products (navigation menu, carousel, collections)
+- Enhances user experience with visual browsing via carousel
+- Supports deep linking for sharing specific collections/products
+- Makes the app feel more complete and professional
+
+---
+
