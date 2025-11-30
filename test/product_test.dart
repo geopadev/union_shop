@@ -56,8 +56,18 @@ void main() {
       await tester.tap(find.text('Placeholder Product 1'));
       await tester.pumpAndSettle();
 
-      // Check that footer is present
-      expect(find.text('Placeholder Footer'), findsOneWidget);
+      // Scroll to footer
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('footer_main')),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      // Check that footer sections are present
+      expect(find.byKey(const Key('footer_shop')), findsOneWidget);
+      expect(find.byKey(const Key('footer_help')), findsOneWidget);
+      expect(find.byKey(const Key('footer_about')), findsOneWidget);
+      expect(find.byKey(const Key('footer_social')), findsOneWidget);
     });
   });
 }
