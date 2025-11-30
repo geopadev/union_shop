@@ -337,7 +337,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update all product displays (home, collections, product page) to use Image.asset()
   - Reason: Updated pubspec.yaml to include assets configuration with three directories: assets/images/products/, assets/images/collections/, assets/images/carousel/. Updated InMemoryProductRepository (lib/repositories/in_memory_product_repository.dart) to use placeholder asset paths 'assets/images/products/product_1.jpg' through 'product_4.jpg'. Updated InMemoryCollectionRepository (lib/repositories/in_memory_collection_repository.dart) with asset paths for all 8 collections (clothing.jpg, merchandise.jpg, halloween.jpg, signature.jpg, portsmouth.jpg, pride.jpg, graduation.jpg, sale.jpg). Updated CarouselData (lib/data/carousel_data.dart) with carousel asset paths 'assets/images/carousel/slide_1.jpg' through 'slide_3.jpg'. Changed all Image.network() to Image.asset() throughout app: home_view.dart (_ProductCard), collections_overview_view.dart (_CollectionCard), collections_view.dart (_ProductCard), product_view.dart (product image), cart_view.dart (_CartItemCard), hero_carousel.dart (_buildSlide), personalization_view.dart (personalized product placeholder). Added comprehensive error handling with errorBuilder showing helpful messages indicating which image file to add when missing (displays icon + file path like 'Add image: assets/images/products/product_1.jpg'). Local assets provide better performance, offline support, eliminate external image URL dependencies, and allow organized image management. Images ready for developer to add with matching filenames - app will automatically display them without code changes.
 
-- [x] S-38 — **Product Options System**
+- [ ] S-38 — **Product Options System**
   - Create ProductOption model (lib/models/product_option.dart) with properties: id, name, type (size/color/material), values, required
   - Update Product model to include optional List<ProductOption> options field
   - Create product option selector widget (lib/widgets/product/product_options_selector.dart)
@@ -359,7 +359,7 @@ Refactor the app to MVVM so `main.dart` is a minimal bootstrapper (keeping `Unio
   - Update InMemoryProductRepository to include sale products with both prices
   - Reason: shop.upsu.net displays sale items with strikethrough original prices and discounted prices. This visual treatment helps customers identify deals and savings. Sale badge draws attention to promotional items.
 
-- [ ] S-40 — **Search Functionality**
+- [x] S-40 — **Search Functionality**
   - Create SearchViewModel (lib/view_models/search_view_model.dart) extending BaseViewModel
   - Implement search() method in ProductRepository using product titles and descriptions
   - Create SearchPage (lib/views/search_view.dart) displaying search results
