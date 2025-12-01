@@ -82,33 +82,6 @@ class HomeScreen extends StatelessWidget {
               onMenuTap: placeholderCallbackForButtons,
             ),
 
-            // 🔥 TEMPORARY UPLOAD BUTTON - REMOVE AFTER UPLOADING DATA
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.orange[100],
-              child: Center(
-                child: ElevatedButton.icon(
-                  key: const Key('upload_firestore_button'),
-                  onPressed: () => _uploadDataToFirestore(context),
-                  icon: const Icon(Icons.cloud_upload),
-                  label: const Text('UPLOAD PRODUCTS TO FIRESTORE'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // 🔥 END OF TEMPORARY BUTTON
-
             // Hero Carousel
             const HeroCarousel(slides: CarouselData.slides),
 
