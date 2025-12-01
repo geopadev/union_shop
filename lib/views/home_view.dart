@@ -222,6 +222,7 @@ class _ProductCardState extends State<_ProductCard> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Product image with SALE badge
                   Stack(
@@ -250,13 +251,19 @@ class _ProductCardState extends State<_ProductCard> {
                                           size: 48,
                                         ),
                                         const SizedBox(height: 8),
-                                        Text(
-                                          'Add image:\n${widget.product.imageUrl}',
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 10,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text(
+                                            'Add image:\n${widget.product.imageUrl}',
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 10,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
                                       ],
                                     ),
@@ -295,41 +302,46 @@ class _ProductCardState extends State<_ProductCard> {
                     ],
                   ),
                   const SizedBox(height: 12),
+
                   // Product title
-                  Text(
-                    widget.product.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                  Flexible(
+                    child: Text(
+                      widget.product.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
-                  // Product price (with strikethrough if on sale)
+
+                  // Product price (compact layout for sale items)
                   if (widget.product.isOnSale &&
                       widget.product.originalPrice != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // Compact sale price layout
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
                       children: [
-                        // Original price with strikethrough
-                        Text(
-                          widget.product.originalPrice!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
                         // Sale price
                         Text(
                           widget.product.price,
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        // Original price with strikethrough (smaller)
+                        Text(
+                          widget.product.originalPrice!,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                            decoration: TextDecoration.lineThrough,
                           ),
                         ),
                       ],
@@ -339,7 +351,7 @@ class _ProductCardState extends State<_ProductCard> {
                     Text(
                       widget.product.price,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Color(0xFF4d2963),
                         fontWeight: FontWeight.bold,
                       ),
