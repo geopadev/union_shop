@@ -5,9 +5,6 @@ import 'package:union_shop/firebase_options.dart';
 import 'package:union_shop/services/firebase_test.dart';
 import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/repositories/cart_repository.dart';
-import 'package:union_shop/repositories/in_memory_cart_repository.dart';
-import 'package:union_shop/repositories/in_memory_collection_repository.dart';
-import 'package:union_shop/repositories/in_memory_product_repository.dart';
 import 'package:union_shop/repositories/firestore_cart_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';
@@ -35,20 +32,15 @@ void main() async {
   runApp(createApp());
 }
 
-/// Factory function to create the app with optional dependency injection
-/// This allows tests to inject mock repositories with zero latency
+/// Factory function to create the app
+/// Uses Firestore repositories exclusively
 Widget createApp({
-  ProductRepository? productRepo,
-  CollectionRepository? collectionRepo,
-  CartRepository? cartRepo,
-  AuthService? authService,
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
-  // Use Firestore repositories by default, InMemory for testing
-  final productRepository = productRepo ?? FirestoreProductRepository();
-  final collectionRepository =
-      collectionRepo ?? FirestoreCollectionRepository();
-  final authenticationService = authService ?? AuthService();
+  // Always use Firestore repositories
+  final productRepository = FirestoreProductRepository();
+  final collectionRepository = FirestoreCollectionRepository();
+  final authenticationService = AuthService();
 
   return MultiProvider(
     providers: [
@@ -60,18 +52,13 @@ Widget createApp({
       // CartViewModel with dynamic repository switching
       ChangeNotifierProxyProvider<AuthService, CartViewModel>(
         create: (_) => CartViewModel(
-          cartRepo ?? InMemoryCartRepository(),
+          FirestoreCartRepository(),
         ),
         update: (context, authService, previousCart) {
-          // For testing, use provided cartRepo
-          if (cartRepo != null) {
-            return previousCart ?? CartViewModel(cartRepo);
-          }
-
           // Switch repository based on auth state
           final newRepo = authService.currentUser != null
               ? FirestoreCartRepository(userId: authService.currentUser!.uid)
-              : InMemoryCartRepository();
+              : FirestoreCartRepository();
 
           // Update existing CartViewModel with new repository
           if (previousCart != null) {
