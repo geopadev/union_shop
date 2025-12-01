@@ -769,11 +769,19 @@ final carouselSlides = [
   - After successful authentication, redirect to /account dashboard
   - Add routes '/account/signup' and '/account/login' to app_router.dart
   - Update SharedHeader account button to navigate to /account/login if not signed in
-  - Match visual styling (clean form layouts, university purple buttons)
+  - Account dashboard should display: Welcome message with user name/email, "Sign Out" button, order history section, saved addresses section
+  - Implement AuthService (lib/services/auth_service.dart) to manage authentication state with Firebase
+  - Use StreamBuilder or Consumer to reactively update UI based on authentication state
+  - Store user data in Firebase Firestore (users collection with userId, email, displayName, addresses, orders)
+  - Add persistent authentication (user stays logged in after closing app)
+  - Add password reset functionality on login page ("Forgot password?" link)
+  - Implement form validation for all auth forms (email format, password strength, matching passwords)
+  - Add loading states and error handling for all auth operations
+  - Match visual styling of shop.upsu.net account pages (clean form layouts, university purple buttons)
   - Add Keys: Key('signup_page'), Key('login_page'), Key('email_input'), Key('password_input'), Key('confirm_password_input'), Key('signup_button'), Key('login_button')
   - Include "Forgot password?" link on login page that sends password reset email
   - Include navigation links between signup and login pages
-  - Implement form validation (email format, password strength, matching passwords)
+  - Implement form validation for all auth forms (email format, password strength, matching passwords)
   - Reason: Email/password authentication provides traditional sign-in flow familiar to users. Created SignUpPage with email, password, and confirm password fields with comprehensive validation (email format regex, minimum 6 character password, password matching). Created LoginPage with email and password fields including "Forgot password?" link calling AuthService.sendPasswordResetEmail(). Both pages implement loading states with CircularProgressIndicator during authentication operations. Error handling displays user-friendly SnackBar messages for all Firebase Auth errors (weak password, email already in use, invalid email, user not found, wrong password, too many requests). Success flow shows confirmation SnackBar and redirects to /account dashboard. Added /account/signup and /account/login routes to app_router.dart. Updated SharedHeader account button to check auth state and navigate to /account/login if not signed in (will be updated in S-54 to navigate to /account if signed in). Pages use SharedHeader and SharedFooter for consistency. All forms use proper TextFormField with validators and visual password toggles. Navigation links allow users to switch between signup and login pages. Privacy policy acceptance text included on signup page. Form validation prevents submission until all fields are valid. All authentication operations integrate with AuthService for centralized error handling and user management. Password reset functionality sends email with Firebase reset link. Email/password authentication fully functional providing secure user account creation and login matching traditional e-commerce patterns.
 
 - [x] S-54 — **Protected Routes and Auth State Management**
@@ -804,4 +812,126 @@ final carouselSlides = [
   - Match visual styling of shop.upsu.net account page (clean layout with grey sections)
   - After sign out, redirect to homepage via context.go('/')
   - Reason: Created AccountPage (lib/views/auth/account_view.dart) displaying user email from AuthService.currentUser with welcome message in grey info box. Implemented "Sign Out" button (Key: 'sign_out_button') calling AuthService.signOut() with success SnackBar and homepage redirect. Cart persistence fully functional via FirestoreCartRepository (lib/repositories/firestore_cart_repository.dart) implementing CartRepository interface. Repository stores cart in Firestore users/{userId}/cart as array with product ID, title, price, imageUrl, description, quantity, and selectedOptions fields. FirestoreCartRepository.addItem() checks for duplicate products with same options and updates quantity or adds new item. Repository operations (addItem, removeItem, updateQuantity, clearCart) use _saveCart() helper saving cart array to Firestore with SetOptions(merge: true) preserving other user data. Cart automatically loads when user signs in via CartViewModel.updateRepository() triggered by ChangeNotifierProxyProvider in main.dart detecting auth state change. Users can add items while signed in with cart persisting to Firestore immediately. When signing out, repository switches to InMemoryCartRepository losing session cart while Firestore cart remains saved for next login. Order History and Saved Addresses sections display placeholder boxes with icons and "No orders/addresses" messages styled with grey backgrounds. Page uses SharedHeader and SharedFooter for consistent layout with Key('account_page') for testing. Protected by S-54 route guards ensuring only authenticated users access dashboard. Account dashboard provides central hub for user-specific features with cart persistence enabling multi-device shopping sessions. Firestore security rules protect user data allowing only authenticated users to read/write their own documents preventing unauthorized access.
+
+- [ ] S-56 — **Firestore Product Repository**
+  - Create FirestoreProductRepository (lib/repositories/firestore_product_repository.dart) implementing ProductRepository interface
+  - Fetch products from Firestore instead of hardcoded InMemoryProductRepository
+  - Support all ProductRepository methods: fetchAll(), fetchById(), search()
+  - Products stored in Firestore 'products' collection with fields: id, title, price, description, imageUrl, collectionIds, options, isOnSale, originalPrice
+  - Create FirestoreCollectionRepository (lib/repositories/firestore_collection_repository.dart) implementing CollectionRepository interface
+  - Fetch collections from Firestore 'collections' collection with fields: id, name, description, imageUrl, productIds
+  - Update main.dart to use Firestore repositories instead of InMemory repositories
+  - Add loading states while fetching data from Firestore
+  - Add error handling for network failures
+  - Keep InMemory repositories for testing purposes (tests should use InMemory with zero latency)
+  - Reason: Migrating to Firestore enables real database persistence, cloud storage, and demonstrates external services integration. Products and collections managed via Firebase Console instead of hardcoded Dart lists. Firestore provides scalable NoSQL database with real-time sync capabilities. This achieves full marks for External Services (6%) by using both Firebase Auth and Firestore Database. FirestoreProductRepository implements ProductRepository interface maintaining compatibility with existing code while fetching from cloud database. FirestoreCollectionRepository fetches collections from Firestore with productIds arrays linking to products. All existing UI code continues working without changes thanks to repository pattern abstraction. Local asset images stored in assets/ folders with paths stored in Firestore imageUrl fields. Products include options array for size/color selections stored as maps. Sale products have isOnSale boolean and originalPrice fields. Search functionality works by fetching all products and filtering client-side. Loading states show during async Firestore queries. Error handling displays user-friendly messages for network failures. Tests continue using InMemoryRepositories with zero latency for deterministic results.
+
+---
+
+## Phase 4: Firestore Data Migration
+
+### Step 1: Migrate Products Data
+
+1. **Go to "Data" tab** in Firestore Database
+2. **Select "products" collection**
+3. **Click "Add document"** for each product
+4. **Use provided product data:**
+   - ID: `classic-hoodie`
+   - Title: `Classic Hoodie`
+   - Price: `£35.00`
+   - Description: `Premium quality hoodie featuring the UPSU logo. Perfect for everyday wear with soft, comfortable fabric. Available in multiple colors and sizes.`
+   - ImageUrl: `assets/images/products/classic_hoodie.jpg`
+   - CollectionIds: `["clothing", "signature-essential", "portsmouth", "pride", "halloween", "sale"]`
+   - IsOnSale: `false`
+   - OriginalPrice: *(leave empty for non-sale items)*
+5. **Repeat for all 24 products** using provided data
+
+### Step 2: Migrate Collections Data
+
+1. **Select "collections" collection**
+2. **Click "Add document"** for each collection
+3. **Use provided collection data:**
+   - ID: `clothing`
+   - Name: `Clothing`
+   - Description: `Discover our range of high-quality clothing featuring the UPSU brand`
+   - ImageUrl: `assets/images/collections/clothing.jpg`
+   - ProductIds: `["classic-hoodie", "classic-sweatshirt", "polo-shirt", "portsmouth-varsity-jacket", "pride-t-shirt"]`
+4. **Repeat for all 8 collections** using provided data
+
+### Step 3: Update Firestore Security Rules
+
+1. **Go to "Rules" tab** in Firestore Database
+2. **Replace with updated rules:**
+```rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to products and collections for everyone
+    match /products/{productId} {
+      allow read: if true;
+    }
+    match /collections/{collectionId} {
+      allow read: if true;
+    }
+    
+    // Allow read/write access to user data and cart for authenticated users
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+3. **Publish rules** and test data access
+
+---
+
+## Phase 5: Update Code for Firestore Repositories
+
+1. **Create FirestoreProductRepository:**
+  - Implement ProductRepository methods using Firestore queries
+  - Use FirebaseFirestore.instance.collection('products') to access products collection
+  - Support fetchAll(), fetchById(), search() methods
+  - Reason: FirestoreProductRepository provides real data access from Firestore database replacing InMemoryProductRepository. Implements ProductRepository interface methods using Firestore queries for fetching products.
+
+2. **Create FirestoreCollectionRepository:**
+  - Implement CollectionRepository methods using Firestore queries
+  - Use FirebaseFirestore.instance.collection('collections') to access collections collection
+  - Support fetchAll(), fetchById() methods
+  - Reason: FirestoreCollectionRepository provides real data access from Firestore database replacing InMemoryCollectionRepository. Implements CollectionRepository interface methods using Firestore queries for fetching collections.
+
+3. **Update main.dart:**
+  - Replace InMemoryProductRepository and InMemoryCollectionRepository with Firestore repositories
+  - Reason: main.dart now uses Firestore repositories for real data access. Removes InMemory repositories to avoid confusion.
+
+4. **Test all features:**
+  - Verify products and collections load from Firestore
+  - Test authentication, cart, and navigation functionality
+  - Ensure no breaking changes or issues introduced
+  - Reason: Comprehensive testing ensures all features work with new Firestore data layer. Confirms migration from InMemory to Firestore repositories is successful and transparent to existing functionality.
+
+---
+
+**What Was Learned:**
+- Firestore provides flexible, scalable database solution with real-time capabilities
+- Firebase Console offers powerful tools for managing data, users, and security
+- FlutterFire plugins enable seamless integration of Firebase services in Flutter apps
+- Declarative routing with go_router simplifies navigation and deep linking
+- Provider package effectively manages app-wide state and dependencies
+- MVVM architecture separates concerns, improves testability and maintainability
+- Responsive design adapts UI to different screen sizes and orientations
+- Accessibility features ensure app is usable by people with disabilities
+- Testing is crucial for verifying functionality and preventing regressions
+- Code organization and documentation are important for collaboration and future development
+
+---
+
+**Next Steps:**
+- Monitor Firestore usage and optimize queries/rules as needed
+- Implement additional features and enhancements
+- Consider user feedback and analytics for future improvements
+- Keep dependencies and Flutter SDK up to date
+- Regularly review and refactor code for quality and performance
+- Explore advanced Firestore features: indexing, triggers, functions
+- Consider implementing offline data access and synchronization
+- Plan for scaling the app and database as usage grows
 
