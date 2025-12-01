@@ -9,8 +9,6 @@ import 'package:union_shop/widgets/home/hero_carousel.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
-import 'package:union_shop/scripts/upload_products_to_firestore.dart';
-import 'package:union_shop/scripts/upload_collections_to_firestore.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,53 +19,6 @@ class HomeScreen extends StatelessWidget {
 
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
-  }
-
-  Future<void> _uploadDataToFirestore(BuildContext context) async {
-    try {
-      // Show loading dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF4d2963)),
-        ),
-      );
-
-      // Upload products
-      await uploadProductsToFirestore();
-
-      // Upload collections (uncomment when ready)
-      await uploadCollectionsToFirestore();
-
-      // Close loading dialog
-      if (context.mounted) {
-        Navigator.of(context).pop();
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ All data uploaded to Firestore!'),
-            backgroundColor: Color(0xFF4d2963),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-    } catch (e) {
-      // Close loading dialog
-      if (context.mounted) {
-        Navigator.of(context).pop();
-
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('❌ Error: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
-    }
   }
 
   @override
@@ -85,33 +36,6 @@ class HomeScreen extends StatelessWidget {
               onCartTap: () => context.go('/cart'),
               onMenuTap: placeholderCallbackForButtons,
             ),
-
-            // 🔥 TEMPORARY UPLOAD BUTTON - REMOVE AFTER UPLOADING DATA
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.orange[100],
-              child: Center(
-                child: ElevatedButton.icon(
-                  key: const Key('upload_firestore_button'),
-                  onPressed: () => _uploadDataToFirestore(context),
-                  icon: const Icon(Icons.cloud_upload),
-                  label: const Text('UPLOAD PRODUCTS TO FIRESTORE'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // 🔥 END OF TEMPORARY BUTTON
 
             // Hero Carousel
             const HeroCarousel(slides: CarouselData.slides),
