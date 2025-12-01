@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/views/about_view.dart';
 import 'package:union_shop/views/auth/google_signin_view.dart';
+import 'package:union_shop/views/auth/signup_view.dart';
+import 'package:union_shop/views/auth/login_view.dart';
 import 'package:union_shop/views/cart_view.dart';
 import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
@@ -85,8 +87,12 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         },
       ),
       GoRoute(
+        path: '/account/signup',
+        builder: (context, state) => const SignUpPage(),
+      ),
+      GoRoute(
         path: '/account/login',
-        builder: (context, state) => const GoogleSignInPage(),
+        builder: (context, state) => const LoginPage(),
       ),
     ],
   );
