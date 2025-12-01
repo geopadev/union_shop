@@ -8,6 +8,7 @@ import 'package:union_shop/repositories/cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_cart_repository.dart';
 import 'package:union_shop/repositories/in_memory_collection_repository.dart';
 import 'package:union_shop/repositories/in_memory_product_repository.dart';
+import 'package:union_shop/repositories/firestore_cart_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';
 import 'package:union_shop/router/app_router.dart';
@@ -44,7 +45,6 @@ Widget createApp({
   // Use provided repositories or create defaults with 500ms latency
   final productRepository = productRepo ?? InMemoryProductRepository();
   final collectionRepository = collectionRepo ?? InMemoryCollectionRepository();
-  final cartRepository = cartRepo ?? InMemoryCartRepository();
   final authenticationService = authService ?? AuthService();
 
   return MultiProvider(
@@ -52,10 +52,33 @@ Widget createApp({
       // Repository providers
       Provider<ProductRepository>.value(value: productRepository),
       Provider<CollectionRepository>.value(value: collectionRepository),
-      Provider<CartRepository>.value(value: cartRepository),
-
-      // Service providers
       Provider<AuthService>.value(value: authenticationService),
+
+      // CartViewModel with dynamic repository switching
+      ChangeNotifierProxyProvider<AuthService, CartViewModel>(
+        create: (_) => CartViewModel(
+          cartRepo ?? InMemoryCartRepository(),
+        ),
+        update: (context, authService, previousCart) {
+          // For testing, use provided cartRepo
+          if (cartRepo != null) {
+            return previousCart ?? CartViewModel(cartRepo);
+          }
+
+          // Switch repository based on auth state
+          final newRepo = authService.currentUser != null
+              ? FirestoreCartRepository(userId: authService.currentUser!.uid)
+              : InMemoryCartRepository();
+
+          // Update existing CartViewModel with new repository
+          if (previousCart != null) {
+            previousCart.updateRepository(newRepo);
+            return previousCart;
+          }
+
+          return CartViewModel(newRepo);
+        },
+      ),
 
       // ViewModel providers
       ChangeNotifierProvider<HomeViewModel>(
@@ -67,9 +90,6 @@ Widget createApp({
       ChangeNotifierProvider<CollectionViewModel>(
         create: (_) =>
             CollectionViewModel(collectionRepository, productRepository),
-      ),
-      ChangeNotifierProvider<CartViewModel>(
-        create: (_) => CartViewModel(cartRepository),
       ),
       ChangeNotifierProvider<SearchViewModel>(
         create: (_) => SearchViewModel(productRepository),

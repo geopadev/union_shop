@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:union_shop/views/about_view.dart';
-import 'package:union_shop/views/auth/google_signin_view.dart';
 import 'package:union_shop/views/auth/signup_view.dart';
 import 'package:union_shop/views/auth/login_view.dart';
 import 'package:union_shop/views/cart_view.dart';

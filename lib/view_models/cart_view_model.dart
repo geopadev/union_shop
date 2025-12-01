@@ -6,8 +6,8 @@ import 'package:union_shop/view_models/base_view_model.dart';
 /// ViewModel for shopping cart
 /// Manages cart state and operations following MVVM pattern
 class CartViewModel extends BaseViewModel {
-  final CartRepository _repository;
-  Cart _cart = Cart.empty();
+  CartRepository _repository;
+  Cart _cart = Cart(items: []);
 
   /// Current cart state
   Cart get cart => _cart;
@@ -26,6 +26,12 @@ class CartViewModel extends BaseViewModel {
 
   CartViewModel(this._repository) {
     _loadCart();
+  }
+
+  /// Update repository (called when auth state changes)
+  void updateRepository(CartRepository newRepository) {
+    _repository = newRepository;
+    _loadCart(); // Reload cart from new repository
   }
 
   /// Load cart data from repository
