@@ -6,17 +6,22 @@ import 'package:union_shop/repositories/cart_repository.dart';
 
 /// Firestore implementation of CartRepository
 /// Saves cart data to Firestore per user
+/// For guest users (no userId), maintains an in-memory cart
 class FirestoreCartRepository implements CartRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String? userId;
 
+  // In-memory cart for guest users
+  List<CartItem> _guestCart = [];
+
   FirestoreCartRepository({this.userId});
 
-  /// Get cart from Firestore for current user
+  /// Get cart from Firestore for authenticated users or in-memory for guests
   @override
   Future<Cart> getCart() async {
+    // If no userId, return guest cart from memory
     if (userId == null) {
-      return Cart(items: []);
+      return Cart(items: List.from(_guestCart));
     }
 
     try {
@@ -53,9 +58,10 @@ class FirestoreCartRepository implements CartRepository {
     }
   }
 
-  /// Add item to cart and save to Firestore
+  /// Add item to cart (Firestore for authenticated, memory for guests)
   @override
-  Future<void> addItem(Product product, int quantity, {Map<String, String>? selectedOptions}) async {
+  Future<void> addItem(Product product, int quantity,
+      {Map<String, String>? selectedOptions}) async {
     final cart = await getCart();
     final items = List<CartItem>.from(cart.items);
 
@@ -85,7 +91,7 @@ class FirestoreCartRepository implements CartRepository {
     await _saveCart(items);
   }
 
-  /// Remove item from cart and save to Firestore
+  /// Remove item from cart
   @override
   Future<void> removeItem(String itemId) async {
     final cart = await getCart();
@@ -93,7 +99,7 @@ class FirestoreCartRepository implements CartRepository {
     await _saveCart(items);
   }
 
-  /// Update item quantity and save to Firestore
+  /// Update item quantity
   @override
   Future<void> updateQuantity(String itemId, int quantity) async {
     final cart = await getCart();
@@ -116,15 +122,19 @@ class FirestoreCartRepository implements CartRepository {
     await _saveCart(items);
   }
 
-  /// Clear cart and remove from Firestore
+  /// Clear cart
   @override
   Future<void> clearCart() async {
     await _saveCart([]);
   }
 
-  /// Save cart to Firestore
+  /// Save cart to Firestore (authenticated) or memory (guest)
   Future<void> _saveCart(List<CartItem> items) async {
-    if (userId == null) return;
+    // If no userId, save to guest cart in memory
+    if (userId == null) {
+      _guestCart = items;
+      return;
+    }
 
     try {
       final cartData = items
