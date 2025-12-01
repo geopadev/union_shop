@@ -47,7 +47,9 @@ Widget createApp({
       // Repository providers
       Provider<ProductRepository>.value(value: productRepository),
       Provider<CollectionRepository>.value(value: collectionRepository),
-      Provider<AuthService>.value(value: authenticationService),
+
+      // AuthService as ChangeNotifierProvider to trigger proxy updates
+      ChangeNotifierProvider<AuthService>.value(value: authenticationService),
 
       // CartViewModel with dynamic repository switching
       ChangeNotifierProxyProvider<AuthService, CartViewModel>(

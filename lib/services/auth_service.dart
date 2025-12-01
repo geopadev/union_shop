@@ -1,11 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:async';
 
 /// Service class for handling Firebase Authentication
 /// Wraps Firebase Auth functionality with simplified API
-class AuthService {
+class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  StreamSubscription<User?>? _authStateSubscription;
+
+  AuthService() {
+    // Listen to auth state changes and notify listeners
+    _authStateSubscription = _auth.authStateChanges().listen((User? user) {
+      print('🔔 Auth state changed: ${user?.email ?? "signed out"}');
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _authStateSubscription?.cancel();
+    super.dispose();
+  }
 
   /// Get current authenticated user
   User? get currentUser => _auth.currentUser;
