@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/models/product.dart';
+import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/view_models/product_view_model.dart';
 import 'package:union_shop/widgets/product/product_options_selector.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductPage extends StatefulWidget {
   final String? collectionId;
@@ -97,6 +99,25 @@ class _ProductPageState extends State<ProductPage> {
       _quantity,
       selectedOptions: _selectedOptions,
     );
+
+    // Debug code
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.currentUser?.uid;
+    print('🔍 DEBUG: Current user ID: ${userId ?? "not signed in"}');
+    print('🔍 DEBUG: Cart items count: ${cartViewModel.totalItems}');
+
+    if (userId != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (doc.exists) {
+        final cartData = doc.data()?['cart'];
+        print('🔍 DEBUG: Firestore cart data: $cartData');
+      } else {
+        print('🔍 DEBUG: User document does NOT exist in Firestore!');
+      }
+    }
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

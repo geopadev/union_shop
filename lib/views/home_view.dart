@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/data/carousel_data.dart';
+import 'package:union_shop/scripts/upload_products_to_firestore.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
 import 'package:union_shop/widgets/home/hero_carousel.dart';
 import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
@@ -21,6 +22,50 @@ class HomeScreen extends StatelessWidget {
     // This is the event handler for buttons that don't work yet
   }
 
+  Future<void> _uploadDataToFirestore(BuildContext context) async {
+    try {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(color: Color(0xFF4d2963)),
+        ),
+      );
+
+      // Upload products and collections
+      await uploadProductsToFirestore();
+
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.of(context).pop();
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ All data uploaded to Firestore!'),
+            backgroundColor: Color(0xFF4d2963),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.of(context).pop();
+
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Error: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +81,33 @@ class HomeScreen extends StatelessWidget {
               onCartTap: () => context.go('/cart'),
               onMenuTap: placeholderCallbackForButtons,
             ),
+
+            // 🔥 TEMPORARY UPLOAD BUTTON - REMOVE AFTER UPLOADING DATA
+            Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.orange[100],
+              child: Center(
+                child: ElevatedButton.icon(
+                  key: const Key('upload_firestore_button'),
+                  onPressed: () => _uploadDataToFirestore(context),
+                  icon: const Icon(Icons.cloud_upload),
+                  label: const Text('UPLOAD PRODUCTS TO FIRESTORE'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // 🔥 END OF TEMPORARY BUTTON
 
             // Hero Carousel
             const HeroCarousel(slides: CarouselData.slides),

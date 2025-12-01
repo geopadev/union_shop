@@ -51,21 +51,31 @@ Widget createApp({
 
       // CartViewModel with dynamic repository switching
       ChangeNotifierProxyProvider<AuthService, CartViewModel>(
-        create: (_) => CartViewModel(
-          FirestoreCartRepository(),
-        ),
+        create: (context) {
+          // Start with guest cart (no userId)
+          print('🛒 Creating CartViewModel with guest cart (initial)');
+          return CartViewModel(FirestoreCartRepository());
+        },
         update: (context, authService, previousCart) {
-          // Switch repository based on auth state
-          final newRepo = authService.currentUser != null
-              ? FirestoreCartRepository(userId: authService.currentUser!.uid)
+          final userId = authService.currentUser?.uid;
+          print(
+              '🔄 Auth state changed. User: ${authService.currentUser?.email ?? "guest"} (${userId ?? "no-id"})');
+
+          // Create new repository based on auth state
+          final newRepo = userId != null
+              ? FirestoreCartRepository(userId: userId)
               : FirestoreCartRepository();
+
+          print('🔄 New repository created with userId: ${userId ?? "null"}');
 
           // Update existing CartViewModel with new repository
           if (previousCart != null) {
+            print('♻️ Updating existing cart with new repository');
             previousCart.updateRepository(newRepo);
             return previousCart;
           }
 
+          print('✨ Creating new CartViewModel');
           return CartViewModel(newRepo);
         },
       ),

@@ -11,8 +11,8 @@ class FirestoreCartRepository implements CartRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String? userId;
 
-  // In-memory cart for guest users
-  List<CartItem> _guestCart = [];
+  // In-memory cart for guest users (instance-specific, not static)
+  final List<CartItem> _guestCart = [];
 
   FirestoreCartRepository({this.userId});
 
@@ -21,13 +21,23 @@ class FirestoreCartRepository implements CartRepository {
   Future<Cart> getCart() async {
     // If no userId, return guest cart from memory
     if (userId == null) {
+      print('📦 Loading guest cart (${_guestCart.length} items)');
       return Cart(items: List.from(_guestCart));
     }
 
     try {
+      print('📦 Loading cart for user: $userId');
       final doc = await _firestore.collection('users').doc(userId).get();
 
       if (!doc.exists) {
+        print(
+            '📭 No cart found for user $userId - creating empty cart in Firestore');
+        // Create empty user document with empty cart
+        await _firestore.collection('users').doc(userId).set({
+          'email': '',
+          'cart': [],
+          'createdAt': FieldValue.serverTimestamp(),
+        });
         return Cart(items: []);
       }
 
@@ -51,9 +61,10 @@ class FirestoreCartRepository implements CartRepository {
         );
       }).toList();
 
+      print('✅ Loaded ${items.length} items from Firestore for user $userId');
       return Cart(items: items);
     } catch (e) {
-      print('Error loading cart from Firestore: $e');
+      print('❌ Error loading cart from Firestore: $e');
       return Cart(items: []);
     }
   }
@@ -132,11 +143,15 @@ class FirestoreCartRepository implements CartRepository {
   Future<void> _saveCart(List<CartItem> items) async {
     // If no userId, save to guest cart in memory
     if (userId == null) {
-      _guestCart = items;
+      print('💾 Saving to guest cart (${items.length} items)');
+      _guestCart.clear();
+      _guestCart.addAll(items);
       return;
     }
 
     try {
+      print(
+          '💾 Saving cart to Firestore for user $userId (${items.length} items)');
       final cartData = items
           .map((item) => {
                 'id': item.id,
@@ -153,11 +168,16 @@ class FirestoreCartRepository implements CartRepository {
           .toList();
 
       await _firestore.collection('users').doc(userId).set(
-        {'cart': cartData},
+        {
+          'cart': cartData,
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
         SetOptions(merge: true),
       );
+
+      print('✅ Cart saved successfully to Firestore');
     } catch (e) {
-      print('Error saving cart to Firestore: $e');
+      print('❌ Error saving cart to Firestore: $e');
     }
   }
 
