@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:union_shop/views/about_view.dart';
 import 'package:union_shop/views/auth/signup_view.dart';
 import 'package:union_shop/views/auth/login_view.dart';
+import 'package:union_shop/views/auth/account_view.dart';
+import 'package:union_shop/services/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/views/cart_view.dart';
 import 'package:union_shop/views/collections_overview_view.dart';
 import 'package:union_shop/views/collections_view.dart';
@@ -19,6 +22,28 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
     navigatorKey: navigatorKey,
     initialLocation: '/',
     debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final user = authService.currentUser;
+      final isSignedIn = user != null;
+
+      final isGoingToLogin = state.matchedLocation == '/account/login';
+      final isGoingToSignup = state.matchedLocation == '/account/signup';
+      final isGoingToAccount = state.matchedLocation == '/account';
+
+      // If user is signed in and trying to access login/signup, redirect to account
+      if (isSignedIn && (isGoingToLogin || isGoingToSignup)) {
+        return '/account';
+      }
+
+      // If user is not signed in and trying to access account, redirect to login
+      if (!isSignedIn && isGoingToAccount) {
+        return '/account/login';
+      }
+
+      // No redirect needed
+      return null;
+    },
     routes: [
       // Home route
       GoRoute(
@@ -92,6 +117,10 @@ GoRouter createRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: '/account/login',
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/account',
+        builder: (context, state) => const AccountPage(),
       ),
     ],
   );

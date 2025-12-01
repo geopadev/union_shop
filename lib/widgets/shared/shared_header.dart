@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/constants/app_colors.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
+import 'package:union_shop/view_models/auth_view_model.dart';
 import 'package:union_shop/widgets/shared/navigation_menu.dart';
 import 'package:go_router/go_router.dart';
 
@@ -117,7 +118,21 @@ class SharedHeader extends StatelessWidget {
                                   minWidth: 32,
                                   minHeight: 32,
                                 ),
-                                onPressed: () => context.go('/account/login'),
+                                onPressed: () {
+                                  // Check auth state and navigate accordingly
+                                  final authService = Provider.of<AuthService>(
+                                    context,
+                                    listen: false,
+                                  );
+                                  final isSignedIn =
+                                      authService.currentUser != null;
+
+                                  if (isSignedIn) {
+                                    context.go('/account');
+                                  } else {
+                                    context.go('/account/login');
+                                  }
+                                },
                               ),
                               // Cart icon with badge
                               Consumer<CartViewModel>(

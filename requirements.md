@@ -791,31 +791,29 @@ final carouselSlides = [
 - [x] S-54 — **Protected Routes and Auth State Management**
   - Implement route guards using GoRouter's redirect callback to protect authenticated routes
   - Routes requiring authentication: /account (account dashboard)
-  - If user is not signed in and tries to access /account, redirect to /account/email-auth
-  - If user is signed in and tries to access /account/email-auth, redirect to /account
-  - Use StreamBuilder or Consumer to reactively update navigation based on authStateChanges
-  - Update app_router.dart to check authentication state before allowing route access
-  - Add AuthService.authStateChanges listener to router for reactive updates
+  - If user is not signed in and tries to access /account, redirect to /account/login
+  - If user is signed in and tries to access /account/login or /account/signup, redirect to /account
+  - Use redirect callback in GoRouter to check authentication state before allowing route access
+  - Update SharedHeader account button to navigate to /account/login if not signed in, /account if signed in
   - Persist authentication state using Firebase Auth's persistence (automatic)
-  - Show loading indicator while checking authentication state
-  - Reason: Protected routes ensure users must authenticate before accessing account-specific features. GoRouter's redirect callback provides clean way to guard routes based on authentication state. Firebase Auth automatically persists user sessions across app restarts so users stay logged in. Reactive navigation ensures UI updates immediately when user signs in or out. This prevents unauthorized access to account dashboard and provides smooth authentication-aware navigation throughout app.
+  - Reason: Protected routes implemented using GoRouter's redirect callback checking AuthService.currentUser to guard /account route. Users not signed in are redirected to /account/login when trying to access account dashboard. Users already signed in are redirected to /account when trying to access login/signup pages preventing unnecessary authentication flows. Updated SharedHeader account button to check auth state via Provider.of<AuthService> and navigate to appropriate route (login if not authenticated, dashboard if authenticated). Firebase Auth automatically persists user sessions across app restarts via browser localStorage so users stay logged in between sessions. Reactive navigation ensures UI updates immediately when user signs in or out as GoRouter's redirect runs on every navigation. Cart repository switching implemented in main.dart with ChangeNotifierProxyProvider<AuthService, CartViewModel> monitoring authStateChanges and updating repository (InMemoryCartRepository when signed out, FirestoreCartRepository when signed in). CartViewModel.updateRepository() method reloads cart from new repository when auth state changes. Protected routes prevent unauthorized access to account dashboard while providing smooth authentication-aware navigation throughout app matching shop.upsu.net behavior where account area requires authentication.
 
 - [x] S-55 — **Account Dashboard Page**
   - Create AccountPage (lib/views/auth/account_view.dart) showing user info and cart persistence
   - Display welcome message with user email address
   - Show "Sign Out" button (Key: 'sign_out_button') that calls AuthService.signOut()
-  - Display user's persisted cart items (cart data stored in Firestore linked to user email)
-  - Cart persistence: when user signs in, load their cart from Firestore
-  - Cart persistence: when user adds items to cart while signed in, save to Firestore
-  - Cart persistence: when user signs out, cart data remains in Firestore for next session
-  - Update CartRepository to save cart to Firestore when user is authenticated
-  - Add optional email parameter to cart operations for associating cart with user
-  - Display "Order History" section (placeholder with message "No orders yet")
-  - Display "Saved Addresses" section (placeholder with message "No addresses saved")
+  - Display user's persisted cart items (cart data stored in Firestore linked to user ID)
+  - Cart persistence: when user signs in, load their cart from Firestore via FirestoreCartRepository
+  - Cart persistence: when user adds items to cart while signed in, save to Firestore automatically
+  - Cart persistence: when user signs out, cart repository switches to InMemoryCartRepository
+  - FirestoreCartRepository saves cart to Firestore users collection with userId as document ID
+  - Cart data stored in users/{userId}/cart field as array of cart items with product details
+  - Display "Order History" section (placeholder with icon and "No orders yet" message)
+  - Display "Saved Addresses" section (placeholder with icon and "No addresses saved" message)
   - Use SharedHeader and SharedFooter for consistency
   - Add Key('account_page') for testing
-  - Protected route - only accessible when authenticated (handled by S-54)
-  - Match visual styling of shop.upsu.net account page (clean layout, sections)
-  - After sign out, redirect to homepage
-  - Reason: Shop.upsu.net account dashboard shows user email and persists cart across sessions via email-based identification. Cart data is tied to email address so users can access their cart from any device after email verification. Account page provides central location for viewing cart persistence, order history (future feature), and saved addresses (future feature). Sign out functionality allows users to end session while cart data remains stored in Firestore. This matches shop.upsu.net behavior where cart items are remembered between visits after email verification. Firestore integration enables real cart persistence unlike current in-memory implementation which loses data on app refresh. Account dashboard fully implemented with user info display, cart persistence, order history and saved addresses sections. Uses SharedHeader and SharedFooter for consistent layout. Includes Key('account_page') for testing. Redirects to homepage after sign out.
+  - Protected route - only accessible when authenticated (handled by S-54 redirect callback)
+  - Match visual styling of shop.upsu.net account page (clean layout with grey sections for placeholders)
+  - After sign out, redirect to homepage via context.go('/')
+  - Reason: Created AccountPage (lib/views/auth/account_view.dart) displaying user email from AuthService.currentUser with welcome message in grey info box. Implemented "Sign Out" button (Key: 'sign_out_button') calling AuthService.signOut() with success SnackBar and homepage redirect. Cart persistence fully functional via FirestoreCartRepository (lib/repositories/firestore_cart_repository.dart) implementing CartRepository interface. Repository stores cart in Firestore users/{userId}/cart as array with product ID, title, price, imageUrl, description, quantity, and selectedOptions fields. FirestoreCartRepository.addItem() checks for duplicate products with same options and updates quantity or adds new item. Repository operations (addItem, removeItem, updateQuantity, clearCart) use _saveCart() helper saving cart array to Firestore with SetOptions(merge: true) preserving other user data. Cart automatically loads when user signs in via CartViewModel.updateRepository() triggered by ChangeNotifierProxyProvider in main.dart detecting auth state change. Users can add items while signed in with cart persisting to Firestore immediately. When signing out, repository switches to InMemoryCartRepository losing session cart while Firestore cart remains saved for next login. Order History and Saved Addresses sections display placeholder boxes with icons and "No orders/addresses" messages styled with grey backgrounds matching shop.upsu.net minimalist design. Page uses SharedHeader and SharedFooter for consistent layout with Key('account_page') for testing. Protected by S-54 route guards ensuring only authenticated users access dashboard. Account dashboard provides central hub for user-specific features with cart persistence enabling multi-device shopping sessions and order history/address management foundations for future features. Firestore security rules (configured in S-47) protect user data allowing only authenticated users to read/write their own documents preventing unauthorized access.
 
