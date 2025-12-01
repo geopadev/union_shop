@@ -28,24 +28,19 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine navigation URL based on whether we have collection context
-    final String navigationUrl = _getNavigationUrl();
-
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
       child: GestureDetector(
-        onTap: () => context.go(navigationUrl),
+        onTap: () => context.go(_getNavigationUrl()),
         child: Semantics(
           button: true,
           label:
               'Product: ${widget.product.title}, Price: ${widget.product.price}',
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            transform: _isHovering
-                ? (Matrix4.identity()..scale(1.03))
-                : Matrix4.identity(),
+            transform: Matrix4.identity()..scale(_isHovering ? 1.03 : 1.0),
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: _isHovering
@@ -60,6 +55,7 @@ class _ProductCardState extends State<ProductCard> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Product image with SALE badge
                   Stack(
@@ -70,8 +66,7 @@ class _ProductCardState extends State<ProductCard> {
                           image: true,
                           label: 'Image of ${widget.product.title}',
                           child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(AppSpacing.radiusM),
+                            borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
                               widget.product.imageUrl,
                               fit: BoxFit.cover,
@@ -85,17 +80,23 @@ class _ProductCardState extends State<ProductCard> {
                                       children: [
                                         const Icon(
                                           Icons.image_not_supported,
-                                          color: AppColors.textSecondary,
-                                          size: AppSpacing.iconXL,
+                                          color: Colors.grey,
+                                          size: 48,
                                         ),
-                                        const SizedBox(height: AppSpacing.paddingS),
-                                        Text(
-                                          'Add image:\n${widget.product.imageUrl}',
-                                          style: const TextStyle(
-                                            color: AppColors.textSecondary,
-                                            fontSize: 10,
+                                        const SizedBox(height: 8),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text(
+                                            'Add image:\n${widget.product.imageUrl}',
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 10,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
                                       ],
                                     ),
@@ -109,22 +110,21 @@ class _ProductCardState extends State<ProductCard> {
                       // SALE badge
                       if (widget.product.isOnSale)
                         Positioned(
-                          top: AppSpacing.paddingS,
-                          right: AppSpacing.paddingS,
+                          top: 8,
+                          right: 8,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.paddingS,
-                              vertical: AppSpacing.paddingXS,
+                              horizontal: 8,
+                              vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.sale,
-                              borderRadius:
-                                  BorderRadius.circular(AppSpacing.radiusS),
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
                               'SALE',
                               style: TextStyle(
-                                color: AppColors.secondary,
+                                color: Colors.white,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.2,
@@ -134,35 +134,48 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.paddingM),
+                  const SizedBox(height: 12),
+
                   // Product title
-                  Text(
-                    widget.product.title,
-                    style: AppTextStyles.productTitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  Flexible(
+                    child: Text(
+                      widget.product.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.paddingS),
-                  // Product price (with strikethrough if on sale)
+                  const SizedBox(height: 8),
+
+                  // Product price (compact layout for sale items)
                   if (widget.product.isOnSale &&
                       widget.product.originalPrice != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // Compact sale price layout
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
                       children: [
-                        // Original price with strikethrough
-                        Text(
-                          widget.product.originalPrice!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.paddingXS),
                         // Sale price
                         Text(
                           widget.product.price,
-                          style: AppTextStyles.productPriceSale,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        // Original price with strikethrough (smaller)
+                        Text(
+                          widget.product.originalPrice!,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
                       ],
                     )
@@ -170,7 +183,11 @@ class _ProductCardState extends State<ProductCard> {
                     // Regular price
                     Text(
                       widget.product.price,
-                      style: AppTextStyles.productPrice,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF4d2963),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                 ],
               ),
