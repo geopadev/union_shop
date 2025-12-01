@@ -29,9 +29,22 @@ void main() {
       expect(authService.authStateChanges, isA<Stream>());
     });
 
-    test('signInWithGoogle method should exist', () {
+    test('signUp method should exist', () {
       expect(
-        () => authService.signInWithGoogle(),
+        () => authService.signUp(
+          email: 'test@example.com',
+          password: 'password123',
+        ),
+        isA<Future>(),
+      );
+    });
+
+    test('signIn method should exist', () {
+      expect(
+        () => authService.signIn(
+          email: 'test@example.com',
+          password: 'password123',
+        ),
         isA<Future>(),
       );
     });
@@ -43,7 +56,21 @@ void main() {
       );
     });
 
-    // Note: Full integration tests for Google Sign-In would require
+    test('sendPasswordResetEmail method should exist', () {
+      expect(
+        () => authService.sendPasswordResetEmail(email: 'test@example.com'),
+        isA<Future>(),
+      );
+    });
+
+    test('updateDisplayName method should exist', () {
+      expect(
+        () => authService.updateDisplayName('Test User'),
+        isA<Future>(),
+      );
+    });
+
+    // Note: Full integration tests for email/password authentication would require
     // Firebase Emulator setup or manual testing in browser
     // These tests verify that the methods exist and are callable
   });
