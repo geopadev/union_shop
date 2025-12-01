@@ -11,6 +11,8 @@ import 'package:union_shop/repositories/in_memory_product_repository.dart';
 import 'package:union_shop/repositories/firestore_cart_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';
+import 'package:union_shop/repositories/firestore_product_repository.dart';
+import 'package:union_shop/repositories/firestore_collection_repository.dart';
 import 'package:union_shop/router/app_router.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
 import 'package:union_shop/view_models/collection_view_model.dart';
@@ -42,9 +44,10 @@ Widget createApp({
   AuthService? authService,
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
-  // Use provided repositories or create defaults with 500ms latency
-  final productRepository = productRepo ?? InMemoryProductRepository();
-  final collectionRepository = collectionRepo ?? InMemoryCollectionRepository();
+  // Use Firestore repositories by default, InMemory for testing
+  final productRepository = productRepo ?? FirestoreProductRepository();
+  final collectionRepository =
+      collectionRepo ?? FirestoreCollectionRepository();
   final authenticationService = authService ?? AuthService();
 
   return MultiProvider(
