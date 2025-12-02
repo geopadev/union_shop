@@ -12,7 +12,12 @@ class HomeViewModel extends BaseViewModel {
   List<Product> get products => List.unmodifiable(_products);
 
   HomeViewModel(this._repository) {
-    _loadProducts();
+    // Don't await - let initialization happen asynchronously
+    // Errors will be silently handled to prevent constructor from throwing
+    _loadProducts().catchError((_) {
+      // Error during initial load is ignored
+      // UI should handle empty product list gracefully
+    });
   }
 
   get error => null;
