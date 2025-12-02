@@ -922,3 +922,192 @@ service cloud.firestore {
   - Simpler architecture with single repository implementation per interface
   - Reason: Removed InMemory repositories to simplify codebase and focus entirely on Firebase integration. All data access now goes through Firestore repositories (FirestoreProductRepository, FirestoreCollectionRepository, FirestoreCartRepository). Main.dart createApp() factory no longer accepts repository parameters - always creates Firestore instances. All widget tests deleted as they depended on InMemory repositories with zero latency. Testing infrastructure to be reimplemented later using Firebase Emulator, integration tests, or alternative testing strategy. Current application has zero test coverage meaning 6% Testing marks lost unless tests are added back. Development workflow now requires Firebase connection for all operations. Architecture simplified to single implementation per repository interface. All ViewModels continue working unchanged as they depend on repository interfaces not implementations. Cart switching still works via ChangeNotifierProxyProvider detecting auth state changes and creating FirestoreCartRepository with/without userId. App fully functional using Firestore for products, collections, and user carts. Future testing approach should use Firebase Emulator for local testing or mock Firestore queries. Decision made to prioritize Firebase integration demonstration over testing infrastructure at this stage of development.
 
+---
+
+## Phase 6: Comprehensive Testing with MVVM Best Practices
+
+**CRITICAL: 6% Testing Marks Recovery**
+
+The goal is to create comprehensive unit and widget tests following MVVM architecture principles. Tests should focus on business logic in ViewModels (most important), then Models, Repositories, and finally UI Widgets. We will use mocking to isolate components and avoid Firebase dependencies in tests.
+
+**Testing Strategy:**
+- **Priority 1:** ViewModel tests (business logic) - 70% of testing effort
+- **Priority 2:** Model tests (data classes) - 10% of testing effort  
+- **Priority 3:** Widget tests (UI components) - 15% of testing effort
+- **Priority 4:** Integration tests (complete flows) - 5% of testing effort
+
+**Dependencies Required:**
+```yaml
+dev_dependencies:
+  mockito: ^5.4.0
+  build_runner: ^2.4.0
+  fake_cloud_firestore: ^2.4.0  # Optional - for mocking Firestore
+  firebase_auth_mocks: ^0.13.0  # Optional - for mocking Firebase Auth
+```
+
+---
+
+### S-58 — **Setup Testing Infrastructure**
+- [ ] Add testing dependencies to pubspec.yaml (mockito, build_runner)
+- [ ] Create test folder structure: models/, view_models/, repositories/, services/, widgets/, views/
+- [ ] Create base test utilities and helpers (test/helpers/)
+- [ ] Setup mock annotations file for code generation
+- [ ] Run `flutter pub run build_runner build` to generate mocks
+- [ ] Verify test setup with a simple "hello world" test
+- [ ] Document testing approach and conventions
+
+### S-59 — **Model Tests (Data Classes)**
+- [ ] Create test/models/cart_test.dart
+  - Test Cart.totalPrice calculation with multiple items
+  - Test Cart.totalItems sum with various quantities
+  - Test Cart.isEmpty and isNotEmpty getters
+  - Test Cart.formattedTotal returns correct format (£XX.XX)
+- [ ] Create test/models/cart_item_test.dart
+  - Test CartItem.totalPrice calculation (price × quantity)
+  - Test CartItem with and without selectedOptions
+  - Test CartItem ID generation
+- [ ] Create test/models/product_test.dart
+  - Test Product model creation
+  - Test Product with options (size, color)
+  - Test Product.isOnSale flag behavior
+- [ ] Create test/models/personalization_form_test.dart
+  - Test PersonalizationForm.calculatePrice() for each size
+  - Test PersonalizationForm.isComplete validation
+  - Test PersonalizationForm.getPreviewText() formatting
+  - Test updateOption() modifies correct field
+
+### S-60 — **ViewModel Tests - Cart (Priority 1)**
+- [ ] Create test/view_models/cart_view_model_test.dart
+  - Setup: Create MockCartRepository, instantiate CartViewModel
+  - Test addToCart() calls repository and updates state
+  - Test removeFromCart() calls repository and refreshes
+  - Test updateQuantity() calls repository with correct params
+  - Test clearCart() empties cart and notifies listeners
+  - Test refreshCart() loads from repository
+  - Test isLoading becomes true during operations
+  - Test isLoading becomes false after operations complete
+  - Test isEmpty returns correct boolean
+  - Test totalItems returns sum of quantities
+  - Test totalPrice returns sum of item totals
+  - Test formattedTotal returns formatted string
+  - Test error handling when repository throws exception
+  - Test notifyListeners() is called after state changes
+
+### S-61 — **ViewModel Tests - Product & Home**
+- [ ] Create test/view_models/product_view_model_test.dart
+  - Test loadProduct() fetches product by ID
+  - Test product is null initially
+  - Test isLoading state during fetch
+  - Test error handling when product not found
+- [ ] Create test/view_models/home_view_model_test.dart
+  - Test products list loads on initialization
+  - Test refreshProducts() reloads data
+  - Test isLoading state during load
+  - Test empty products list handling
+- [ ] Create test/view_models/collection_view_model_test.dart
+  - Test collections load on initialization
+  - Test getCollectionById() returns correct collection
+  - Test getProductsForCollection() filters correctly
+  - Test isLoading state during operations
+
+### S-62 — **ViewModel Tests - Search & Auth**
+- [ ] Create test/view_models/search_view_model_test.dart
+  - Test search() with valid query
+  - Test search() with empty query
+  - Test hasSearched flag toggles correctly
+  - Test searchResults updates after search
+  - Test isLoading during search operation
+- [ ] Create test/services/auth_service_test.dart (if using ChangeNotifier)
+  - Test currentUser getter
+  - Test notifyListeners() called on auth state change
+  - Test dispose() cancels subscriptions
+
+### S-63 — **Repository Tests (with Mocks)**
+- [ ] Create test/repositories/firestore_cart_repository_test.dart
+  - Mock FirebaseFirestore instance
+  - Test getCart() fetches from Firestore for authenticated user
+  - Test getCart() returns guest cart when userId is null
+  - Test addItem() saves to Firestore
+  - Test removeItem() deletes from Firestore
+  - Test updateQuantity() modifies item in Firestore
+  - Test clearCart() empties Firestore cart array
+  - Test error handling for Firestore failures
+- [ ] Create test/repositories/firestore_product_repository_test.dart (optional)
+  - Test fetchAll() returns list of products
+  - Test fetchById() returns single product
+  - Test search() filters products by query
+
+### S-64 — **Widget Tests - Shared Components**
+- [ ] Create test/widgets/shared/shared_header_test.dart
+  - Test header renders with all buttons
+  - Test cart badge displays correct item count
+  - Test cart badge displays "9+" when count > 9
+  - Test logo tap callback fires
+  - Test cart tap callback fires
+  - Test tooltips are present for accessibility
+- [ ] Create test/widgets/shared/shared_footer_test.dart
+  - Test footer renders with all sections
+  - Test footer links are present
+  - Test copyright text displays
+- [ ] Create test/widgets/home/hero_carousel_test.dart (optional)
+  - Test carousel displays slides
+  - Test navigation dots render
+  - Test slide auto-advance timer
+
+### S-65 — **View Integration Tests**
+- [ ] Create test/views/cart_view_test.dart
+  - Test CartPage displays empty cart state
+  - Test CartPage displays cart items
+  - Test quantity increment button works
+  - Test quantity decrement button works
+  - Test remove button deletes item
+  - Test cart totals display correctly
+  - Test "Proceed to Checkout" button shows SnackBar
+- [ ] Create test/views/product_view_test.dart
+  - Test ProductPage displays product details
+  - Test quantity selector increments/decrements
+  - Test "Add to Cart" button with valid options
+  - Test "Add to Cart" shows error with missing options
+  - Test product options (size/color) can be selected
+- [ ] Create test/views/auth/login_view_test.dart (optional)
+  - Test LoginPage displays email and password fields
+  - Test "Log In" button calls AuthService
+  - Test validation errors display
+  - Test navigation after successful login
+
+### S-66 — **Test Coverage & Documentation**
+- [ ] Run `flutter test --coverage` to generate coverage report
+- [ ] Verify test coverage is above 70% for critical files
+- [ ] Review and fix any failing tests
+- [ ] Add test execution instructions to requirements.md
+- [ ] Document mocking patterns and best practices
+- [ ] Create test naming conventions guide
+- [ ] Verify all tests pass in CI/CD (if applicable)
+- [ ] Update README with testing commands
+
+**Testing Completion Criteria:**
+- ✅ Minimum 30 unit tests for ViewModels (Priority 1)
+- ✅ Minimum 10 tests for Models
+- ✅ Minimum 15 widget/integration tests
+- ✅ All tests pass with `flutter test`
+- ✅ Test coverage above 70% for business logic
+- ✅ **6% Testing marks recovered**
+
+**Test Execution Commands:**
+```bash
+# Run all tests
+flutter test
+
+# Run with coverage
+flutter test --coverage
+
+# Run specific test file
+flutter test test/view_models/cart_view_model_test.dart
+
+# Run tests matching pattern
+flutter test --name "CartViewModel"
+
+# Generate mocks
+flutter pub run build_runner build
+```
+
