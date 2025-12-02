@@ -958,11 +958,12 @@ dev_dependencies:
 - Reason: Testing infrastructure successfully setup. Added mockito ^5.4.4, build_runner ^2.4.8, fake_cloud_firestore ^3.0.3, and firebase_auth_mocks ^0.14.1 to dev_dependencies. Created organized test folder structure mirroring MVVM architecture with directories for models, view_models, repositories, services, widgets (shared/home), views (auth), and helpers. Created mock_annotations.dart defining mocks for CartRepository, ProductRepository, CollectionRepository, AuthService, and CartViewModel. Generated mocks using build_runner resulting in mock_annotations.mocks.dart with MockCartRepository, MockProductRepository, MockCollectionRepository, MockAuthService, and MockCartViewModel classes. Created test_helpers.dart providing factory methods for creating test data (createTestProduct, createTestCartItem, createTestCart, createTestCollection) with sensible defaults. Created infrastructure_test.dart with 3 basic tests verifying test framework works correctly. Created comprehensive test/README.md documenting testing strategy, conventions, AAA pattern, mock setup, coverage goals, common patterns, troubleshooting, and best practices. All infrastructure tests passing (3/3). Testing infrastructure complete and ready for writing actual tests.
 
 ### S-59 — **Model Tests (Data Classes)**
-- [ ] Create test/models/cart_test.dart
+- [x] Create test/models/cart_test.dart
   - Test Cart.totalPrice calculation with multiple items
   - Test Cart.totalItems sum with various quantities
   - Test Cart.isEmpty and isNotEmpty getters
   - Test Cart.formattedTotal returns correct format (£XX.XX)
+  - Reason: Created comprehensive cart_test.dart with 29 test cases covering all Cart model functionality. Tests organized into logical groups: Cart Creation (3 tests), totalItems calculation (4 tests), totalPrice calculation (5 tests), isEmpty/isNotEmpty getters (4 tests), formattedTotal formatting (5 tests), copyWith method (3 tests), toString representation (2 tests), and Edge Cases (3 tests). Tests verify correct behavior for empty carts, single items, multiple items, decimal prices, large quantities, zero quantities, and duplicate products. All tests follow AAA pattern (Arrange-Act-Assert) with clear test data setup and descriptive test names. Cart model passes all 29 tests covering totalPrice (£55.50 for multiple items), totalItems sum (6 items = 2+1+3), isEmpty/isNotEmpty boolean checks, and formattedTotal string format (£XX.XX). Tests ensure Cart correctly calculates totals, handles edge cases, and provides immutable copyWith functionality.
 - [ ] Create test/models/cart_item_test.dart
   - Test CartItem.totalPrice calculation (price × quantity)
   - Test CartItem with and without selectedOptions
