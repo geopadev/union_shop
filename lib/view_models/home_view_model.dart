@@ -15,6 +15,8 @@ class HomeViewModel extends BaseViewModel {
     _loadProducts();
   }
 
+  get error => null;
+
   /// Load products data from repository
   Future<void> _loadProducts() async {
     await runWithLoading(() async {
