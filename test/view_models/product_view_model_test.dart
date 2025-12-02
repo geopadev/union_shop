@@ -270,9 +270,15 @@ void main() {
 
       test('should propagate error from repository on refresh', () async {
         // Arrange
-        when(mockRepository.fetchById(any))
-            .thenAnswer((_) async => testProduct)
-            .thenThrow(Exception('Network error'));
+        var callCount = 0;
+        when(mockRepository.fetchById(any)).thenAnswer((_) async {
+          callCount++;
+          if (callCount == 1) {
+            return testProduct;
+          } else {
+            throw Exception('Network error');
+          }
+        });
         final viewModel = ProductViewModel(mockRepository);
 
         await viewModel.loadProductById('prod1');

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:union_shop/models/product.dart';
 import 'package:union_shop/repositories/firestore_cart_repository.dart';
 
 import '../helpers/test_helpers.dart';

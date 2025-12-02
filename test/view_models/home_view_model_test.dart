@@ -235,11 +235,11 @@ void main() {
 
       test('should propagate error from repository on refresh', () async {
         // Arrange
-        when(mockRepository.fetchAll())
-            .thenAnswer((_) async => testProducts)
-            .thenThrow(Exception('Network error'));
+        when(mockRepository.fetchAll()).thenAnswer((_) async => testProducts);
         final viewModel = HomeViewModel(mockRepository);
         await Future.delayed(Duration.zero);
+
+        when(mockRepository.fetchAll()).thenThrow(Exception('Network error'));
 
         // Act & Assert
         expect(() => viewModel.refreshProducts(), throwsException);
