@@ -964,10 +964,11 @@ dev_dependencies:
   - Test Cart.isEmpty and isNotEmpty getters
   - Test Cart.formattedTotal returns correct format (£XX.XX)
   - Reason: Created comprehensive cart_test.dart with 29 test cases covering all Cart model functionality. Tests organized into logical groups: Cart Creation (3 tests), totalItems calculation (4 tests), totalPrice calculation (5 tests), isEmpty/isNotEmpty getters (4 tests), formattedTotal formatting (5 tests), copyWith method (3 tests), toString representation (2 tests), and Edge Cases (3 tests). Tests verify correct behavior for empty carts, single items, multiple items, decimal prices, large quantities, zero quantities, and duplicate products. All tests follow AAA pattern (Arrange-Act-Assert) with clear test data setup and descriptive test names. Cart model passes all 29 tests covering totalPrice (£55.50 for multiple items), totalItems sum (6 items = 2+1+3), isEmpty/isNotEmpty boolean checks, and formattedTotal string format (£XX.XX). Tests ensure Cart correctly calculates totals, handles edge cases, and provides immutable copyWith functionality.
-- [ ] Create test/models/cart_item_test.dart
+- [x] Create test/models/cart_item_test.dart
   - Test CartItem.totalPrice calculation (price × quantity)
   - Test CartItem with and without selectedOptions
   - Test CartItem ID generation
+  - Reason: Created comprehensive cart_item_test.dart with 36 test cases covering all CartItem functionality. Tests organized into groups: CartItem Creation (6 tests for required fields, optional selectedOptions, quantity handling), totalPrice calculation (9 tests including £25×2=£50, decimal prices £15.50×3=£46.50, zero quantity, large quantities, price parsing with/without £ symbol, whitespace handling, invalid price fallback to 0.0), Selected Options (4 tests for single/multiple options, special characters, price independence), copyWith method (7 tests for immutable updates to id/product/quantity/options), toString representation (3 tests), ID Handling (4 tests for UUID/numeric/alphanumeric IDs), and Edge Cases (3 tests for negative quantities, small decimals £0.01×100, comma separators). All 36 tests passing. CartItem correctly calculates totalPrice by parsing price string, multiplying by quantity, handles selectedOptions map for size/color/custom attributes without affecting price, provides copyWith for immutable updates, and supports various ID formats.
 - [ ] Create test/models/product_test.dart
   - Test Product model creation
   - Test Product with options (size, color)
