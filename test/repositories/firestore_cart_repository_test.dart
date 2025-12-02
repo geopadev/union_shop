@@ -14,7 +14,7 @@ import '../helpers/test_helpers.dart';
 /// which uses in-memory storage and doesn't require Firebase initialization.
 void main() {
   group('FirestoreCartRepository Tests', () {
-    late testProduct;
+    late Product testProduct;
 
     setUp(() {
       testProduct = TestHelpers.createTestProduct(
@@ -113,7 +113,8 @@ void main() {
         expect(cart.items.isEmpty, true);
       });
 
-      test('should maintain separate guest carts for different instances', () async {
+      test('should maintain separate guest carts for different instances',
+          () async {
         // Arrange
         final repository1 = FirestoreCartRepository(userId: null);
         final repository2 = FirestoreCartRepository(userId: null);
@@ -128,7 +129,9 @@ void main() {
         expect(cart2.items.isEmpty, true);
       });
 
-      test('should increment quantity when adding same product with same options', () async {
+      test(
+          'should increment quantity when adding same product with same options',
+          () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
         final options = {'size': 'M', 'color': 'Red'};
@@ -143,7 +146,9 @@ void main() {
         expect(cart.items[0].quantity, 5);
       });
 
-      test('should add separate items when adding same product with different options', () async {
+      test(
+          'should add separate items when adding same product with different options',
+          () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
         final options1 = {'size': 'M'};
@@ -162,7 +167,9 @@ void main() {
     });
 
     group('Authenticated User', () {
-      test('documents that authenticated user tests require Firebase initialization', () {
+      test(
+          'documents that authenticated user tests require Firebase initialization',
+          () {
         // FirestoreCartRepository uses FirebaseFirestore.instance directly
         // Testing authenticated users requires:
         // 1. setupFirebaseAuthMocks() or FakeFirebaseFirestore injection
@@ -179,7 +186,8 @@ void main() {
         expect(true, true);
       });
 
-      test('documents getCart() loads cart from Firestore for existing users', () {
+      test('documents getCart() loads cart from Firestore for existing users',
+          () {
         // When userId is provided and Firestore doc exists:
         // - Fetches users/{userId} document
         // - Parses cart array into CartItem objects
@@ -219,7 +227,8 @@ void main() {
         expect(true, true);
       });
 
-      test('documents error handling returns empty cart on Firestore failures', () {
+      test('documents error handling returns empty cart on Firestore failures',
+          () {
         // On Firestore errors:
         // - Catches exception
         // - Logs error message
@@ -242,7 +251,8 @@ void main() {
         expect(cart.items[0].selectedOptions, null);
       });
 
-      test('should handle adding product with empty selected options', () async {
+      test('should handle adding product with empty selected options',
+          () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
 
@@ -283,7 +293,8 @@ void main() {
       test('should handle multiple operations in sequence', () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
-        final product2 = TestHelpers.createTestProduct(id: 'prod2', title: 'Product 2');
+        final product2 =
+            TestHelpers.createTestProduct(id: 'prod2', title: 'Product 2');
 
         // Act
         await repository.addItem(testProduct, 1);
@@ -366,7 +377,8 @@ void main() {
 
         // Act
         await repository.addItem(testProduct, 1); // null options
-        await repository.addItem(testProduct, 1, selectedOptions: {}); // empty options
+        await repository
+            .addItem(testProduct, 1, selectedOptions: {}); // empty options
         final cart = await repository.getCart();
 
         // Assert - Should have 2 items (null != {})
@@ -401,7 +413,8 @@ void main() {
     });
 
     group('Cart State Management', () {
-      test('should maintain cart state across multiple getCart calls', () async {
+      test('should maintain cart state across multiple getCart calls',
+          () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
         await repository.addItem(testProduct, 3);

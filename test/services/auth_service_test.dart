@@ -11,8 +11,6 @@ import 'package:union_shop/services/auth_service.dart';
 /// For now, these tests document the AuthService API and verify basic patterns.
 void main() {
   group('AuthService Tests', () {
-
-  group('AuthService Tests', () {
     group('API Documentation', () {
       test('should have currentUser getter', () {
         // Verify API exists

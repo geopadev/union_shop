@@ -17,6 +17,7 @@ import 'package:union_shop/repositories/collection_repository.dart' as _i7;
 import 'package:union_shop/repositories/product_repository.dart' as _i6;
 import 'package:union_shop/services/auth_service.dart' as _i9;
 import 'package:union_shop/view_models/cart_view_model.dart' as _i12;
+import 'package:union_shop/view_models/product_view_model.dart' as _i14;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -447,6 +448,103 @@ class MockCartViewModel extends _i1.Mock implements _i12.CartViewModel {
   _i4.Future<void> refreshCart() => (super.noSuchMethod(
         Invocation.method(
           #refreshCart,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  void setLoading(bool? loading) => super.noSuchMethod(
+        Invocation.method(
+          #setLoading,
+          [loading],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> runWithLoading(_i4.Future<void> Function()? operation) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #runWithLoading,
+          [operation],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  void addListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [ProductViewModel].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProductViewModel extends _i1.Mock implements _i14.ProductViewModel {
+  MockProductViewModel() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool get isLoading => (super.noSuchMethod(
+        Invocation.getter(#isLoading),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  _i4.Future<void> loadProductById(String? productId) => (super.noSuchMethod(
+        Invocation.method(
+          #loadProductById,
+          [productId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> refreshProduct() => (super.noSuchMethod(
+        Invocation.method(
+          #refreshProduct,
           [],
         ),
         returnValue: _i4.Future<void>.value(),

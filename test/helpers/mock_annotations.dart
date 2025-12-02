@@ -4,6 +4,7 @@ import 'package:union_shop/repositories/product_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/view_models/cart_view_model.dart';
+import 'package:union_shop/view_models/product_view_model.dart';
 
 /// Mock annotations for code generation
 /// Run: flutter pub run build_runner build --delete-conflicting-outputs
@@ -14,5 +15,6 @@ import 'package:union_shop/view_models/cart_view_model.dart';
   CollectionRepository,
   AuthService,
   CartViewModel,
+  ProductViewModel,
 ])
 void main() {}
