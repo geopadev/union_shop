@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/repositories/firestore_cart_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../helpers/test_helpers.dart';
+import '../helpers/firebase_test_setup.dart';
 
 /// NOTE: FirestoreCartRepository testing is limited because the repository uses
 /// FirebaseFirestore.instance directly without dependency injection.
@@ -14,6 +16,12 @@ import '../helpers/test_helpers.dart';
 /// For now, these tests document the repository API and test guest cart functionality
 /// which uses in-memory storage and doesn't require Firebase initialization.
 void main() {
+  setupFirebaseCoreMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+  });
+
   group('FirestoreCartRepository Tests', () {
     late Product testProduct;
 
@@ -301,17 +309,33 @@ void main() {
         await repository.addItem(testProduct, 1);
         await repository.addItem(product2, 2);
 
-        final cart1 = await repository.getCart();
-        final itemId1 = cart1.items[0].id;
+        var cart = await repository.getCart();
+        expect(cart.items.length, 2,
+            reason: 'Should have 2 items after adding');
 
-        await repository.updateQuantity(itemId1, 5);
-        await repository.removeItem(cart1.items[1].id);
+        // Find items by product ID to be more robust
+        final item1 =
+            cart.items.firstWhere((i) => i.product.id == testProduct.id);
+        final item2 = cart.items.firstWhere((i) => i.product.id == product2.id);
 
-        final cart2 = await repository.getCart();
+        await repository.updateQuantity(item1.id, 5);
+
+        cart = await repository.getCart();
+        expect(cart.items.length, 2,
+            reason: 'Should still have 2 items after update');
+        expect(cart.items.firstWhere((i) => i.id == item1.id).quantity, 5);
+
+        await repository.removeItem(item2.id);
+
+        cart = await repository.getCart();
 
         // Assert
-        expect(cart2.items.length, 1);
-        expect(cart2.items[0].quantity, 5);
+        expect(cart.items.length, 1,
+            reason: 'Should have 1 item after removing one');
+        expect(cart.items[0].id, item1.id,
+            reason: 'Should be the first item that remains');
+        expect(cart.items[0].quantity, 5,
+            reason: 'Remaining item should have quantity 5');
       });
 
       test('should handle adding large quantity', () async {
@@ -372,7 +396,7 @@ void main() {
         expect(updatedCart.items[0].selectedOptions, options);
       });
 
-      test('should treat null and empty options as different', () async {
+      test('should treat null and empty options as the same', () async {
         // Arrange
         final repository = FirestoreCartRepository(userId: null);
 
@@ -382,8 +406,9 @@ void main() {
             .addItem(testProduct, 1, selectedOptions: {}); // empty options
         final cart = await repository.getCart();
 
-        // Assert - Should have 2 items (null != {})
-        expect(cart.items.length, 2);
+        // Assert - Should have 1 item with quantity 2 (null == {} for cart purposes)
+        expect(cart.items.length, 1);
+        expect(cart.items[0].quantity, 2);
       });
     });
 

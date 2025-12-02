@@ -14,6 +14,9 @@ class FirestoreCartRepository implements CartRepository {
   // In-memory cart for guest users (instance-specific, not static)
   final List<CartItem> _guestCart = [];
 
+  // Counter to ensure unique IDs even when created in the same millisecond
+  static int _idCounter = 0;
+
   FirestoreCartRepository({this.userId});
 
   /// Get cart from Firestore for authenticated users or in-memory for guests
@@ -91,7 +94,7 @@ class FirestoreCartRepository implements CartRepository {
       );
     } else {
       final item = CartItem(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: '${DateTime.now().millisecondsSinceEpoch}_${_idCounter++}',
         product: product,
         quantity: quantity,
         selectedOptions: selectedOptions,

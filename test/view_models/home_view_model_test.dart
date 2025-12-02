@@ -228,20 +228,24 @@ void main() {
         // Arrange
         when(mockRepository.fetchAll()).thenThrow(Exception('Network error'));
 
-        // Act & Assert
-        expect(() => HomeViewModel(mockRepository), returnsNormally);
-        // Note: Error happens asynchronously in constructor
+        // Act - Constructor should not throw, error happens async
+        final viewModel = HomeViewModel(mockRepository);
+
+        // Wait for async initialization to complete
+        await Future.delayed(Duration.zero);
+
+        // Assert - Error should be captured in error property
+        expect(viewModel.error, isNotNull);
+        expect(viewModel.error.toString(), contains('Network error'));
       });
 
       test('should propagate error from repository on refresh', () async {
         // Arrange
-        when(mockRepository.fetchAll())
-            .thenAnswer((_) async => testProducts);
+        when(mockRepository.fetchAll()).thenAnswer((_) async => testProducts);
         final viewModel = HomeViewModel(mockRepository);
         await Future.delayed(Duration.zero);
 
-        when(mockRepository.fetchAll())
-            .thenThrow(Exception('Network error'));
+        when(mockRepository.fetchAll()).thenThrow(Exception('Network error'));
 
         // Act & Assert
         expect(() => viewModel.refreshProducts(), throwsException);
