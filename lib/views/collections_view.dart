@@ -39,10 +39,11 @@ class _CollectionsPageState extends State<CollectionsPage> {
 
       // Filter by size
       if (_selectedSizes.isNotEmpty) {
-        final sizeOption = product.options?.firstWhere(
-          (opt) => opt.name == 'Size',
-          orElse: () => null as dynamic,
-        );
+        if (product.options == null) return false;
+        final sizeOption = product.options!.cast<dynamic>().firstWhere(
+              (opt) => opt.name == 'Size',
+              orElse: () => null,
+            );
         if (sizeOption == null) return false;
         final hasMatchingSize =
             sizeOption.values.any((size) => _selectedSizes.contains(size));
@@ -51,10 +52,11 @@ class _CollectionsPageState extends State<CollectionsPage> {
 
       // Filter by color
       if (_selectedColors.isNotEmpty) {
-        final colorOption = product.options?.firstWhere(
-          (opt) => opt.name == 'Color',
-          orElse: () => null as dynamic,
-        );
+        if (product.options == null) return false;
+        final colorOption = product.options!.cast<dynamic>().firstWhere(
+              (opt) => opt.name == 'Color',
+              orElse: () => null,
+            );
         if (colorOption == null) return false;
         final hasMatchingColor =
             colorOption.values.any((color) => _selectedColors.contains(color));
@@ -102,10 +104,11 @@ class _CollectionsPageState extends State<CollectionsPage> {
   Set<String> _getAllAvailableSizes(List<Product> products) {
     final sizes = <String>{};
     for (var product in products) {
-      final sizeOption = product.options?.firstWhere(
-        (opt) => opt.name == 'Size',
-        orElse: () => null as dynamic,
-      );
+      if (product.options == null) continue;
+      final sizeOption = product.options!.cast<dynamic>().firstWhere(
+            (opt) => opt.name == 'Size',
+            orElse: () => null,
+          );
       if (sizeOption != null) {
         sizes.addAll(sizeOption.values);
       }
@@ -116,10 +119,11 @@ class _CollectionsPageState extends State<CollectionsPage> {
   Set<String> _getAllAvailableColors(List<Product> products) {
     final colors = <String>{};
     for (var product in products) {
-      final colorOption = product.options?.firstWhere(
-        (opt) => opt.name == 'Color',
-        orElse: () => null as dynamic,
-      );
+      if (product.options == null) continue;
+      final colorOption = product.options!.cast<dynamic>().firstWhere(
+            (opt) => opt.name == 'Color',
+            orElse: () => null,
+          );
       if (colorOption != null) {
         colors.addAll(colorOption.values);
       }
