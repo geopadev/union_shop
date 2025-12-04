@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:union_shop/firebase_options.dart';
 import 'package:union_shop/services/firebase_test.dart';
 import 'package:union_shop/services/auth_service.dart';
-import 'package:union_shop/repositories/cart_repository.dart';
 import 'package:union_shop/repositories/firestore_cart_repository.dart';
 import 'package:union_shop/repositories/collection_repository.dart';
 import 'package:union_shop/repositories/product_repository.dart';

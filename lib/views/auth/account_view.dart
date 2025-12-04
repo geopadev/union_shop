@@ -80,9 +80,9 @@ class AccountPage extends StatelessWidget {
                       const SizedBox(height: 40),
 
                       // Welcome Message
-                      Text(
+                      const Text(
                         'My Account',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF4d2963),
