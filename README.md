@@ -5,7 +5,6 @@ A modern, full-featured Flutter e-commerce application for the University of Por
 ![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-02569B?logo=flutter)
 ![Firebase](https://img.shields.io/badge/Firebase-Enabled-FFCA28?logo=firebase)
 ![Tests](https://img.shields.io/badge/Tests-439%20Passing-brightgreen)
-![Coverage](https://img.shields.io/badge/Coverage-52.97%25-yellow)
 
 ## 📋 Table of Contents
 
@@ -383,9 +382,7 @@ Check the console for:
 ## 🧪 Testing
 
 ### Test Coverage: 52.97% (607/1146 lines)
-
 The app includes **439 passing tests** covering models, view models, repositories, views, and widgets.
-
 ### Running Tests
 
 ```bash
@@ -887,12 +884,6 @@ Closes #123
 
 ---
 
-## 📝 License
-
-This project is developed for the University of Portsmouth Students' Union.
-
----
-
 ## 🙏 Acknowledgments
 
 - University of Portsmouth Students' Union for project requirements
@@ -902,6 +893,14 @@ This project is developed for the University of Portsmouth Students' Union.
 
 ---
 
+## 📧 Contact
 
+**Developer**: George  
+**GitHub**: [@geopadev](https://github.com/geopadev)  
+**Repository**: [union_shop](https://github.com/geopadev/union_shop)
+
+For questions, issues, or contributions, please open an issue on GitHub or contact via the repository.
+
+---
 
 *Last Updated: December 4, 2025*
