@@ -69,10 +69,10 @@ void main() {
         // Arrange
         when(mockCollectionRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testCollections));
+                const Duration(milliseconds: 50), () => testCollections));
         when(mockProductRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProducts));
+                const Duration(milliseconds: 50), () => testProducts));
 
         // Act
         final viewModel = CollectionViewModel(
@@ -86,20 +86,20 @@ void main() {
         // Arrange
         when(mockCollectionRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testCollections));
+                const Duration(milliseconds: 50), () => testCollections));
         when(mockProductRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProducts));
+                const Duration(milliseconds: 50), () => testProducts));
 
         // Act
         final viewModel = CollectionViewModel(
             mockCollectionRepository, mockProductRepository);
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
 
         // Assert
         expect(viewModel.isLoading, true);
 
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
         expect(viewModel.isLoading, false);
       });
     });
@@ -416,16 +416,16 @@ void main() {
 
         when(mockCollectionRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testCollections));
+                const Duration(milliseconds: 50), () => testCollections));
         when(mockProductRepository.fetchAll()).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProducts));
+                const Duration(milliseconds: 50), () => testProducts));
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.refreshData();
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;

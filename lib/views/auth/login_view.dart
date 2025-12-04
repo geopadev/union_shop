@@ -49,10 +49,10 @@ class _LoginPageState extends State<LoginPage> {
 
       if (mounted && user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Welcome back!'),
-            backgroundColor: const Color(0xFF4d2963),
-            duration: const Duration(seconds: 2),
+            backgroundColor: Color(0xFF4d2963),
+            duration: Duration(seconds: 2),
           ),
         );
 

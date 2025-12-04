@@ -5,7 +5,7 @@ import 'package:union_shop/models/product_option.dart';
 void main() {
   group('Product Model Tests', () {
     // Test data setup
-    final sizeOption = ProductOption(
+    const sizeOption = ProductOption(
       id: 'size1',
       name: 'Size',
       type: ProductOptionType.size,
@@ -13,7 +13,7 @@ void main() {
       required: true,
     );
 
-    final colorOption = ProductOption(
+    const colorOption = ProductOption(
       id: 'color1',
       name: 'Color',
       type: ProductOptionType.color,
@@ -21,7 +21,7 @@ void main() {
       required: false,
     );
 
-    final materialOption = ProductOption(
+    const materialOption = ProductOption(
       id: 'material1',
       name: 'Material',
       type: ProductOptionType.material,
@@ -619,7 +619,7 @@ void main() {
       });
 
       test('should handle product with only required options', () {
-        final requiredSizeOption = ProductOption(
+        const requiredSizeOption = ProductOption(
           id: 'size1',
           name: 'Size',
           type: ProductOptionType.size,

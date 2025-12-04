@@ -51,7 +51,7 @@ void main() {
         // Arrange
         when(mockRepository.fetchById(any)).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProduct));
+                const Duration(milliseconds: 50), () => testProduct));
 
         // Act
         final viewModel = ProductViewModel(mockRepository, productId: 'prod1');
@@ -96,14 +96,14 @@ void main() {
         // Arrange
         when(mockRepository.fetchById(any)).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProduct));
+                const Duration(milliseconds: 50), () => testProduct));
         final viewModel = ProductViewModel(mockRepository);
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.loadProductById('prod1');
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -222,7 +222,7 @@ void main() {
         // Arrange
         when(mockRepository.fetchById(any)).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProduct));
+                const Duration(milliseconds: 50), () => testProduct));
         final viewModel = ProductViewModel(mockRepository);
 
         await viewModel.loadProductById('prod1');
@@ -231,7 +231,7 @@ void main() {
         expect(viewModel.isLoading, false);
 
         final future = viewModel.refreshProduct();
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;

@@ -196,8 +196,8 @@ void main() {
         await tester.tap(find.byKey(const Key('logoTap')), warnIfMissed: false);
         await tester.pump();
 
-        // Assert - verify callback was registered even if tap location is off-screen
-        expect(find.byKey(const Key('logoTap')), findsOneWidget);
+        // Assert
+        expect(logoTapped, true);
       });
 
       testWidgets('should call onCartTap when cart icon is tapped',

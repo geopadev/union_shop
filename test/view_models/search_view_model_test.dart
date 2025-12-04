@@ -127,14 +127,14 @@ void main() {
         // Arrange
         when(mockRepository.search(any)).thenAnswer((_) async =>
             await Future.delayed(
-                Duration(milliseconds: 50), () => testProducts));
+                const Duration(milliseconds: 50), () => testProducts));
         final viewModel = SearchViewModel(mockRepository);
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.search('red');
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;

@@ -251,6 +251,7 @@ class _ProductCardState extends State<_ProductCard> {
                 boxShadow: _isHovering
                     ? [
                         BoxShadow(
+                          // ignore: deprecated_member_use
                           color: Colors.black.withOpacity(0.1),
                           blurRadius: 10,
                           offset: const Offset(0, 4),

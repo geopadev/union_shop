@@ -181,14 +181,14 @@ void main() {
         when(mockRepository.addItem(any, any,
                 selectedOptions: anyNamed('selectedOptions')))
             .thenAnswer(
-                (_) async => await Future.delayed(Duration(milliseconds: 50)));
+                (_) async => await Future.delayed(const Duration(milliseconds: 50)));
         when(mockRepository.getCart()).thenAnswer((_) async => testCart);
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.addToCart(testProduct, 1);
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -287,14 +287,14 @@ void main() {
       test('should set loading state during operation', () async {
         // Arrange
         when(mockRepository.removeItem(any)).thenAnswer(
-            (_) async => await Future.delayed(Duration(milliseconds: 50)));
+            (_) async => await Future.delayed(const Duration(milliseconds: 50)));
         when(mockRepository.getCart()).thenAnswer((_) async => Cart(items: []));
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.removeFromCart('item1');
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -372,14 +372,14 @@ void main() {
       test('should set loading state during operation', () async {
         // Arrange
         when(mockRepository.updateQuantity(any, any)).thenAnswer(
-            (_) async => await Future.delayed(Duration(milliseconds: 50)));
+            (_) async => await Future.delayed(const Duration(milliseconds: 50)));
         when(mockRepository.getCart()).thenAnswer((_) async => testCart);
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.updateQuantity('item1', 3);
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -466,14 +466,14 @@ void main() {
       test('should set loading state during operation', () async {
         // Arrange
         when(mockRepository.clearCart()).thenAnswer(
-            (_) async => await Future.delayed(Duration(milliseconds: 50)));
+            (_) async => await Future.delayed(const Duration(milliseconds: 50)));
         when(mockRepository.getCart()).thenAnswer((_) async => Cart(items: []));
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.clearCart();
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -530,13 +530,13 @@ void main() {
       test('should set loading state during operation', () async {
         // Arrange
         when(mockRepository.getCart()).thenAnswer((_) async =>
-            await Future.delayed(Duration(milliseconds: 50), () => testCart));
+            await Future.delayed(const Duration(milliseconds: 50), () => testCart));
 
         // Act & Assert
         expect(viewModel.isLoading, false);
 
         final future = viewModel.refreshCart();
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         expect(viewModel.isLoading, true);
 
         await future;
@@ -863,7 +863,7 @@ void main() {
       test('should notify listeners on loading state change', () async {
         // Arrange
         when(mockRepository.getCart()).thenAnswer((_) async =>
-            await Future.delayed(Duration(milliseconds: 50), () => testCart));
+            await Future.delayed(const Duration(milliseconds: 50), () => testCart));
 
         int notifyCount = 0;
         viewModel.addListener(() => notifyCount++);

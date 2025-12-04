@@ -52,10 +52,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
       if (mounted && user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Account created successfully!'),
-            backgroundColor: const Color(0xFF4d2963),
-            duration: const Duration(seconds: 2),
+            backgroundColor: Color(0xFF4d2963),
+            duration: Duration(seconds: 2),
           ),
         );
 

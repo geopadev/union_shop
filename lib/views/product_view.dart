@@ -101,6 +101,7 @@ class _ProductPageState extends State<ProductPage> {
     );
 
     // Debug code
+    // ignore: use_build_context_synchronously
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.currentUser?.uid;
     print('🔍 DEBUG: Current user ID: ${userId ?? "not signed in"}');
