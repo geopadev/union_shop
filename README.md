@@ -902,6 +902,6 @@ This project is developed for the University of Portsmouth Students' Union.
 
 ---
 
-**Built with ❤️ by the UPSU Development Team**
+
 
 *Last Updated: December 4, 2025*
