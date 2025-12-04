@@ -493,3 +493,4 @@ Future<void> uploadProductsToFirestore() async {
 void main() async {
   await uploadProductsToFirestore();
 }
+
