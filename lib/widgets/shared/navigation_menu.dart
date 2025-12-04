@@ -55,30 +55,24 @@ class _NavigationItemState extends State<_NavigationItem> {
   Widget build(BuildContext context) {
     final hasDropdown = widget.item.hasDropdown;
 
-    if (hasDropdown) {
-      return MouseRegion(
-        onEnter: (_) => setState(() => _isHovering = true),
-        onExit: (_) => setState(() => _isHovering = false),
-        child: DropdownMenuWidget(
-          trigger: _buildTrigger(),
-          item: widget.item,
-          children: widget.item.children,
-        ),
-      );
-    }
-
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
-      child: GestureDetector(
-        onTap: () {
-          if (widget.item.route != null) {
-            context.go(widget.item.route!);
-          }
-        },
-        child: _buildTrigger(),
-      ),
+      child: hasDropdown
+          ? DropdownMenuWidget(
+              trigger: _buildTrigger(),
+              item: widget.item,
+              children: widget.item.children,
+            )
+          : GestureDetector(
+              onTap: () {
+                if (widget.item.route != null) {
+                  context.go(widget.item.route!);
+                }
+              },
+              child: _buildTrigger(),
+            ),
     );
   }
 
