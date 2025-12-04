@@ -8,10 +8,21 @@ import 'package:union_shop/widgets/shared/mobile_navigation_drawer.dart';
 import 'package:union_shop/widgets/shared/shared_header.dart';
 import 'package:union_shop/widgets/shared/shared_footer.dart';
 
-class CollectionsPage extends StatelessWidget {
+class CollectionsPage extends StatefulWidget {
   final String? collectionId;
 
   const CollectionsPage({super.key, this.collectionId});
+
+  @override
+  State<CollectionsPage> createState() => _CollectionsPageState();
+}
+
+class _CollectionsPageState extends State<CollectionsPage> {
+  String _sortBy =
+      'featured'; // featured, price-asc, price-desc, title-asc, title-desc
+  Set<String> _selectedSizes = {};
+  Set<String> _selectedColors = {};
+  bool _showOnSaleOnly = false;
 
   void navigateToHome(BuildContext context) {
     context.go('/');
@@ -19,6 +30,101 @@ class CollectionsPage extends StatelessWidget {
 
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
+  }
+
+  List<Product> _filterAndSortProducts(List<Product> products) {
+    var filtered = products.where((product) {
+      // Filter by sale status
+      if (_showOnSaleOnly && !product.isOnSale) return false;
+
+      // Filter by size
+      if (_selectedSizes.isNotEmpty) {
+        final sizeOption = product.options?.firstWhere(
+          (opt) => opt.name == 'Size',
+          orElse: () => null as dynamic,
+        );
+        if (sizeOption == null) return false;
+        final hasMatchingSize =
+            sizeOption.values.any((size) => _selectedSizes.contains(size));
+        if (!hasMatchingSize) return false;
+      }
+
+      // Filter by color
+      if (_selectedColors.isNotEmpty) {
+        final colorOption = product.options?.firstWhere(
+          (opt) => opt.name == 'Color',
+          orElse: () => null as dynamic,
+        );
+        if (colorOption == null) return false;
+        final hasMatchingColor =
+            colorOption.values.any((color) => _selectedColors.contains(color));
+        if (!hasMatchingColor) return false;
+      }
+
+      return true;
+    }).toList();
+
+    // Sort products
+    switch (_sortBy) {
+      case 'price-asc':
+        filtered.sort((a, b) {
+          final priceA =
+              double.tryParse(a.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
+          final priceB =
+              double.tryParse(b.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
+          return priceA.compareTo(priceB);
+        });
+        break;
+      case 'price-desc':
+        filtered.sort((a, b) {
+          final priceA =
+              double.tryParse(a.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
+          final priceB =
+              double.tryParse(b.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
+          return priceB.compareTo(priceA);
+        });
+        break;
+      case 'title-asc':
+        filtered.sort((a, b) => a.title.compareTo(b.title));
+        break;
+      case 'title-desc':
+        filtered.sort((a, b) => b.title.compareTo(a.title));
+        break;
+      case 'featured':
+      default:
+        // Keep original order for featured
+        break;
+    }
+
+    return filtered;
+  }
+
+  Set<String> _getAllAvailableSizes(List<Product> products) {
+    final sizes = <String>{};
+    for (var product in products) {
+      final sizeOption = product.options?.firstWhere(
+        (opt) => opt.name == 'Size',
+        orElse: () => null as dynamic,
+      );
+      if (sizeOption != null) {
+        sizes.addAll(sizeOption.values);
+      }
+    }
+    return sizes;
+  }
+
+  Set<String> _getAllAvailableColors(List<Product> products) {
+    final colors = <String>{};
+    for (var product in products) {
+      final colorOption = product.options?.firstWhere(
+        (opt) => opt.name == 'Color',
+        orElse: () => null as dynamic,
+      );
+      if (colorOption != null) {
+        colors.addAll(colorOption.values);
+      }
+    }
+    return colors;
   }
 
   @override
@@ -55,9 +161,11 @@ class CollectionsPage extends StatelessWidget {
                 Collection? collection;
                 List<Product> products = [];
 
-                if (collectionId != null) {
-                  collection = viewModel.getCollectionById(collectionId!);
-                  products = viewModel.getProductsForCollection(collectionId!);
+                if (widget.collectionId != null) {
+                  collection =
+                      viewModel.getCollectionById(widget.collectionId!);
+                  products =
+                      viewModel.getProductsForCollection(widget.collectionId!);
                 }
 
                 if (collection == null) {
@@ -71,6 +179,13 @@ class CollectionsPage extends StatelessWidget {
                     ),
                   );
                 }
+
+                // Get all available filter options from products
+                final availableSizes = _getAllAvailableSizes(products);
+                final availableColors = _getAllAvailableColors(products);
+
+                // Apply filtering and sorting
+                final filteredProducts = _filterAndSortProducts(products);
 
                 return Container(
                   color: Colors.white,
@@ -132,9 +247,68 @@ class CollectionsPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 32),
 
+                          // Filter and Sort Controls
+                          Row(
+                            children: [
+                              // Filters Section (Desktop) / Button (Mobile)
+                              Expanded(
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    if (constraints.maxWidth > 800) {
+                                      // Desktop: Show filters inline
+                                      return Wrap(
+                                        spacing: 12,
+                                        runSpacing: 12,
+                                        children: [
+                                          // Sort Dropdown
+                                          _buildSortDropdown(),
+
+                                          // Size Filter (if available)
+                                          if (availableSizes.isNotEmpty)
+                                            _buildSizeFilter(availableSizes),
+
+                                          // Color Filter (if available)
+                                          if (availableColors.isNotEmpty)
+                                            _buildColorFilter(availableColors),
+
+                                          // Sale Filter
+                                          _buildSaleFilter(),
+                                        ],
+                                      );
+                                    } else {
+                                      // Mobile: Show filter button
+                                      return Row(
+                                        children: [
+                                          Expanded(child: _buildSortDropdown()),
+                                          const SizedBox(width: 12),
+                                          OutlinedButton.icon(
+                                            onPressed: () => _showMobileFilters(
+                                              context,
+                                              availableSizes,
+                                              availableColors,
+                                            ),
+                                            icon: const Icon(Icons.filter_list),
+                                            label: Text(
+                                              'Filters${_getActiveFilterCount() > 0 ? ' (${_getActiveFilterCount()})' : ''}',
+                                            ),
+                                            style: OutlinedButton.styleFrom(
+                                              foregroundColor:
+                                                  const Color(0xFF4d2963),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+
                           // Product Count
                           Text(
-                            '${products.length} products',
+                            '${filteredProducts.length} products',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[600],
@@ -143,12 +317,12 @@ class CollectionsPage extends StatelessWidget {
                           const SizedBox(height: 24),
 
                           // Products Grid
-                          if (products.isEmpty)
+                          if (filteredProducts.isEmpty)
                             const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(60),
                                 child: Text(
-                                  'No products in this collection',
+                                  'No products match your filters',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.grey),
                                 ),
@@ -184,12 +358,12 @@ class CollectionsPage extends StatelessWidget {
                                     crossAxisSpacing: 24,
                                     mainAxisSpacing: 48,
                                   ),
-                                  itemCount: products.length,
+                                  itemCount: filteredProducts.length,
                                   itemBuilder: (context, index) {
-                                    final product = products[index];
+                                    final product = filteredProducts[index];
                                     return _ProductCard(
                                       product: product,
-                                      collectionId: collectionId!,
+                                      collectionId: widget.collectionId!,
                                     );
                                   },
                                 );
@@ -208,6 +382,340 @@ class CollectionsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSortDropdown() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: DropdownButton<String>(
+        value: _sortBy,
+        underline: const SizedBox(),
+        icon: const Icon(Icons.arrow_drop_down),
+        items: const [
+          DropdownMenuItem(value: 'featured', child: Text('Featured')),
+          DropdownMenuItem(
+              value: 'price-asc', child: Text('Price: Low to High')),
+          DropdownMenuItem(
+              value: 'price-desc', child: Text('Price: High to Low')),
+          DropdownMenuItem(value: 'title-asc', child: Text('Name: A to Z')),
+          DropdownMenuItem(value: 'title-desc', child: Text('Name: Z to A')),
+        ],
+        onChanged: (value) {
+          if (value != null) {
+            setState(() => _sortBy = value);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildSizeFilter(Set<String> availableSizes) {
+    return PopupMenuButton<String>(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Size${_selectedSizes.isNotEmpty ? ' (${_selectedSizes.length})' : ''}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.arrow_drop_down, size: 20),
+          ],
+        ),
+      ),
+      itemBuilder: (context) {
+        final sortedSizes = availableSizes.toList()
+          ..sort((a, b) {
+            const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+            final indexA = sizeOrder.indexOf(a);
+            final indexB = sizeOrder.indexOf(b);
+            if (indexA != -1 && indexB != -1) return indexA.compareTo(indexB);
+            return a.compareTo(b);
+          });
+
+        return sortedSizes.map((size) {
+          final isSelected = _selectedSizes.contains(size);
+          return PopupMenuItem<String>(
+            value: size,
+            child: Row(
+              children: [
+                Checkbox(
+                  value: isSelected,
+                  onChanged: (_) {
+                    setState(() {
+                      if (isSelected) {
+                        _selectedSizes.remove(size);
+                      } else {
+                        _selectedSizes.add(size);
+                      }
+                    });
+                    Navigator.pop(context);
+                  },
+                  activeColor: const Color(0xFF4d2963),
+                ),
+                Text(size),
+              ],
+            ),
+          );
+        }).toList();
+      },
+      onSelected: (size) {
+        setState(() {
+          if (_selectedSizes.contains(size)) {
+            _selectedSizes.remove(size);
+          } else {
+            _selectedSizes.add(size);
+          }
+        });
+      },
+    );
+  }
+
+  Widget _buildColorFilter(Set<String> availableColors) {
+    return PopupMenuButton<String>(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Color${_selectedColors.isNotEmpty ? ' (${_selectedColors.length})' : ''}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.arrow_drop_down, size: 20),
+          ],
+        ),
+      ),
+      itemBuilder: (context) {
+        return availableColors.map((color) {
+          final isSelected = _selectedColors.contains(color);
+          return PopupMenuItem<String>(
+            value: color,
+            child: Row(
+              children: [
+                Checkbox(
+                  value: isSelected,
+                  onChanged: (_) {
+                    setState(() {
+                      if (isSelected) {
+                        _selectedColors.remove(color);
+                      } else {
+                        _selectedColors.add(color);
+                      }
+                    });
+                    Navigator.pop(context);
+                  },
+                  activeColor: const Color(0xFF4d2963),
+                ),
+                Text(color),
+              ],
+            ),
+          );
+        }).toList();
+      },
+      onSelected: (color) {
+        setState(() {
+          if (_selectedColors.contains(color)) {
+            _selectedColors.remove(color);
+          } else {
+            _selectedColors.add(color);
+          }
+        });
+      },
+    );
+  }
+
+  Widget _buildSaleFilter() {
+    return FilterChip(
+      label: const Text('On Sale'),
+      selected: _showOnSaleOnly,
+      onSelected: (selected) {
+        setState(() => _showOnSaleOnly = selected);
+      },
+      selectedColor: const Color(0xFF4d2963).withOpacity(0.2),
+      checkmarkColor: const Color(0xFF4d2963),
+    );
+  }
+
+  int _getActiveFilterCount() {
+    int count = 0;
+    if (_selectedSizes.isNotEmpty) count++;
+    if (_selectedColors.isNotEmpty) count++;
+    if (_showOnSaleOnly) count++;
+    return count;
+  }
+
+  void _showMobileFilters(
+    BuildContext context,
+    Set<String> availableSizes,
+    Set<String> availableColors,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Filters',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _selectedSizes.clear();
+                            _selectedColors.clear();
+                            _showOnSaleOnly = false;
+                          });
+                          setModalState(() {});
+                        },
+                        child: const Text('Clear All'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Size Filter
+                  if (availableSizes.isNotEmpty) ...[
+                    const Text(
+                      'Size',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: availableSizes.map((size) {
+                        final isSelected = _selectedSizes.contains(size);
+                        return FilterChip(
+                          label: Text(size),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedSizes.add(size);
+                              } else {
+                                _selectedSizes.remove(size);
+                              }
+                            });
+                            setModalState(() {});
+                          },
+                          selectedColor:
+                              const Color(0xFF4d2963).withOpacity(0.2),
+                          checkmarkColor: const Color(0xFF4d2963),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // Color Filter
+                  if (availableColors.isNotEmpty) ...[
+                    const Text(
+                      'Color',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: availableColors.map((color) {
+                        final isSelected = _selectedColors.contains(color);
+                        return FilterChip(
+                          label: Text(color),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedColors.add(color);
+                              } else {
+                                _selectedColors.remove(color);
+                              }
+                            });
+                            setModalState(() {});
+                          },
+                          selectedColor:
+                              const Color(0xFF4d2963).withOpacity(0.2),
+                          checkmarkColor: const Color(0xFF4d2963),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // Sale Filter
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Show On Sale Only',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Switch(
+                        value: _showOnSaleOnly,
+                        onChanged: (value) {
+                          setState(() => _showOnSaleOnly = value);
+                          setModalState(() {});
+                        },
+                        activeColor: const Color(0xFF4d2963),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Apply Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4d2963),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: const Text('Apply Filters'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
