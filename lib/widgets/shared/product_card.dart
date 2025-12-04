@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:union_shop/constants/app_colors.dart';
-import 'package:union_shop/constants/app_spacing.dart';
-import 'package:union_shop/constants/app_text_styles.dart';
 import 'package:union_shop/models/product.dart';
 
 /// Shared ProductCard widget used across home, collections, and search views

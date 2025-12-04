@@ -187,7 +187,7 @@ void main() {
     group('Callbacks', () {
       testWidgets('should call onLogoTap when logo is tapped', (tester) async {
         // Arrange
-        bool logoTapped = false;
+        var logoTapped = false;
         void onLogoTap() => logoTapped = true;
 
         await tester.pumpWidget(createTestWidget(onLogoTap: onLogoTap));
